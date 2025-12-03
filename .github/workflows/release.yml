@@ -5,6 +5,11 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
 jobs:
   test:
     runs-on: macos-latest
@@ -91,15 +96,15 @@ jobs:
       
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.version.outputs.VERSION }}
-          release_name: Display Layout Manager ${{ steps.version.outputs.VERSION }}
+          name: Display Layout Manager ${{ steps.version.outputs.VERSION }}
           body_path: changelog.txt
           draft: false
           prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   update-homebrew:
     needs: [test, release]
