@@ -1,0 +1,26 @@
+# パッケージに含めるファイルを指定
+
+# ドキュメント
+include README.md
+include LICENSE
+include CHANGELOG.md
+
+# 設定ファイル
+include setup.py
+include MANIFEST.in
+
+# Homebrew Formula
+include Formula/display-layout-manager.rb
+
+# 除外するファイル
+exclude .gitignore
+exclude .DS_Store
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+recursive-exclude * *.orig
+recursive-exclude * *.rej
+recursive-exclude * *~
+recursive-exclude * .coverage
+recursive-exclude * .tox
+recursive-exclude tests *
+recursive-exclude test_* *

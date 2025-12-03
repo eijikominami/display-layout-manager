@@ -1,0 +1,196 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  test:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install system dependencies
+        run: |
+          # Install Homebrew dependencies
+          brew install jakehilborn/jakehilborn/displayplacer
+          brew install grep
+      
+      - name: Install Python package
+        run: |
+          pip install -e .
+      
+      - name: Run integration tests
+        run: |
+          python -m src.display_layout_manager.main --run-tests --verbose
+
+  release:
+    needs: test
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+      version: ${{ steps.version.outputs.VERSION }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Get version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+      
+      - name: Generate changelog
+        id: changelog
+        run: |
+          # Extract changelog for this version
+          if [ -f CHANGELOG.md ]; then
+            # Get changelog section for this version
+            CHANGELOG=$(awk '/^## \['"${GITHUB_REF#refs/tags/v}"'\]/{flag=1; next} /^## \[/{flag=0} flag' CHANGELOG.md || echo "See CHANGELOG.md for details.")
+          else
+            CHANGELOG="Initial release of Display Layout Manager"
+          fi
+          
+          # Save changelog to file for multiline output
+          cat << 'EOF' > changelog.txt
+          ## Changes in ${{ steps.version.outputs.VERSION }}
+          
+          ${CHANGELOG}
+          
+          ## Installation
+          
+          ```bash
+          # Install via Homebrew
+          brew tap eijikominami/display-layout-manager
+          brew install display-layout-manager
+          
+          # Or install from source
+          pip install git+https://github.com/eijikominami/display-layout-manager.git
+          ```
+          
+          ## Usage
+          
+          ```bash
+          # Save current display layout
+          display-layout-manager --save-current
+          
+          # Apply saved layout automatically
+          display-layout-manager
+          
+          # Show current displays
+          display-layout-manager --show-displays
+          ```
+          EOF
+      
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version.outputs.VERSION }}
+          release_name: Display Layout Manager ${{ steps.version.outputs.VERSION }}
+          body_path: changelog.txt
+          draft: false
+          prerelease: false
+
+  update-homebrew:
+    needs: [test, release]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main repo
+        uses: actions/checkout@v4
+      
+      - name: Get release info
+        id: release_info
+        run: |
+          VERSION="${{ needs.release.outputs.version }}"
+          # Calculate SHA256 of the release tarball
+          TARBALL_URL="https://github.com/eijikominami/display-layout-manager/archive/${VERSION}.tar.gz"
+          SHA256=$(curl -sL "$TARBALL_URL" | sha256sum | cut -d' ' -f1)
+          echo "SHA256=$SHA256" >> $GITHUB_OUTPUT
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "TARBALL_URL=$TARBALL_URL" >> $GITHUB_OUTPUT
+      
+      - name: Checkout Homebrew tap
+        uses: actions/checkout@v4
+        with:
+          repository: eijikominami/homebrew-display-layout-manager
+          token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+          path: homebrew-tap
+      
+      - name: Update Homebrew Formula
+        run: |
+          cd homebrew-tap
+          
+          # Update the formula
+          cat > Formula/display-layout-manager.rb << 'EOF'
+          class DisplayLayoutManager < Formula
+            include Language::Python::Virtualenv
+
+            desc "macOS用ディスプレイレイアウト自動設定ツール"
+            homepage "https://github.com/eijikominami/display-layout-manager"
+            url "${{ steps.release_info.outputs.TARBALL_URL }}"
+            sha256 "${{ steps.release_info.outputs.SHA256 }}"
+            license "MIT"
+
+            depends_on "python@3.11"
+            depends_on "jakehilborn/jakehilborn/displayplacer"
+            depends_on "grep"
+
+            def install
+              virtualenv_install_with_resources
+            end
+
+            def post_install
+              config_dir = "#{Dir.home}/Library/Application Support/DisplayLayoutManager"
+              system "mkdir", "-p", config_dir
+              system "chmod", "700", config_dir
+
+              log_dir = "#{Dir.home}/Library/Logs/DisplayLayoutManager"
+              system "mkdir", "-p", log_dir
+              system "chmod", "700", log_dir
+            end
+
+            test do
+              assert_match "Display Layout Manager", shell_output("#{bin}/display-layout-manager --version")
+              system "#{bin}/display-layout-manager", "--run-tests"
+            end
+          end
+          EOF
+          
+          # Commit and push changes
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add Formula/display-layout-manager.rb
+          git commit -m "Update display-layout-manager to ${{ steps.release_info.outputs.VERSION }}"
+          git push
+
+  notify:
+    needs: [test, release, update-homebrew]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Notify success
+        if: needs.test.result == 'success' && needs.release.result == 'success' && needs.update-homebrew.result == 'success'
+        run: |
+          echo "✅ Release ${{ needs.release.outputs.version }} completed successfully!"
+          echo "- Tests passed"
+          echo "- GitHub Release created"
+          echo "- Homebrew Formula updated"
+      
+      - name: Notify failure
+        if: needs.test.result == 'failure' || needs.release.result == 'failure' || needs.update-homebrew.result == 'failure'
+        run: |
+          echo "❌ Release ${{ needs.release.outputs.version }} failed!"
+          echo "- Test result: ${{ needs.test.result }}"
+          echo "- Release result: ${{ needs.release.result }}"
+          echo "- Homebrew update result: ${{ needs.update-homebrew.result }}"
+          exit 1

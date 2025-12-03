@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "display-layout-manager"
+dynamic = ["version"]
+description = "macOS用ディスプレイレイアウト自動設定ツール"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Display Layout Manager Team", email = "contact@example.com"}
+]
+maintainers = [
+    {name = "Display Layout Manager Team", email = "contact@example.com"}
+]
+keywords = ["macos", "display", "monitor", "layout", "displayplacer", "automation"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Desktop Environment",
+    "Topic :: System :: Hardware",
+    "Topic :: Utilities",
+]
+requires-python = ">=3.8"
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/example/display-layout-manager"
+Repository = "https://github.com/example/display-layout-manager"
+Documentation = "https://github.com/example/display-layout-manager/blob/main/README.md"
+"Bug Reports" = "https://github.com/example/display-layout-manager/issues"
+Changelog = "https://github.com/example/display-layout-manager/blob/main/CHANGELOG.md"
+
+[project.scripts]
+display-layout-manager = "display_layout_manager.main:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.dynamic]
+version = {attr = "display_layout_manager.__version__"}
+
+[tool.setuptools_scm]
+write_to = "src/display_layout_manager/_version.py"
