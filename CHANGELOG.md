@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2025-12-06
+
 ### Removed
 - **常駐監視機能**: macOS のバックグラウンドプロセスでは NSApplication 通知が動作しないため削除
 - **デーモン関連コマンド**: `--daemon`, `--enable-daemon`, `--disable-daemon` 等を削除
