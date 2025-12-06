@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Removed
+- **常駐監視機能**: macOS のバックグラウンドプロセスでは NSApplication 通知が動作しないため削除
+- **デーモン関連コマンド**: `--daemon`, `--enable-daemon`, `--disable-daemon` 等を削除
+- **PyObjC 依存関係**: 常駐機能削除に伴い pyobjc-framework-Cocoa を削除
+- **デーモン関連モジュール**: display_monitor.py, event_processor.py, daemon_manager.py 等を削除
+
+### Changed
+- **requirements.txt**: 外部依存関係なし（標準ライブラリのみ使用）に変更
+- **README.md**: 常駐機能に関する記載を削除
+- **Homebrew Formula**: デーモン関連のセットアップコードを削除
+
+### Migration Guide for Existing Users
+
+v1.1.0〜v1.1.4 で常駐機能を有効化していたユーザーは、以下のファイルを手動で削除してください：
+
+```bash
+# LaunchAgent を停止・削除
+launchctl unload ~/Library/LaunchAgents/com.eijikominami.display-layout-manager.plist
+rm ~/Library/LaunchAgents/com.eijikominami.display-layout-manager.plist
+
+# デーモン設定ファイルを削除（オプション）
+rm ~/Library/Application\ Support/DisplayLayoutManager/daemon.json
+
+# デーモンログファイルを削除（オプション）
+rm ~/Library/Logs/DisplayLayoutManager/daemon.log
+rm ~/Library/Logs/DisplayLayoutManager/daemon_error.log
+```
+
+**注意**: 基本機能（`display-layout-manager` コマンドによる手動レイアウト適用）は引き続き動作します。
+
 ## [1.1.4] - 2025-12-06
 
 ### Changed
@@ -43,6 +75,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **警告解消**: "PyObjC が利用できません" 警告が表示されなくなる
 - **パフォーマンス向上**: ポーリング方式からリアルタイム通知に改善
 
+## [1.1.0] - 2025-12-06
+
+### Added
+- **常駐監視機能**: ディスプレイ変更の自動検知と自動レイアウト適用（後に削除）
+- **LaunchAgent 統合**: ログイン時の自動起動とクラッシュ時の自動再起動（後に削除）
+- **ディスプレイ変更監視**: NSApplication.didChangeScreenParametersNotification を使用（後に削除）
+- **イベント処理システム**: デバウンス機能付きイベント処理（後に削除）
+- **設定の動的リロード**: daemon.json 設定ファイルの変更を自動検知（後に削除）
+- **非同期コマンド実行**: レイアウト適用の非同期処理とキュー管理（後に削除）
+- **包括的な管理コマンド**: 常駐機能管理コマンド（後に削除）
+
+### Note
+- v1.1.0 で追加された常駐監視機能は、macOS のバックグラウンドプロセスでは NSApplication 通知が正しく動作しないことが判明したため、後のバージョンで削除されました
+
 ## [1.0.0] - 2025-12-03
 
 ### Added
@@ -79,69 +125,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Homebrew Formula 提供
 - 統合テストスイート
 - 包括的なエラーハンドリング
-
-## [1.1.0] - 2025-12-06
-
-### Added
-- **常駐監視機能**: ディスプレイ変更の自動検知と自動レイアウト適用
-- **LaunchAgent 統合**: ログイン時の自動起動とクラッシュ時の自動再起動
-- **ディスプレイ変更監視**: NSApplication.didChangeScreenParametersNotification を使用
-- **イベント処理システム**: デバウンス機能付きイベント処理（デフォルト2秒）
-- **設定の動的リロード**: daemon.json 設定ファイルの変更を自動検知
-- **非同期コマンド実行**: レイアウト適用の非同期処理とキュー管理
-- **包括的な管理コマンド**:
-  - `--daemon`: 常駐モードで実行
-  - `--enable-daemon` / `--disable-daemon`: 常駐機能の有効化/無効化
-  - `--start-daemon` / `--stop-daemon`: 手動開始/停止
-  - `--status-daemon`: 常駐プロセスの状態確認
-  - `--show-daemon-logs` / `--clear-daemon-logs`: ログ管理
-  - `--daemon-config` / `--reload-daemon`: 設定管理
-
-### Enhanced
-- **Homebrew Formula**: インストール時の常駐機能自動セットアップ
-- **ログ機能**: daemon.log と execution_history.log の追加
-- **統合テスト**: 常駐機能のテストケース追加
-- **エラーハンドリング**: 常駐機能固有のエラー処理
-
-### Technical Details
-- 新規モジュール:
-  - `display_monitor.py`: ディスプレイ変更監視
-  - `event_processor.py`: イベント処理とデバウンス
-  - `daemon_manager.py`: LaunchAgent 管理
-  - `configuration_watcher.py`: 設定ファイル監視
-  - `command_scheduler.py`: コマンド実行スケジューラー
-- PyObjC 対応（オプション）: macOS 通知システムとの統合
-- メモリ・CPU 使用量最適化
-- バッテリー消費量最適化
-
-## [1.1.1] - 2025-12-06
-
-### Fixed
-- **PyObjC 依存関係**: pyproject.toml に pyobjc-framework-Cocoa>=10.0 を追加
-- **自動インストール**: Homebrew インストール時に PyObjC が自動的に含まれるように修正
-- **警告解消**: "PyObjC が利用できません" 警告が新規インストールで表示されなくなる
-- **パフォーマンス**: ポーリング方式からリアルタイム通知方式への自動切り替え
-
-### Technical Details
-- pyproject.toml の dependencies に PyObjC を追加
-- setup.py と pyproject.toml の依存関係を統一
-- 最適なディスプレイ変更監視のための環境整備
-
-## [1.1.1] - 2025-12-06
-
-### Fixed
-- **PyObjC 依存関係**: pyproject.toml に pyobjc-framework-Cocoa>=10.0 を追加
-- **自動インストール**: Homebrew インストール時に PyObjC が自動的に含まれるように修正
-- **パフォーマンス**: ポーリングベースからリアルタイム通知への自動切り替え
-
-### Enhanced
-- **警告解消**: "PyObjC が利用できません" 警告が新規インストールで表示されなくなる
-- **最適化**: ディスプレイ変更検知のレスポンス時間とバッテリー効率が改善
-
-## [Unreleased]
-
-### Planned
-- 単体テスト実装
-- ドキュメント拡充
-- GUI インターフェース
-- プロファイル管理機能

@@ -1,4 +1,4 @@
 # Display Layout Manager の依存関係
 
-# macOS 通知システム統合用（常駐監視機能で必要）
-pyobjc-framework-Cocoa>=10.0
+# 現在、外部依存関係はありません
+# 標準ライブラリのみを使用しています

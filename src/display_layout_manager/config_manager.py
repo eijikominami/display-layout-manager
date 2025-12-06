@@ -96,28 +96,10 @@ class ConfigManager:
         """デフォルト設定ファイルを作成"""
         self._log("デフォルト設定ファイルを作成中...")
         
-        # サンプル設定の作成
+        # 空の設定ファイルを作成
         default_config = {
             "version": "1.0",
-            "patterns": [
-                {
-                    "name": "Laptop Only",
-                    "description": "ラップトップ単体使用時の設定例",
-                    "screen_ids": [
-                        "EXAMPLE-SCREEN-ID-1"
-                    ],
-                    "command": "displayplacer \"id:EXAMPLE-SCREEN-ID-1 res:1470x956 hz:60 color_depth:8 enabled:true scaling:on origin:(0,0) degree:0\""
-                },
-                {
-                    "name": "Dual Monitor Setup",
-                    "description": "デュアルモニター設定の例",
-                    "screen_ids": [
-                        "EXAMPLE-SCREEN-ID-1",
-                        "EXAMPLE-SCREEN-ID-2"
-                    ],
-                    "command": "displayplacer \"id:EXAMPLE-SCREEN-ID-1 res:1470x956 hz:60 color_depth:8 enabled:true scaling:on origin:(0,0) degree:0\" \"id:EXAMPLE-SCREEN-ID-2 res:1920x1080 hz:60 color_depth:8 enabled:true scaling:off origin:(1470,0) degree:0\""
-                }
-            ]
+            "patterns": []
         }
         
         # ディレクトリの作成
@@ -131,8 +113,8 @@ class ConfigManager:
         os.chmod(config_path, 0o600)
         
         print(f"デフォルト設定ファイルを作成しました: {config_path}")
-        print("注意: サンプルのScreen IDを実際の値に置き換えてください")
-        print("現在のScreen IDを確認するには: display-layout-manager --show-displays")
+        print("現在のディスプレイレイアウトを保存するには: display-layout-manager --save-current")
+        print("接続されたディスプレイを確認するには: display-layout-manager --show-displays")
     
     def validate_config_structure(self, config_data: Dict[str, Any]) -> List[str]:
         """設定ファイル構造の検証"""
