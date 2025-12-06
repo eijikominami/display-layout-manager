@@ -11,22 +11,22 @@ from .auto_launch_manager import AutoLaunchManager
 
 class DisplayLayoutMenuBar(rumps.App):
     """Display Layout Manager メニューバーアプリケーション"""
-    
+
     def __init__(self):
         super(DisplayLayoutMenuBar, self).__init__(
             "🖥️",  # ディスプレイの絵文字アイコン
-            quit_button=None  # カスタム終了ボタンを使用
+            quit_button=None,  # カスタム終了ボタンを使用
         )
-        
+
         # コンポーネントの初期化
         self.cli_bridge = CLIBridge(verbose=False)
         self.auto_launch_manager = AutoLaunchManager()
-        
+
         self.menu = self._build_menu()
-        
+
         # 初期状態を反映
         self._update_auto_launch_state()
-    
+
     def _build_menu(self):
         """メニュー構造を構築"""
         return [
@@ -35,16 +35,16 @@ class DisplayLayoutMenuBar(rumps.App):
             rumps.separator,
             rumps.MenuItem("ログイン時に起動", callback=self.toggle_auto_launch),
             rumps.separator,
-            rumps.MenuItem("終了", callback=self.quit_application)
+            rumps.MenuItem("終了", callback=self.quit_application),
         ]
-    
+
     def _update_auto_launch_state(self):
         """自動起動メニュー項目の状態を更新"""
         is_enabled = self.auto_launch_manager.is_enabled()
         menu_item = self.menu["ログイン時に起動"]
         if menu_item:
             menu_item.state = 1 if is_enabled else 0
-    
+
     @rumps.clicked("レイアウトを適用")
     def apply_layout(self, _):
         """レイアウト適用アクション（サイレント実行）"""
@@ -54,7 +54,7 @@ class DisplayLayoutMenuBar(rumps.App):
         except Exception:
             # エラー時もサイレント（ログファイルに記録される）
             pass
-    
+
     @rumps.clicked("現在の設定を保存")
     def save_current(self, _):
         """現在の設定保存アクション（サイレント実行）"""
@@ -64,7 +64,7 @@ class DisplayLayoutMenuBar(rumps.App):
         except Exception:
             # エラー時もサイレント（ログファイルに記録される）
             pass
-    
+
     @rumps.clicked("ログイン時に起動")
     def toggle_auto_launch(self, sender):
         """自動起動の切り替えアクション"""
@@ -81,7 +81,7 @@ class DisplayLayoutMenuBar(rumps.App):
         except Exception:
             # エラー時もサイレント（ログファイルに記録される）
             pass
-    
+
     @rumps.clicked("終了")
     def quit_application(self, _):
         """アプリケーション終了アクション"""

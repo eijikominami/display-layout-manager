@@ -17,16 +17,16 @@ def test_auto_launch_manager():
     print("=" * 60)
     print("AutoLaunchManager 単体テスト")
     print("=" * 60)
-    
+
     manager = AutoLaunchManager()
-    
+
     # 1. 初期状態確認
     print("\n[テスト 1] 初期状態確認")
     print(f"  plist_path: {manager.plist_path}")
     print(f"  plist exists: {manager.plist_path.exists()}")
     initial_state = manager.is_enabled()
     print(f"  is_enabled(): {initial_state}")
-    
+
     # 2. 無効化（既に無効の場合もテスト）
     print("\n[テスト 2] 無効化")
     try:
@@ -38,7 +38,7 @@ def test_auto_launch_manager():
         print("  ✓ 無効化後の状態確認: OK")
     except Exception as e:
         print(f"  ✗ disable() 失敗: {e}")
-    
+
     # 3. 有効化
     print("\n[テスト 3] 有効化")
     try:
@@ -51,9 +51,10 @@ def test_auto_launch_manager():
     except Exception as e:
         print(f"  ✗ enable() 失敗: {e}")
         import traceback
+
         traceback.print_exc()
         return False
-    
+
     # 4. トグル動作テスト
     print("\n[テスト 4] トグル動作")
     try:
@@ -64,7 +65,7 @@ def test_auto_launch_manager():
             print("  disable() 実行")
             assert manager.is_enabled() == False, "無効化されるべき"
             print("  ✓ 有効 → 無効: OK")
-        
+
         # 無効 → 有効
         if not manager.is_enabled():
             print("  現在: 無効")
@@ -72,7 +73,7 @@ def test_auto_launch_manager():
             print("  enable() 実行")
             assert manager.is_enabled() == True, "有効化されるべき"
             print("  ✓ 無効 → 有効: OK")
-        
+
         # 有効 → 無効（再度）
         if manager.is_enabled():
             print("  現在: 有効")
@@ -80,14 +81,15 @@ def test_auto_launch_manager():
             print("  disable() 実行")
             assert manager.is_enabled() == False, "無効化されるべき"
             print("  ✓ 有効 → 無効（再度）: OK")
-        
+
         print("  ✓ トグル動作: OK")
     except Exception as e:
         print(f"  ✗ トグル動作失敗: {e}")
         import traceback
+
         traceback.print_exc()
         return False
-    
+
     # 5. クリーンアップ（テスト後は無効化）
     print("\n[テスト 5] クリーンアップ")
     try:
@@ -95,7 +97,7 @@ def test_auto_launch_manager():
         print("  ✓ テスト後のクリーンアップ完了")
     except Exception as e:
         print(f"  ✗ クリーンアップ失敗: {e}")
-    
+
     print("\n" + "=" * 60)
     print("✓ すべてのテストが成功しました")
     print("=" * 60)
