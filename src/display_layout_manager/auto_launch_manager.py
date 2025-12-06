@@ -44,9 +44,15 @@ class AutoLaunchManager:
                 raise Exception("display-layout-manager-menubar が見つかりません")
             
             # plist ファイルを作成
+            # executable_path がスペースを含む場合（python コマンド）は分割
+            if " " in executable_path:
+                program_args = executable_path.split()
+            else:
+                program_args = [executable_path]
+            
             plist_data = {
                 "Label": "com.eijikominami.display-layout-manager",
-                "ProgramArguments": [executable_path],
+                "ProgramArguments": program_args,
                 "RunAtLoad": True,
                 "KeepAlive": False,
                 "StandardOutPath": str(Path.home() / "Library" / "Logs" / "DisplayLayoutManager" / "menubar.log"),
@@ -114,13 +120,6 @@ class AutoLaunchManager:
         Returns:
             str: 実行ファイルのパス
         """
-        # 検索パス
-        search_paths = [
-            "/opt/homebrew/bin/display-layout-manager-menubar",  # Apple Silicon
-            "/usr/local/bin/display-layout-manager-menubar",     # Intel Mac
-            str(Path.home() / ".local" / "bin" / "display-layout-manager-menubar"),  # pip --user
-        ]
-        
         # which コマンドで検索
         try:
             result = subprocess.run(
@@ -133,9 +132,25 @@ class AutoLaunchManager:
         except subprocess.CalledProcessError:
             pass
         
+        # 検索パス
+        search_paths = [
+            "/opt/homebrew/bin/display-layout-manager-menubar",  # Apple Silicon
+            "/usr/local/bin/display-layout-manager-menubar",     # Intel Mac
+            str(Path.home() / ".local" / "bin" / "display-layout-manager-menubar"),  # pip --user
+        ]
+        
         # 検索パスから探す
         for path in search_paths:
             if Path(path).exists():
                 return path
+        
+        # 開発中の場合：現在のスクリプトを使用
+        # python3 -m src.display_layout_manager.menubar として実行
+        import sys
+        python_executable = sys.executable
+        module_path = Path(__file__).parent / "menubar.py"
+        if module_path.exists():
+            # Python モジュールとして実行するコマンドを返す
+            return f"{python_executable} -m src.display_layout_manager.menubar"
         
         return ""

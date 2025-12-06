@@ -14,6 +14,7 @@ Display Layout Manager は、macOS で複数のディスプレイ構成を自動
 - **現在レイアウト保存**: `--save-current` で現在のディスプレイ構成を簡単保存
 - **依存関係管理**: 必要なツールの自動インストールと確認
 - **包括的なログ**: 構造化ログ出力とセッションサマリー
+- **メニューバーアプリ**: macOS メニューバーから簡単に操作できる GUI
 - **エラーハンドリング**: ユーザーフレンドリーなエラーメッセージとトラブルシューティングガイド
 - **統合テスト**: 包括的なテストスイートによる品質保証
 
@@ -78,11 +79,14 @@ display-layout-manager-menubar --disable-auto-launch
 
 #### メニューバーアプリの機能
 
+メニューバーに 🖥️ アイコンが表示され、以下の機能を提供します：
+
 - **レイアウトを適用**: クリック一つで現在のディスプレイ構成に合ったレイアウトを適用
 - **現在の設定を保存**: 現在のディスプレイ構成を設定ファイルに保存
-- **接続されたディスプレイ**: 現在接続されているディスプレイ情報を表示
-- **ログイン時に起動**: 自動起動の有効化・無効化を切り替え
-- **macOS 通知**: 操作結果を通知センターで確認
+- **✓ ログイン時に起動**: 自動起動の有効化・無効化を切り替え（チェックマークで状態表示）
+- **終了**: メニューバーアプリを終了
+
+操作結果はログファイル（`~/Library/Logs/DisplayLayoutManager/`）に記録されます。
 
 ### CLI コマンド
 
@@ -284,7 +288,26 @@ python -m src.display_layout_manager.main --run-tests
 ### テスト
 
 ```bash
-# 統合テスト
+# 全テストスイートを実行（推奨）
+python3 tests/run_all_tests.py
+
+# テストカバレッジを測定
+python3 tests/run_coverage.py
+# HTML レポート: htmlcov/index.html
+
+# CLI コンポーネント単体テスト
+python3 tests/test_cli_components.py      # ConfigManager, PatternMatcher, CLIBridge
+python3 tests/test_dependency_manager.py  # DependencyManager
+python3 tests/test_display_manager.py     # DisplayManager
+python3 tests/test_command_executor.py    # CommandExecutor
+python3 tests/test_layout_saver.py        # LayoutSaver
+
+# メニューバーアプリテスト
+python3 tests/test_menubar_checkbox.py    # AutoLaunchManager
+python3 tests/test_menubar_logic.py       # メニューバーロジック
+python3 tests/test_menubar_integration.py # メニューバー統合テスト
+
+# CLI 統合テスト
 display-layout-manager --run-tests --verbose
 
 # 手動テスト

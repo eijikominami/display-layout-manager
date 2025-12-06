@@ -48,23 +48,24 @@ class CLIBridge:
         """
         try:
             # 設定ファイルを読み込み
-            config = self.config_manager.load_config()
-            if not config:
+            config_path = self.config_manager.get_default_config_path()
+            success, config, errors = self.config_manager.load_config(config_path)
+            if not success:
                 return ActionResult(
                     success=False,
-                    error_message="設定ファイルの読み込みに失敗しました"
+                    error_message=f"設定ファイルの読み込みに失敗しました: {', '.join(errors)}"
                 )
             
             # 現在のディスプレイ構成を取得
-            current_config = self.display_manager.get_current_configuration()
-            if not current_config:
+            success, current_config, error = self.display_manager.get_current_displays()
+            if not success:
                 return ActionResult(
                     success=False,
-                    error_message="ディスプレイ情報の取得に失敗しました"
+                    error_message=f"ディスプレイ情報の取得に失敗しました: {error}"
                 )
             
             # パターンマッチング
-            match_result = self.pattern_matcher.find_match(
+            match_result = self.pattern_matcher.find_best_match(
                 current_config.screen_ids,
                 config.patterns
             )
@@ -77,10 +78,7 @@ class CLIBridge:
                 )
             
             # コマンド実行
-            exec_result = self.command_executor.execute(
-                match_result.pattern.command,
-                dry_run=False
-            )
+            exec_result = self.command_executor.execute_pattern(match_result.pattern)
             
             if exec_result.success:
                 return ActionResult(
@@ -110,7 +108,8 @@ class CLIBridge:
             ActionResult: 実行結果
         """
         try:
-            save_result = self.layout_saver.save_current_layout()
+            config_path = self.config_manager.get_default_config_path()
+            save_result = self.layout_saver.save_current_layout(config_path)
             
             if save_result.success:
                 action_text = "作成" if save_result.action == "created" else "更新"
@@ -140,11 +139,11 @@ class CLIBridge:
             ActionResult: 実行結果
         """
         try:
-            current_config = self.display_manager.get_current_configuration()
-            if not current_config:
+            success, current_config, error = self.display_manager.get_current_displays()
+            if not success:
                 return ActionResult(
                     success=False,
-                    error_message="ディスプレイ情報の取得に失敗しました"
+                    error_message=f"ディスプレイ情報の取得に失敗しました: {error}"
                 )
             
             display_info = f"接続されたディスプレイ: {len(current_config.screen_ids)}個\n"
