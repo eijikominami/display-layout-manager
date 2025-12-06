@@ -21,9 +21,6 @@ try:
     OBJC_AVAILABLE = True
 except ImportError:
     OBJC_AVAILABLE = False
-    print("エラー: PyObjC が必要です。以下のコマンドでインストールしてください:")
-    print("pip3 install pyobjc-framework-Cocoa")
-    raise ImportError("PyObjC が利用できません")
 
 
 @dataclass
@@ -249,6 +246,4 @@ class DisplayMonitor:
         return self._current_screen_count
 
 
-# PyObjC が利用できない場合のダミー実装
-if not OBJC_AVAILABLE:
-    print("警告: PyObjC が利用できません。ポーリングベースの監視を使用します。")
+# PyObjC が利用できない場合の警告は start_monitoring で表示

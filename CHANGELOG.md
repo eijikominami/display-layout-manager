@@ -89,6 +89,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - setup.py と pyproject.toml の依存関係を統一
 - 最適なディスプレイ変更監視のための環境整備
 
+## [1.1.1] - 2025-12-06
+
+### Fixed
+- **PyObjC 依存関係**: pyproject.toml に pyobjc-framework-Cocoa>=10.0 を追加
+- **自動インストール**: Homebrew インストール時に PyObjC が自動的に含まれるように修正
+- **パフォーマンス**: ポーリングベースからリアルタイム通知への自動切り替え
+
+### Enhanced
+- **警告解消**: "PyObjC が利用できません" 警告が新規インストールで表示されなくなる
+- **最適化**: ディスプレイ変更検知のレスポンス時間とバッテリー効率が改善
+
 ## [Unreleased]
 
 ### Planned
