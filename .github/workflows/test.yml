@@ -88,4 +88,4 @@ jobs:
       
       - name: Check import sorting with isort
         run: |
-          isort --check-only src/ tests/
+          isort --check-only --profile black src/ tests/
