@@ -39,7 +39,7 @@ setup(
     
     # 依存関係
     install_requires=[
-        # 標準ライブラリのみ使用
+        "pyobjc-framework-Cocoa>=10.0",  # macOS 通知システム統合用
     ],
     
     # エントリーポイント

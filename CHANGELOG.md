@@ -76,6 +76,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - メモリ・CPU 使用量最適化
 - バッテリー消費量最適化
 
+## [1.1.1] - 2025-12-06
+
+### Fixed
+- **PyObjC 依存関係**: pyproject.toml に pyobjc-framework-Cocoa>=10.0 を追加
+- **自動インストール**: Homebrew インストール時に PyObjC が自動的に含まれるように修正
+- **警告解消**: "PyObjC が利用できません" 警告が新規インストールで表示されなくなる
+- **パフォーマンス**: ポーリング方式からリアルタイム通知方式への自動切り替え
+
+### Technical Details
+- pyproject.toml の dependencies に PyObjC を追加
+- setup.py と pyproject.toml の依存関係を統一
+- 最適なディスプレイ変更監視のための環境整備
+
 ## [Unreleased]
 
 ### Planned

@@ -16,11 +16,14 @@ import re
 
 try:
     import objc
-    from Foundation import NSNotificationCenter, NSApplication
-    from AppKit import NSScreen
+    from Foundation import NSNotificationCenter, NSApplication, NSRunLoop, NSDefaultRunLoopMode
+    from AppKit import NSScreen, NSApp
     OBJC_AVAILABLE = True
 except ImportError:
     OBJC_AVAILABLE = False
+    print("エラー: PyObjC が必要です。以下のコマンドでインストールしてください:")
+    print("pip3 install pyobjc-framework-Cocoa")
+    raise ImportError("PyObjC が利用できません")
 
 
 @dataclass
@@ -64,10 +67,10 @@ class DisplayMonitor:
         if self.is_monitoring:
             return True
             
-        if OBJC_AVAILABLE:
-            return self._start_objc_monitoring()
-        else:
-            return self._start_polling_monitoring()
+        if not OBJC_AVAILABLE:
+            raise RuntimeError("PyObjC が必要です。pip3 install pyobjc-framework-Cocoa でインストールしてください")
+            
+        return self._start_objc_monitoring()
     
     def stop_monitoring(self) -> None:
         """監視を停止"""
