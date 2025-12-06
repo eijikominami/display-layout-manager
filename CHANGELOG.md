@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **メニューバーアプリケーション**: macOS メニューバーから操作できる GUI アプリケーション
+- **display-layout-manager-menubar**: メニューバーアプリの起動コマンド
+- **レイアウト適用ボタン**: メニューバーから1クリックでレイアウト適用
+- **設定保存ボタン**: メニューバーから現在の設定を保存
+- **ディスプレイ情報表示**: 接続されたディスプレイ情報をメニューから確認
+- **自動起動管理**: ログイン時の自動起動を GUI で切り替え
+- **macOS 通知**: 操作結果を通知センターで表示
+- **CLI Bridge**: メニューバーアプリと既存 CLI コンポーネントの連携
+- **Notification Manager**: macOS 通知センター統合
+- **Auto Launch Manager**: LaunchAgent による自動起動管理
+
+### Changed
+- **依存関係**: rumps と pyobjc-framework-Cocoa を追加
+- **setup.py**: display-layout-manager-menubar エントリーポイントを追加
+- **Homebrew Formula**: メニューバーアプリのリソースと使用方法を追加
+
 ## [1.2.0] - 2025-12-06
 
 ### Removed

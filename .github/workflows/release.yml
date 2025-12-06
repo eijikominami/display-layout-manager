@@ -32,9 +32,21 @@ jobs:
         run: |
           pip install -e .
       
+      - name: Install test dependencies
+        run: |
+          pip install coverage
+      
+      - name: Run unit tests
+        run: |
+          python tests/run_all_tests.py
+      
       - name: Run integration tests
         run: |
           python -m src.display_layout_manager.main --run-tests --verbose
+      
+      - name: Generate coverage report
+        run: |
+          python tests/run_coverage.py
 
   release:
     needs: test
@@ -150,6 +162,16 @@ jobs:
             depends_on "jakehilborn/jakehilborn/displayplacer"
             depends_on "grep"
 
+            resource "rumps" do
+              url "https://files.pythonhosted.org/packages/3d/11/5696c4f1f5d0e8b9a3e7f8e0e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3/rumps-0.4.0.tar.gz"
+              sha256 "95b5e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3"
+            end
+
+            resource "pyobjc-framework-Cocoa" do
+              url "https://files.pythonhosted.org/packages/pyobjc-framework-Cocoa/pyobjc_framework_Cocoa-9.2.tar.gz"
+              sha256 "..."
+            end
+
             def install
               virtualenv_install_with_resources
             end
@@ -167,10 +189,14 @@ jobs:
               puts <<~EOS
                 Display Layout Manager がインストールされました。
                 
-                基本的な使用方法:
+                CLI使用方法:
                   display-layout-manager --save-current     # 現在のレイアウトを保存
                   display-layout-manager                    # 保存されたレイアウトを適用
                   display-layout-manager --show-displays   # 接続されたディスプレイを表示
+                
+                メニューバーアプリ:
+                  display-layout-manager-menubar            # メニューバーアプリを起動
+                  display-layout-manager-menubar --enable-auto-launch  # 自動起動を有効化
                 
                 設定ファイル:
                   ~/Library/Application Support/DisplayLayoutManager/config.json
