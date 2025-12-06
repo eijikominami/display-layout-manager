@@ -20,10 +20,16 @@ def test_checkbox_toggle():
     print("メニューバーアプリ 統合テスト - チェックマークトグル")
     print("=" * 70)
 
-    # CI 環境チェック
-    if os.environ.get("CI") == "true":
+    # CI 環境チェック（GitHub Actions、その他のCI環境を検出）
+    is_ci = (
+        os.environ.get("CI") == "true"
+        or os.environ.get("GITHUB_ACTIONS") == "true"
+        or os.environ.get("CI") is not None
+    )
+
+    if is_ci:
         print(
-            "\n⚠ CI 環境では LaunchAgents へのアクセスが制限されているため、このテストをスキップします"
+            "\n⚠ CI 環境では GUI テストが実行できないため、このテストをスキップします"
         )
         print("=" * 70)
         return True
