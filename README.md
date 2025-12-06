@@ -1,5 +1,12 @@
 # Display Layout Manager
 
+[![Build](https://github.com/eijikominami/display-layout-manager/actions/workflows/test.yml/badge.svg)](https://github.com/eijikominami/display-layout-manager/actions/workflows/test.yml)
+[![Release](https://github.com/eijikominami/display-layout-manager/actions/workflows/release.yml/badge.svg)](https://github.com/eijikominami/display-layout-manager/actions/workflows/release.yml)
+[![Release Version](https://img.shields.io/github/v/release/eijikominami/display-layout-manager)](https://github.com/eijikominami/display-layout-manager/releases)
+[![codecov](https://codecov.io/gh/eijikominami/display-layout-manager/branch/main/graph/badge.svg)](https://codecov.io/gh/eijikominami/display-layout-manager)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/downloads/)
+
 macOS用のディスプレイレイアウト自動設定ツール
 
 ## 概要
