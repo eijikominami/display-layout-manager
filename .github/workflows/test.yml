@@ -89,3 +89,112 @@ jobs:
       - name: Check import sorting with isort
         run: |
           isort --check-only --profile black src/ tests/
+  
+  homebrew-test:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Get version from __init__.py
+        id: version
+        run: |
+          VERSION=$(python3 -c "exec(open('src/display_layout_manager/__init__.py').read()); print(__version__)")
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "Detected version: $VERSION"
+      
+      - name: Install system dependencies
+        run: |
+          brew install jakehilborn/jakehilborn/displayplacer
+          brew install grep
+      
+      - name: Create temporary Homebrew Formula
+        run: |
+          mkdir -p /tmp/homebrew-test/Formula
+          
+          # Get SHA256 of current source
+          tar czf /tmp/test-source.tar.gz --exclude='.git' .
+          SHA256=$(shasum -a 256 /tmp/test-source.tar.gz | cut -d' ' -f1)
+          
+          # Create test formula
+          cat > /tmp/homebrew-test/Formula/display-layout-manager.rb << 'EOF'
+          class DisplayLayoutManager < Formula
+            include Language::Python::Virtualenv
+
+            desc "macOS用ディスプレイレイアウト自動設定ツール"
+            homepage "https://github.com/eijikominami/display-layout-manager"
+            url "file:///tmp/test-source.tar.gz"
+            sha256 "$SHA256"
+            license "MIT"
+
+            depends_on "python@3.11"
+            depends_on "jakehilborn/jakehilborn/displayplacer"
+            depends_on "grep"
+
+            resource "pyobjc-core" do
+              url "https://files.pythonhosted.org/packages/b8/b6/d5612eb40be4fd5ef88c259339e6313f46ba67577a95d86c3470b951fce0/pyobjc_core-12.1.tar.gz"
+              sha256 "2bb3903f5387f72422145e1466b3ac3f7f0ef2e9960afa9bcd8961c5cbf8bd21"
+            end
+
+            resource "pyobjc-framework-Cocoa" do
+              url "https://files.pythonhosted.org/packages/02/a3/16ca9a15e77c061a9250afbae2eae26f2e1579eb8ca9462ae2d2c71e1169/pyobjc_framework_cocoa-12.1.tar.gz"
+              sha256 "5556c87db95711b985d5efdaaf01c917ddd41d148b1e52a0c66b1a2e2c5c1640"
+            end
+
+            resource "rumps" do
+              url "https://files.pythonhosted.org/packages/b2/e2/2e6a47951290bd1a2831dcc50aec4b25d104c0cf00e8b7868cbd29cf3bfe/rumps-0.4.0.tar.gz"
+              sha256 "17fb33c21b54b1e25db0d71d1d793dc19dc3c0b7d8c79dc6d833d0cffc8b1596"
+            end
+
+            def install
+              virtualenv_install_with_resources
+            end
+
+            test do
+              assert_match "Display Layout Manager", shell_output("#{bin}/display-layout-manager --version")
+            end
+          end
+          EOF
+          
+          # Replace SHA256 placeholder
+          sed -i '' "s/\$SHA256/$SHA256/g" /tmp/homebrew-test/Formula/display-layout-manager.rb
+      
+      - name: Install from local Formula
+        run: |
+          brew install --build-from-source /tmp/homebrew-test/Formula/display-layout-manager.rb
+      
+      - name: Verify installation
+        run: |
+          # Check that main command exists
+          which display-layout-manager
+          display-layout-manager --version
+          
+          # Check that menubar command exists
+          which display-layout-manager-menubar
+          
+          # List all installed binaries
+          echo "Installed binaries:"
+          ls -la $(brew --prefix)/bin/ | grep display-layout-manager
+          
+          # Check Cellar structure
+          echo "Cellar structure:"
+          CELLAR_PATH=$(brew --cellar display-layout-manager)/${{ steps.version.outputs.VERSION }}
+          ls -la $CELLAR_PATH/bin/
+      
+      - name: Run basic functionality tests
+        run: |
+          # Test CLI help
+          display-layout-manager --help
+          
+          # Test version command
+          display-layout-manager --version
+          
+          # Test show-displays (may fail if no displays, but should not crash)
+          display-layout-manager --show-displays || true
+      
+      - name: Cleanup
+        if: always()
+        run: |
+          brew uninstall display-layout-manager || true
+          rm -rf /tmp/homebrew-test
+          rm -f /tmp/test-source.tar.gz
