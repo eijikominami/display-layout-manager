@@ -150,16 +150,6 @@ jobs:
             depends_on "jakehilborn/jakehilborn/displayplacer"
             depends_on "grep"
 
-            resource "pyobjc-core" do
-              url "https://files.pythonhosted.org/packages/b8/b6/d5612eb40be4fd5ef88c259339e6313f46ba67577a95d86c3470b951fce0/pyobjc_core-12.1.tar.gz"
-              sha256 "2bb3903f5387f72422145e1466b3ac3f7f0ef2e9960afa9bcd8961c5cbf8bd21"
-            end
-
-            resource "pyobjc-framework-Cocoa" do
-              url "https://files.pythonhosted.org/packages/02/a3/16ca9a15e77c061a9250afbae2eae26f2e1579eb8ca9462ae2d2c71e1169/pyobjc_framework_cocoa-12.1.tar.gz"
-              sha256 "5556c87db95711b985d5efdaaf01c917ddd41d148b1e52a0c66b1a2e2c5c1640"
-            end
-
             def install
               virtualenv_install_with_resources
             end
@@ -177,31 +167,17 @@ jobs:
               puts <<~EOS
                 Display Layout Manager がインストールされました。
                 
-                常駐監視機能を有効化するには、以下のコマンドを実行してください：
-                  display-layout-manager --enable-daemon
-                
                 基本的な使用方法:
                   display-layout-manager --save-current     # 現在のレイアウトを保存
                   display-layout-manager                    # 保存されたレイアウトを適用
                   display-layout-manager --show-displays   # 接続されたディスプレイを表示
                 
-                常駐機能管理コマンド:
-                  display-layout-manager --enable-daemon   # 常駐機能を有効化
-                  display-layout-manager --status-daemon   # 状態確認
-                  display-layout-manager --disable-daemon  # 無効化
-                
                 設定ファイル:
                   ~/Library/Application Support/DisplayLayoutManager/config.json
-                  ~/Library/Application Support/DisplayLayoutManager/daemon.json
                 
                 ログファイル:
                   ~/Library/Logs/DisplayLayoutManager/
               EOS
-            end
-
-            def uninstall_preflight
-              # 常駐機能を停止・削除
-              system "#{bin}/display-layout-manager", "--disable-daemon"
             end
 
             test do
