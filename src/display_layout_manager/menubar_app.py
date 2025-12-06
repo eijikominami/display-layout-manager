@@ -15,8 +15,7 @@ class DisplayLayoutMenuBar(rumps.App):
     
     def __init__(self):
         super(DisplayLayoutMenuBar, self).__init__(
-            "Display Layout Manager",
-            icon=None,  # TODO: アイコンを追加
+            "🖥️",  # ディスプレイの絵文字アイコン
             quit_button=None  # カスタム終了ボタンを使用
         )
         
