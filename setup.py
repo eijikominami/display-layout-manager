@@ -39,13 +39,15 @@ setup(
     
     # 依存関係
     install_requires=[
-        "pyobjc-framework-Cocoa>=10.0",  # macOS 通知システム統合用
+        "rumps>=0.4.0",  # メニューバーアプリフレームワーク
+        "pyobjc-framework-Cocoa>=9.0",  # macOS API アクセス
     ],
     
     # エントリーポイント
     entry_points={
         "console_scripts": [
             "display-layout-manager=display_layout_manager.main:main",
+            "display-layout-manager-menubar=display_layout_manager.menubar:main",
         ],
     },
     
