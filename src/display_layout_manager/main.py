@@ -19,6 +19,10 @@ from .command_executor import CommandExecutor
 from .logger import Logger
 from .error_handler import ErrorHandler
 from .layout_saver import LayoutSaver
+from .display_monitor import DisplayMonitor
+from .event_processor import EventProcessor, ProcessedEvent
+from .daemon_manager import DaemonManager
+from .configuration_watcher import DaemonConfigManager
 
 
 
@@ -89,16 +93,394 @@ def parse_arguments() -> argparse.Namespace:
         help="現在のディスプレイレイアウトをパターンとして保存"
     )
     
+    parser.add_argument(
+        "--daemon",
+        action="store_true",
+        help="常駐モードで実行（LaunchAgent から呼び出し用）"
+    )
+    
+    # 常駐機能管理コマンド
+    parser.add_argument(
+        "--enable-daemon",
+        action="store_true",
+        help="常駐機能を有効化"
+    )
+    
+    parser.add_argument(
+        "--disable-daemon",
+        action="store_true",
+        help="常駐機能を無効化"
+    )
+    
+    parser.add_argument(
+        "--start-daemon",
+        action="store_true",
+        help="常駐プロセスを手動開始"
+    )
+    
+    parser.add_argument(
+        "--stop-daemon",
+        action="store_true",
+        help="常駐プロセスを手動停止"
+    )
+    
+    parser.add_argument(
+        "--status-daemon",
+        action="store_true",
+        help="常駐プロセスの状態を確認"
+    )
+    
+    parser.add_argument(
+        "--show-daemon-logs",
+        action="store_true",
+        help="常駐プロセスのログを表示"
+    )
+    
+    parser.add_argument(
+        "--clear-daemon-logs",
+        action="store_true",
+        help="常駐プロセスのログをクリア"
+    )
+    
+    parser.add_argument(
+        "--daemon-config",
+        action="store_true",
+        help="常駐設定ファイルを表示"
+    )
+    
+    parser.add_argument(
+        "--reload-daemon",
+        action="store_true",
+        help="常駐プロセスの設定をリロード"
+    )
+    
     return parser.parse_args()
 
 
+def run_daemon_mode(args: argparse.Namespace) -> int:
+    """常駐モードで実行"""
+    import signal
+    import time
+    
+    # 常駐専用ログの初期化
+    logger = Logger(verbose=args.verbose, log_to_file=True, daemon_mode=True)
+    logger.info("daemon", "Display Layout Manager Daemon 開始")
+    
+    # 設定管理の初期化
+    config_manager = ConfigManager(verbose=args.verbose)
+    
+    # 常駐プロセス用の設定を読み込み
+    daemon_config = load_daemon_config()
+    
+    # 自動実行が無効の場合は監視のみ
+    if not daemon_config.get('daemon', {}).get('auto_execute', True):
+        logger.info("daemon", "自動実行が無効のため、監視のみ実行します")
+    
+    # シャットダウンフラグ
+    shutdown_requested = False
+    
+    def signal_handler(signum, frame):
+        nonlocal shutdown_requested
+        logger.info("daemon", f"シグナル {signum} を受信、シャットダウン開始")
+        shutdown_requested = True
+    
+    # シグナルハンドラーを設定
+    signal.signal(signal.SIGTERM, signal_handler)
+    signal.signal(signal.SIGINT, signal_handler)
+    
+    try:
+        # イベント処理コールバック
+        def on_processed_event(event: ProcessedEvent):
+            logger.info("daemon", f"ディスプレイ変更検知: {event.final_event_type}, "
+                       f"ディスプレイ数: {event.screen_count}")
+            
+            # 自動実行が有効な場合のみコマンドを実行
+            if daemon_config.get('daemon', {}).get('auto_execute', True):
+                execute_layout_command(event, logger, config_manager, daemon_config)
+        
+        # Event Processor の初期化
+        debounce_delay = daemon_config.get('daemon', {}).get('debounce_delay', 2.0)
+        event_processor = EventProcessor(
+            callback=on_processed_event,
+            debounce_delay=debounce_delay
+        )
+        
+        # Display Monitor の初期化
+        def on_display_change(event):
+            logger.debug("daemon", f"ディスプレイイベント受信: {event.event_type}")
+            event_processor.process_event(event)
+        
+        display_monitor = DisplayMonitor(callback=on_display_change)
+        
+        # 監視開始
+        if not display_monitor.start_monitoring():
+            logger.error("daemon", "ディスプレイ監視の開始に失敗")
+            return 1
+        
+        logger.info("daemon", "ディスプレイ監視を開始しました")
+        
+        # メインループ
+        while not shutdown_requested:
+            time.sleep(1.0)
+        
+        # クリーンアップ
+        logger.info("daemon", "シャットダウン処理開始")
+        display_monitor.stop_monitoring()
+        event_processor.shutdown()
+        logger.info("daemon", "Display Layout Manager Daemon 終了")
+        
+        return 0
+        
+    except Exception as e:
+        logger.error("daemon", f"常駐モード実行中にエラー: {e}")
+        return 1
 
+
+def load_daemon_config() -> dict:
+    """常駐設定ファイルを読み込み"""
+    daemon_config_path = Path.home() / "Library/Application Support/DisplayLayoutManager/daemon.json"
+    
+    if not daemon_config_path.exists():
+        # デフォルト設定を作成
+        default_config = {
+            "version": "1.0",
+            "daemon": {
+                "enabled": True,
+                "debounce_delay": 2.0,
+                "log_level": "INFO",
+                "max_execution_time": 30,
+                "auto_execute": True,
+                "excluded_events": [],
+                "notification": {
+                    "enabled": False,
+                    "success": True,
+                    "failure": True
+                }
+            },
+            "monitoring": {
+                "display_changes": True,
+                "configuration_changes": True,
+                "check_interval": 1.0
+            },
+            "execution": {
+                "command_timeout": 30,
+                "retry_count": 2,
+                "retry_delay": 5.0,
+                "dry_run": False
+            },
+            "logging": {
+                "file_path": "~/Library/Logs/DisplayLayoutManager/daemon.log",
+                "max_file_size": "10MB",
+                "backup_count": 5,
+                "format": "json"
+            }
+        }
+        
+        # 設定ディレクトリを作成
+        daemon_config_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        # デフォルト設定を保存
+        import json
+        with open(daemon_config_path, 'w', encoding='utf-8') as f:
+            json.dump(default_config, f, indent=2, ensure_ascii=False)
+        
+        return default_config
+    
+    # 既存の設定を読み込み
+    try:
+        import json
+        with open(daemon_config_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"常駐設定ファイルの読み込みに失敗: {e}")
+        return {}
+
+
+def execute_layout_command(event: ProcessedEvent, logger: Logger, 
+                          config_manager: ConfigManager, daemon_config: dict):
+    """レイアウトコマンドを実行"""
+    try:
+        # 通常のレイアウト適用処理を実行
+        config_path = config_manager.get_config_path()
+        
+        # 依存関係チェック（簡略版）
+        dependency_manager = DependencyManager(verbose=False)
+        if not dependency_manager.check_all_dependencies():
+            logger.error("daemon", "依存関係が不足しています")
+            return
+        
+        # ディスプレイ検出
+        display_manager = DisplayManager(verbose=False)
+        current_displays = display_manager.get_current_displays()
+        
+        if not current_displays:
+            logger.error("daemon", "ディスプレイの検出に失敗")
+            return
+        
+        # 設定読み込み
+        config = config_manager.load_config(config_path)
+        if not config:
+            logger.error("daemon", "設定ファイルの読み込みに失敗")
+            return
+        
+        # パターンマッチング
+        pattern_matcher = PatternMatcher(verbose=False)
+        match_result = pattern_matcher.find_matching_pattern(current_displays, config)
+        
+        if not match_result.matched:
+            logger.info("daemon", "マッチするパターンが見つかりません")
+            return
+        
+        # コマンド実行
+        command_executor = CommandExecutor(verbose=False)
+        dry_run = daemon_config.get('execution', {}).get('dry_run', False)
+        
+        execution_result = command_executor.execute_command(
+            match_result.pattern.command,
+            match_result.pattern.name,
+            dry_run=dry_run
+        )
+        
+        if execution_result.success:
+            logger.success("daemon", f"レイアウト '{match_result.pattern.name}' を適用しました")
+        else:
+            logger.error("daemon", f"レイアウト適用に失敗: {execution_result.stderr}")
+            
+    except Exception as e:
+        logger.error("daemon", f"レイアウトコマンド実行中にエラー: {e}")
+
+
+def handle_daemon_commands(args: argparse.Namespace) -> int:
+    """常駐機能管理コマンドを処理"""
+    daemon_manager = DaemonManager(verbose=args.verbose)
+    
+    try:
+        if args.enable_daemon:
+            print("常駐機能を有効化中...")
+            if daemon_manager.install_daemon():
+                print("✓ 常駐機能を有効化しました")
+                print("  ログイン時に自動的に開始されます")
+                return 0
+            else:
+                print("✗ 常駐機能の有効化に失敗しました")
+                return 1
+        
+        elif args.disable_daemon:
+            print("常駐機能を無効化中...")
+            if daemon_manager.uninstall_daemon():
+                print("✓ 常駐機能を無効化しました")
+                return 0
+            else:
+                print("✗ 常駐機能の無効化に失敗しました")
+                return 1
+        
+        elif args.start_daemon:
+            print("常駐プロセスを開始中...")
+            if daemon_manager.start_daemon():
+                print("✓ 常駐プロセスを開始しました")
+                return 0
+            else:
+                print("✗ 常駐プロセスの開始に失敗しました")
+                return 1
+        
+        elif args.stop_daemon:
+            print("常駐プロセスを停止中...")
+            if daemon_manager.stop_daemon():
+                print("✓ 常駐プロセスを停止しました")
+                return 0
+            else:
+                print("✗ 常駐プロセスの停止に失敗しました")
+                return 1
+        
+        elif args.status_daemon:
+            status = daemon_manager.get_daemon_status()
+            print("常駐プロセス状態:")
+            print(f"  インストール済み: {'はい' if status.is_installed else 'いいえ'}")
+            print(f"  有効化済み: {'はい' if status.is_enabled else 'いいえ'}")
+            print(f"  実行中: {'はい' if status.is_running else 'いいえ'}")
+            
+            if status.pid:
+                print(f"  プロセスID: {status.pid}")
+            
+            if status.last_exit_code is not None:
+                print(f"  最終終了コード: {status.last_exit_code}")
+            
+            if status.plist_path:
+                print(f"  plist ファイル: {status.plist_path}")
+            
+            if status.log_path:
+                print(f"  ログファイル: {status.log_path}")
+            
+            return 0
+        
+        elif args.show_daemon_logs:
+            print("常駐プロセスのログ（最新50行）:")
+            print("-" * 50)
+            log_content = daemon_manager.get_log_content(lines=50)
+            print(log_content)
+            
+            print("\nエラーログ（最新20行）:")
+            print("-" * 50)
+            error_log_content = daemon_manager.get_log_content(lines=20, error_log=True)
+            print(error_log_content)
+            
+            return 0
+        
+        elif args.clear_daemon_logs:
+            print("常駐プロセスのログをクリア中...")
+            if daemon_manager.clear_logs():
+                print("✓ ログをクリアしました")
+                return 0
+            else:
+                print("✗ ログのクリアに失敗しました")
+                return 1
+        
+        elif args.daemon_config:
+            config_manager = DaemonConfigManager(verbose=args.verbose)
+            config = config_manager.load_config()
+            
+            print("常駐設定:")
+            print("-" * 50)
+            import json
+            print(json.dumps(config, indent=2, ensure_ascii=False))
+            
+            print(f"\n設定ファイル: {config_manager.config_path}")
+            return 0
+        
+        elif args.reload_daemon:
+            print("常駐プロセスの設定をリロード中...")
+            if daemon_manager.reload_daemon():
+                print("✓ 設定をリロードしました")
+                return 0
+            else:
+                print("✗ 設定のリロードに失敗しました")
+                return 1
+        
+        return 0
+        
+    except Exception as e:
+        print(f"常駐機能管理中にエラー: {e}")
+        return 1
 
 
 def main() -> int:
     """メイン実行関数"""
     try:
         args = parse_arguments()
+        
+        # 常駐モードの場合
+        if args.daemon:
+            return run_daemon_mode(args)
+        
+        # 常駐機能管理コマンドの処理
+        daemon_commands = [
+            args.enable_daemon, args.disable_daemon, args.start_daemon,
+            args.stop_daemon, args.status_daemon, args.show_daemon_logs,
+            args.clear_daemon_logs, args.daemon_config, args.reload_daemon
+        ]
+        
+        if any(daemon_commands):
+            return handle_daemon_commands(args)
         
         print(f"Display Layout Manager v{__version__}")
         

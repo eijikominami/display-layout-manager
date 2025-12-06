@@ -31,9 +31,10 @@ class LogEntry:
 class Logger:
     """ログ・フィードバック管理クラス"""
     
-    def __init__(self, verbose: bool = False, log_to_file: bool = True):
+    def __init__(self, verbose: bool = False, log_to_file: bool = True, daemon_mode: bool = False):
         self.verbose = verbose
         self.log_to_file = log_to_file
+        self.daemon_mode = daemon_mode
         self.log_entries = []
         self._log_file_path: Optional[Path] = None
         
@@ -45,9 +46,13 @@ class Logger:
         log_dir = Path.home() / "Library" / "Logs" / "DisplayLayoutManager"
         log_dir.mkdir(parents=True, exist_ok=True)
         
-        # ログファイル名に日付を含める
-        timestamp = datetime.now().strftime("%Y%m%d")
-        self._log_file_path = log_dir / f"display_layout_manager_{timestamp}.log"
+        if self.daemon_mode:
+            # 常駐モードの場合は専用ログファイル
+            self._log_file_path = log_dir / "daemon.log"
+        else:
+            # 通常モードの場合は日付付きログファイル
+            timestamp = datetime.now().strftime("%Y%m%d")
+            self._log_file_path = log_dir / f"display_layout_manager_{timestamp}.log"
         
         # ディレクトリの権限設定
         os.chmod(log_dir, 0o700)
@@ -102,6 +107,10 @@ class Logger:
     def error(self, component: str, message: str, details: Optional[Dict[str, Any]] = None) -> None:
         """エラーログ"""
         self._log("ERROR", component, message, details)
+    
+    def debug(self, component: str, message: str, details: Optional[Dict[str, Any]] = None) -> None:
+        """デバッグログ"""
+        self._log("DEBUG", component, message, details)
     
     def log_dependency_check(self, tool: str, available: bool, version: Optional[str] = None) -> None:
         """依存関係チェックのログ"""
