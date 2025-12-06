@@ -117,13 +117,16 @@ jobs:
           SHA256=$(shasum -a 256 /tmp/test-source.tar.gz | cut -d' ' -f1)
           
           # Create test formula
-          cat > /tmp/homebrew-test/Formula/display-layout-manager.rb << 'EOF'
+          VERSION=$(python3 -c "exec(open('src/display_layout_manager/__init__.py').read()); print(__version__)")
+          
+          cat > /tmp/homebrew-test/Formula/display-layout-manager.rb << EOF
           class DisplayLayoutManager < Formula
             include Language::Python::Virtualenv
 
             desc "macOS用ディスプレイレイアウト自動設定ツール"
             homepage "https://github.com/eijikominami/display-layout-manager"
             url "file:///tmp/test-source.tar.gz"
+            version "$VERSION"
             sha256 "$SHA256"
             license "MIT"
 
@@ -155,13 +158,15 @@ jobs:
             end
           end
           EOF
-          
-          # Replace SHA256 placeholder
-          sed -i '' "s/\$SHA256/$SHA256/g" /tmp/homebrew-test/Formula/display-layout-manager.rb
       
-      - name: Install from local Formula
+      - name: Create local tap and install
         run: |
-          brew install --build-from-source /tmp/homebrew-test/Formula/display-layout-manager.rb
+          # Create local tap
+          mkdir -p $(brew --repository)/Library/Taps/test/homebrew-test/Formula
+          cp /tmp/homebrew-test/Formula/display-layout-manager.rb $(brew --repository)/Library/Taps/test/homebrew-test/Formula/
+          
+          # Install from local tap
+          brew install --build-from-source test/test/display-layout-manager
       
       - name: Verify installation
         run: |
@@ -196,5 +201,6 @@ jobs:
         if: always()
         run: |
           brew uninstall display-layout-manager || true
+          brew untap test/test || true
           rm -rf /tmp/homebrew-test
           rm -f /tmp/test-source.tar.gz
