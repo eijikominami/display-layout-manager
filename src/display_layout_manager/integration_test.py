@@ -16,10 +16,6 @@ from .display_manager import DisplayManager
 from .pattern_matcher import PatternMatcher
 from .command_executor import CommandExecutor
 from .logger import Logger
-from .daemon_manager import DaemonManager
-from .display_monitor import DisplayMonitor
-from .event_processor import EventProcessor
-from .configuration_watcher import DaemonConfigManager
 
 
 @dataclass
@@ -426,132 +422,7 @@ displayplacer "id:TEST-ID-1 res:1920x1080 hz:60 color_depth:8 enabled:true scali
             execution_time = time.time() - start_time
             return TestResult("layout_saver", False, f"レイアウト保存機能テストエラー: {e}", {"error": str(e)}, execution_time)
     
-    def test_daemon_management(self) -> TestResult:
-        """常駐機能管理テスト"""
-        import time
-        start_time = time.time()
-        
-        try:
-            self._log("常駐機能管理テスト開始")
-            
-            daemon_manager = DaemonManager(verbose=self.verbose)
-            
-            # 初期状態の確認
-            initial_status = daemon_manager.get_daemon_status()
-            
-            # plist ファイル生成テスト（実際にはインストールしない）
-            plist_content_valid = daemon_manager._find_executable_path() is not None
-            
-            details = {
-                "initial_installed": initial_status.is_installed,
-                "initial_running": initial_status.is_running,
-                "executable_found": plist_content_valid,
-                "plist_path": str(daemon_manager.plist_path),
-                "log_path": str(daemon_manager.log_path)
-            }
-            
-            # テスト成功条件（実際のインストールは行わない）
-            test_success = True  # 基本的な初期化が成功すれば OK
-            
-            message = "常駐機能管理テスト成功" if test_success else "常駐機能管理テスト失敗"
-            
-            execution_time = time.time() - start_time
-            return TestResult("daemon_management", test_success, message, details, execution_time)
-            
-        except Exception as e:
-            execution_time = time.time() - start_time
-            return TestResult("daemon_management", False, f"常駐機能管理テストエラー: {e}", {"error": str(e)}, execution_time)
-    
-    def test_display_monitoring(self) -> TestResult:
-        """ディスプレイ監視機能テスト"""
-        import time
-        start_time = time.time()
-        
-        try:
-            self._log("ディスプレイ監視機能テスト開始")
-            
-            events_received = []
-            
-            def test_callback(event):
-                events_received.append(event)
-            
-            display_monitor = DisplayMonitor(callback=test_callback)
-            
-            # 初期状態の確認
-            current_displays = display_monitor.get_current_displays()
-            current_count = display_monitor.get_current_display_count()
-            
-            details = {
-                "current_display_count": current_count,
-                "current_displays": current_displays[:3] if current_displays else [],  # 最初の3つのみ
-                "monitor_initialized": True,
-                "callback_set": test_callback is not None
-            }
-            
-            # テスト成功条件
-            test_success = (
-                current_count >= 0 and
-                isinstance(current_displays, list)
-            )
-            
-            message = "ディスプレイ監視機能テスト成功" if test_success else "ディスプレイ監視機能テスト失敗"
-            
-            execution_time = time.time() - start_time
-            return TestResult("display_monitoring", test_success, message, details, execution_time)
-            
-        except Exception as e:
-            execution_time = time.time() - start_time
-            return TestResult("display_monitoring", False, f"ディスプレイ監視機能テストエラー: {e}", {"error": str(e)}, execution_time)
-    
-    def test_daemon_config_management(self) -> TestResult:
-        """常駐設定管理テスト"""
-        import time
-        start_time = time.time()
-        
-        try:
-            self._log("常駐設定管理テスト開始")
-            
-            config_manager = DaemonConfigManager(verbose=self.verbose)
-            
-            # 設定の読み込み
-            config = config_manager.load_config()
-            
-            # 設定の検証
-            config_valid = (
-                'daemon' in config and
-                'monitoring' in config and
-                'execution' in config and
-                'logging' in config
-            )
-            
-            # デフォルト値の確認
-            daemon_config = config.get('daemon', {})
-            debounce_delay = daemon_config.get('debounce_delay', 0)
-            auto_execute = daemon_config.get('auto_execute', False)
-            
-            details = {
-                "config_loaded": config is not None,
-                "config_valid": config_valid,
-                "debounce_delay": debounce_delay,
-                "auto_execute": auto_execute,
-                "config_path": str(config_manager.config_path)
-            }
-            
-            # テスト成功条件
-            test_success = (
-                config_valid and
-                isinstance(debounce_delay, (int, float)) and
-                debounce_delay >= 0
-            )
-            
-            message = "常駐設定管理テスト成功" if test_success else "常駐設定管理テスト失敗"
-            
-            execution_time = time.time() - start_time
-            return TestResult("daemon_config_management", test_success, message, details, execution_time)
-            
-        except Exception as e:
-            execution_time = time.time() - start_time
-            return TestResult("daemon_config_management", False, f"常駐設定管理テストエラー: {e}", {"error": str(e)}, execution_time)
+
 
     def run_all_tests(self) -> List[TestResult]:
         """全テストを実行"""
@@ -568,10 +439,7 @@ displayplacer "id:TEST-ID-1 res:1920x1080 hz:60 color_depth:8 enabled:true scali
                 self.test_pattern_matching,
                 self.test_command_execution,
                 self.test_logging_system,
-                self.test_layout_saver,
-                self.test_daemon_management,
-                self.test_display_monitoring,
-                self.test_daemon_config_management
+                self.test_layout_saver
             ]
             
             for test_func in tests:
