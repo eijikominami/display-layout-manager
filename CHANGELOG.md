@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.2] - 2025-12-06
+
+### Fixed
+- **PyObjC インポートエラー**: NSApplication を Foundation から AppKit に修正
+- **常駐機能**: デーモンモードでの PyObjC 利用可能性チェックを修正
+- **リアルタイム監視**: ディスプレイ変更の即座検知が正常に動作
+
+## [1.1.1] - 2025-12-06
+
+### Fixed
+- **PyObjC 依存関係**: pyproject.toml に pyobjc-framework-Cocoa>=10.0 を追加
+- **自動インストール**: 新規インストール時に PyObjC が自動的に含まれるように修正
+- **警告解消**: "PyObjC が利用できません" 警告が表示されなくなる
+- **パフォーマンス向上**: ポーリング方式からリアルタイム通知に改善
+
 ## [1.0.0] - 2025-12-03
 
 ### Added

@@ -16,8 +16,8 @@ import re
 
 try:
     import objc
-    from Foundation import NSNotificationCenter, NSApplication, NSRunLoop, NSDefaultRunLoopMode
-    from AppKit import NSScreen, NSApp
+    from Foundation import NSNotificationCenter, NSRunLoop, NSDefaultRunLoopMode
+    from AppKit import NSApplication, NSScreen, NSApp
     OBJC_AVAILABLE = True
 except ImportError:
     OBJC_AVAILABLE = False
