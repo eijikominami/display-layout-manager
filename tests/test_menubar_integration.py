@@ -22,7 +22,9 @@ def test_checkbox_toggle():
 
     # CI 環境チェック
     if os.environ.get("CI") == "true":
-        print("\n⚠ CI 環境では LaunchAgents へのアクセスが制限されているため、このテストをスキップします")
+        print(
+            "\n⚠ CI 環境では LaunchAgents へのアクセスが制限されているため、このテストをスキップします"
+        )
         print("=" * 70)
         return True
 
