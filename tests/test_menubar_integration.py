@@ -10,9 +10,6 @@ from pathlib import Path
 # src ディレクトリをパスに追加
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from display_layout_manager.auto_launch_manager import AutoLaunchManager
-from display_layout_manager.menubar_app import DisplayLayoutMenuBar
-
 
 def test_checkbox_toggle():
     """チェックマーク表示のトグル動作を実際にテスト"""
@@ -34,11 +31,14 @@ def test_checkbox_toggle():
         print("=" * 70)
         return True
 
-    # rumps のインポートチェック（GUI環境が必要）
+    # rumps と menubar_app のインポートチェック（GUI環境が必要）
     try:
         import rumps
+
+        from display_layout_manager.auto_launch_manager import AutoLaunchManager
+        from display_layout_manager.menubar_app import DisplayLayoutMenuBar
     except Exception as e:
-        print(f"\n⚠ rumps のインポートに失敗しました（GUI環境が必要）: {e}")
+        print(f"\n⚠ GUI モジュールのインポートに失敗しました（GUI環境が必要）: {e}")
         print("  このテストをスキップします")
         print("=" * 70)
         return True
