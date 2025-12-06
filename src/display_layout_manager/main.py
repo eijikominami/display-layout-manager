@@ -5,20 +5,20 @@ macOS用のディスプレイレイアウト自動設定アプリケーション
 """
 
 import argparse
-import sys
 import os
+import sys
 from pathlib import Path
 from typing import Optional
 
 from . import __version__
-from .dependency_manager import DependencyManager
-from .config_manager import ConfigManager
-from .display_manager import DisplayManager
-from .pattern_matcher import PatternMatcher
 from .command_executor import CommandExecutor
-from .logger import Logger
+from .config_manager import ConfigManager
+from .dependency_manager import DependencyManager
+from .display_manager import DisplayManager
 from .error_handler import ErrorHandler
 from .layout_saver import LayoutSaver
+from .logger import Logger
+from .pattern_matcher import PatternMatcher
 
 
 def parse_arguments() -> argparse.Namespace:

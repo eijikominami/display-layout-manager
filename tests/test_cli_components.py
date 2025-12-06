@@ -2,12 +2,12 @@
 """
 CLI コンポーネントの包括的単体テスト
 """
-import sys
-import os
 import json
+import os
+import sys
 import tempfile
 from pathlib import Path
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import MagicMock, Mock, patch
 
 # src ディレクトリをパスに追加
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))

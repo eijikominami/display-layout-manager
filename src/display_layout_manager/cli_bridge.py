@@ -6,11 +6,12 @@ Display Layout Manager - CLI Bridge
 
 from dataclasses import dataclass
 from typing import Optional
-from .display_manager import DisplayManager
-from .pattern_matcher import PatternMatcher
-from .layout_saver import LayoutSaver
+
 from .command_executor import CommandExecutor
 from .config_manager import ConfigManager
+from .display_manager import DisplayManager
+from .layout_saver import LayoutSaver
+from .pattern_matcher import PatternMatcher
 
 
 @dataclass

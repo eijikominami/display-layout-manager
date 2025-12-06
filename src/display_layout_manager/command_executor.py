@@ -3,11 +3,12 @@
 displayplacerコマンドの実行と結果処理を管理
 """
 
-import subprocess
 import shlex
-from typing import Tuple, Optional
+import subprocess
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Optional, Tuple
+
 from .config_manager import ConfigPattern
 
 

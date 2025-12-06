@@ -3,10 +3,10 @@
 必要な外部ツールの存在確認とインストールを管理
 """
 
-import subprocess
 import shutil
-from typing import Tuple, Optional
+import subprocess
 from pathlib import Path
+from typing import Optional, Tuple
 
 
 class DependencyManager:

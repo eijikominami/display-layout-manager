@@ -2,8 +2,8 @@
 """
 テストカバレッジを測定するスクリプト
 """
-import sys
 import subprocess
+import sys
 from pathlib import Path
 
 

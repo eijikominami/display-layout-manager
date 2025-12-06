@@ -2,16 +2,16 @@
 """
 メニューバーアプリの統合テスト（実際の UI 動作確認）
 """
-import sys
 import os
-from pathlib import Path
+import sys
 import time
+from pathlib import Path
 
 # src ディレクトリをパスに追加
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from display_layout_manager.menubar_app import DisplayLayoutMenuBar
 from display_layout_manager.auto_launch_manager import AutoLaunchManager
+from display_layout_manager.menubar_app import DisplayLayoutMenuBar
 
 
 def test_checkbox_toggle():

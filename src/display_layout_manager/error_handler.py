@@ -5,9 +5,9 @@
 
 import sys
 import traceback
-from typing import Optional, Dict, Any, List
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any, Dict, List, Optional
 
 
 class ErrorCategory(Enum):

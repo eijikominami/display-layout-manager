@@ -5,13 +5,14 @@
 
 import json
 import os
-from pathlib import Path
-from typing import Dict, Any, Optional
+from dataclasses import asdict, dataclass
 from datetime import datetime
-from dataclasses import dataclass, asdict
+from pathlib import Path
+from typing import Any, Dict, Optional
+
 from .command_executor import ExecutionResult
-from .pattern_matcher import MatchResult
 from .display_manager import DisplayConfiguration
+from .pattern_matcher import MatchResult
 
 
 @dataclass

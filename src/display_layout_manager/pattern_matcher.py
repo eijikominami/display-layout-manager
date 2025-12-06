@@ -3,8 +3,9 @@
 ディスプレイ組み合わせのパターンマッチングを管理
 """
 
-from typing import List, Optional, Tuple
 from dataclasses import dataclass
+from typing import List, Optional, Tuple
+
 from .config_manager import ConfigPattern
 from .display_manager import DisplayConfiguration
 

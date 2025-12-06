@@ -9,7 +9,7 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
-from display_layout_manager.display_manager import DisplayManager, DisplayConfiguration
+from display_layout_manager.display_manager import DisplayConfiguration, DisplayManager
 
 
 def test_extract_screen_ids():

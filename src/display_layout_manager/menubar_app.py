@@ -5,8 +5,9 @@ macOS メニューバーアプリケーションの実装
 """
 
 import rumps
-from .cli_bridge import CLIBridge
+
 from .auto_launch_manager import AutoLaunchManager
+from .cli_bridge import CLIBridge
 
 
 class DisplayLayoutMenuBar(rumps.App):

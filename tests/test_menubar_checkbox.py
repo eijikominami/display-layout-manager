@@ -2,8 +2,8 @@
 """
 メニューバーアプリのチェックマーク機能の単体テスト
 """
-import sys
 import os
+import sys
 from pathlib import Path
 
 # src ディレクトリをパスに追加

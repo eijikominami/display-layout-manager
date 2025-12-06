@@ -5,11 +5,12 @@
 
 import json
 import re
-from typing import List, Tuple, Optional
 from dataclasses import dataclass
 from pathlib import Path
-from .display_manager import DisplayManager
+from typing import List, Optional, Tuple
+
 from .config_manager import ConfigManager, ConfigPattern, Configuration
+from .display_manager import DisplayManager
 
 
 @dataclass

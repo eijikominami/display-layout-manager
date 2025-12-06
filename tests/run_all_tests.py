@@ -2,8 +2,8 @@
 """
 全テストを実行するマスタースクリプト
 """
-import sys
 import subprocess
+import sys
 from pathlib import Path
 
 

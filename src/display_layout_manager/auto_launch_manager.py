@@ -5,9 +5,9 @@ Display Layout Manager - Auto Launch Manager
 """
 
 import os
-import subprocess
 import plistlib
 import shutil
+import subprocess
 from pathlib import Path
 
 

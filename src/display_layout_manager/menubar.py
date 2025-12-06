@@ -5,10 +5,11 @@ Display Layout Manager - Menu Bar Application Entry Point
 macOS メニューバーアプリケーションのエントリーポイント
 """
 
-import sys
 import argparse
-from display_layout_manager.menubar_app import DisplayLayoutMenuBar
+import sys
+
 from display_layout_manager.auto_launch_manager import AutoLaunchManager
+from display_layout_manager.menubar_app import DisplayLayoutMenuBar
 
 
 def main():

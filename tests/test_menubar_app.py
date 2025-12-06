@@ -2,16 +2,16 @@
 """
 メニューバーアプリの包括的な単体テスト
 """
-import sys
 import os
+import sys
 from pathlib import Path
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import MagicMock, Mock, patch
 
 # src ディレクトリをパスに追加
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from display_layout_manager.menubar_app import DisplayLayoutMenuBar
 from display_layout_manager.auto_launch_manager import AutoLaunchManager
+from display_layout_manager.menubar_app import DisplayLayoutMenuBar
 
 
 def test_menubar_initialization():

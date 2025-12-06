@@ -5,9 +5,9 @@ displayplacerコマンドを使用してディスプレイ情報を取得・管�
 
 import re
 import subprocess
-from typing import List, Optional, Tuple
 from dataclasses import dataclass
 from datetime import datetime
+from typing import List, Optional, Tuple
 
 
 @dataclass
