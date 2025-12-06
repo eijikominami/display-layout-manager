@@ -172,21 +172,23 @@ jobs:
               log_dir = "#{Dir.home}/Library/Logs/DisplayLayoutManager"
               system "mkdir", "-p", log_dir
               system "chmod", "700", log_dir
-
-              # 常駐機能の自動セットアップ
-              system "#{bin}/display-layout-manager", "--enable-daemon"
               
               # セットアップ完了メッセージ
               puts <<~EOS
                 Display Layout Manager がインストールされました。
                 
-                常駐監視機能が自動的に有効化されています。
-                ディスプレイ設定の変更時に自動的にレイアウトが適用されます。
+                常駐監視機能を有効化するには、以下のコマンドを実行してください：
+                  display-layout-manager --enable-daemon
                 
-                管理コマンド:
-                  display-layout-manager --status-daemon    # 状態確認
-                  display-layout-manager --disable-daemon   # 無効化
-                  display-layout-manager --enable-daemon    # 有効化
+                基本的な使用方法:
+                  display-layout-manager --save-current     # 現在のレイアウトを保存
+                  display-layout-manager                    # 保存されたレイアウトを適用
+                  display-layout-manager --show-displays   # 接続されたディスプレイを表示
+                
+                常駐機能管理コマンド:
+                  display-layout-manager --enable-daemon   # 常駐機能を有効化
+                  display-layout-manager --status-daemon   # 状態確認
+                  display-layout-manager --disable-daemon  # 無効化
                 
                 設定ファイル:
                   ~/Library/Application Support/DisplayLayoutManager/config.json

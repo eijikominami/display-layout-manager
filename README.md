@@ -93,8 +93,8 @@ display-layout-manager --run-tests
 display-layout-manager --save-current
 
 # 常駐機能の管理
+display-layout-manager --enable-daemon      # 有効化（初回のみ必要）
 display-layout-manager --status-daemon      # 状態確認
-display-layout-manager --enable-daemon      # 有効化
 display-layout-manager --disable-daemon     # 無効化
 display-layout-manager --show-daemon-logs   # ログ表示
 
@@ -119,7 +119,7 @@ v1.1.0 から追加された常駐監視機能により、ディスプレイ設�
 # 常駐機能の状態確認
 display-layout-manager --status-daemon
 
-# 常駐機能を有効化（Homebrew インストール時は自動で有効化済み）
+# 常駐機能を有効化（初回のみ必要）
 display-layout-manager --enable-daemon
 
 # 常駐機能を無効化
@@ -239,19 +239,19 @@ display-layout-manager --save-current
 
 ## 常駐監視機能 🆕
 
-Homebrew でインストールすると、常駐監視機能が自動的に有効化されます。ディスプレイ設定の変更を自動検知し、適切なレイアウトを自動適用します。
+Homebrew でインストールした後、簡単なコマンドで常駐監視機能を有効化できます。ディスプレイ設定の変更を自動検知し、適切なレイアウトを自動適用します。
 
 ### 基本的な使用方法
 
 ```bash
+# 常駐機能を有効化（初回のみ必要）
+display-layout-manager --enable-daemon
+
 # 常駐機能の状態確認
 display-layout-manager --status-daemon
 
 # 常駐機能を無効化
 display-layout-manager --disable-daemon
-
-# 常駐機能を再有効化
-display-layout-manager --enable-daemon
 ```
 
 ### 常駐機能管理コマンド

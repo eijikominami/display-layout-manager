@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.4] - 2025-12-06
+
+### Changed
+- **Homebrew インストール**: post_install での自動常駐機能有効化を削除
+- **ユーザー体験**: インストール後に手動で `--enable-daemon` 実行が必要に変更
+- **権限問題解決**: macOS セキュリティ制限による権限エラーを回避
+
+### Fixed
+- **要件定義書**: 要件16の受け入れ基準を実装に合わせて修正
+- **README.md**: 常駐機能の有効化手順を正確に更新
+- **GitHub Actions**: PyObjC リソースが自動削除されないように修正
+
+### Added
+- **開発ガイドライン**: 実装変更時の仕様書・ドキュメント整合性確認プロセスを追加
+- **品質保証**: コミット前品質保証メカニズムをステアリングに追加
+
 ## [1.1.3] - 2025-12-06
 
 ### Fixed
