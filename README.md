@@ -65,16 +65,16 @@ macOS のメニューバーから簡単に操作できる GUI アプリケーシ
 
 ```bash
 # メニューバーアプリを起動
-display-layout-manager-menubar
+display-layout-menubar
 
 # バックグラウンドで起動
-display-layout-manager-menubar &
+display-layout-menubar &
 
 # ログイン時の自動起動を有効化
-display-layout-manager-menubar --enable-auto-launch
+display-layout-menubar --enable-auto-launch
 
 # ログイン時の自動起動を無効化
-display-layout-manager-menubar --disable-auto-launch
+display-layout-menubar --disable-auto-launch
 ```
 
 #### メニューバーアプリの機能

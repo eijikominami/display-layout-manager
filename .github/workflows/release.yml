@@ -179,6 +179,15 @@ jobs:
 
             def install
               virtualenv_install_with_resources
+              
+              # Manually create menubar entry point if it doesn't exist
+              unless (bin/"display-layout-menubar").exist?
+                (bin/"display-layout-menubar").write <<~EOS
+                  #!/bin/bash
+                  exec "#{libexec}/bin/python" -m display_layout_manager.menubar "$@"
+                EOS
+                chmod 0755, bin/"display-layout-menubar"
+              end
             end
 
             def post_install
@@ -200,8 +209,8 @@ jobs:
                   display-layout-manager --show-displays   # 接続されたディスプレイを表示
                 
                 メニューバーアプリ:
-                  display-layout-manager-menubar            # メニューバーアプリを起動
-                  display-layout-manager-menubar --enable-auto-launch  # 自動起動を有効化
+                  display-layout-menubar            # メニューバーアプリを起動
+                  display-layout-menubar --enable-auto-launch  # 自動起動を有効化
                 
                 設定ファイル:
                   ~/Library/Application Support/DisplayLayoutManager/config.json

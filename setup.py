@@ -47,7 +47,7 @@ setup(
     entry_points={
         "console_scripts": [
             "display-layout-manager=display_layout_manager.main:main",
-            "display-layout-manager-menubar=display_layout_manager.menubar:main",
+            "display-layout-menubar=display_layout_manager.menubar:main",
         ],
     },
     
