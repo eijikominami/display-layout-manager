@@ -42,10 +42,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 統合テストスイート
 - 包括的なエラーハンドリング
 
+## [1.1.0] - 2025-12-06
+
+### Added
+- **常駐監視機能**: ディスプレイ変更の自動検知と自動レイアウト適用
+- **LaunchAgent 統合**: ログイン時の自動起動とクラッシュ時の自動再起動
+- **ディスプレイ変更監視**: NSApplication.didChangeScreenParametersNotification を使用
+- **イベント処理システム**: デバウンス機能付きイベント処理（デフォルト2秒）
+- **設定の動的リロード**: daemon.json 設定ファイルの変更を自動検知
+- **非同期コマンド実行**: レイアウト適用の非同期処理とキュー管理
+- **包括的な管理コマンド**:
+  - `--daemon`: 常駐モードで実行
+  - `--enable-daemon` / `--disable-daemon`: 常駐機能の有効化/無効化
+  - `--start-daemon` / `--stop-daemon`: 手動開始/停止
+  - `--status-daemon`: 常駐プロセスの状態確認
+  - `--show-daemon-logs` / `--clear-daemon-logs`: ログ管理
+  - `--daemon-config` / `--reload-daemon`: 設定管理
+
+### Enhanced
+- **Homebrew Formula**: インストール時の常駐機能自動セットアップ
+- **ログ機能**: daemon.log と execution_history.log の追加
+- **統合テスト**: 常駐機能のテストケース追加
+- **エラーハンドリング**: 常駐機能固有のエラー処理
+
+### Technical Details
+- 新規モジュール:
+  - `display_monitor.py`: ディスプレイ変更監視
+  - `event_processor.py`: イベント処理とデバウンス
+  - `daemon_manager.py`: LaunchAgent 管理
+  - `configuration_watcher.py`: 設定ファイル監視
+  - `command_scheduler.py`: コマンド実行スケジューラー
+- PyObjC 対応（オプション）: macOS 通知システムとの統合
+- メモリ・CPU 使用量最適化
+- バッテリー消費量最適化
+
 ## [Unreleased]
 
 ### Planned
 - 単体テスト実装
-- CI/CD パイプライン設定
 - ドキュメント拡充
-- パフォーマンス最適化
+- GUI インターフェース
+- プロファイル管理機能
