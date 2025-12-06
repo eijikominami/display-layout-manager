@@ -34,6 +34,15 @@ def test_checkbox_toggle():
         print("=" * 70)
         return True
 
+    # rumps のインポートチェック（GUI環境が必要）
+    try:
+        import rumps
+    except Exception as e:
+        print(f"\n⚠ rumps のインポートに失敗しました（GUI環境が必要）: {e}")
+        print("  このテストをスキップします")
+        print("=" * 70)
+        return True
+
     # クリーンアップ（テスト前に無効化）
     print("\n[準備] 自動起動を無効化")
     manager = AutoLaunchManager()
@@ -46,8 +55,6 @@ def test_checkbox_toggle():
     # メニューバーアプリを作成（実際には起動しない）
     print("\n[テスト 1] メニューバーアプリの初期化")
     try:
-        # rumps.App の run() を呼ばずにインスタンスだけ作成
-        import rumps
 
         # モックせずに実際のインスタンスを作成
         app = DisplayLayoutMenuBar()
