@@ -1,124 +1,126 @@
-# アーキテクチャドキュメント
+English / [**日本語**](ARCHITECTURE_JP.md)
 
-## システム概要
+# Architecture Document
 
-Display Layout Manager は、macOS のディスプレイレイアウトを自動的に管理するためのツールです。CLI とメニューバーアプリの2つのインターフェースを提供し、ディスプレイ構成の検出、パターンマッチング、レイアウト適用を自動化します。
+## System Overview
 
-## アーキテクチャ図
+Display Layout Manager is a tool for automatically managing display layouts on macOS. It provides two interfaces: CLI and menu bar app, automating display configuration detection, pattern matching, and layout application.
+
+## Architecture Diagram
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     ユーザーインターフェース                    │
+│                     User Interface Layer                     │
 ├──────────────────────────┬──────────────────────────────────┤
 │   CLI (main.py)          │  Menu Bar App (menubar_app.py)   │
-│   - コマンドライン引数解析  │  - rumps ベースの GUI            │
-│   - 対話的操作            │  - メニュー項目管理               │
+│   - Command-line parsing │  - rumps-based GUI               │
+│   - Interactive ops      │  - Menu item management          │
 └──────────────┬───────────┴────────────┬─────────────────────┘
                │                        │
                └────────┬───────────────┘
                         │
          ┌──────────────┴──────────────┐
          │   CLI Bridge (cli_bridge.py) │
-         │   - UI層とビジネスロジックの橋渡し │
+         │   - UI to business logic     │
          └──────────────┬──────────────┘
                         │
          ┌──────────────┴──────────────┐
-         │      ビジネスロジック層        │
+         │      Business Logic Layer    │
          ├─────────────────────────────┤
          │  Config Manager              │
-         │  - 設定ファイル読み込み        │
-         │  - JSON パース・検証          │
+         │  - Config file loading       │
+         │  - JSON parsing/validation   │
          ├─────────────────────────────┤
          │  Display Manager             │
-         │  - ディスプレイ検出            │
-         │  - Screen ID 抽出            │
+         │  - Display detection         │
+         │  - Screen ID extraction      │
          ├─────────────────────────────┤
          │  Pattern Matcher             │
-         │  - パターンマッチング          │
-         │  - 最適レイアウト選択          │
+         │  - Pattern matching          │
+         │  - Optimal layout selection  │
          ├─────────────────────────────┤
          │  Layout Saver                │
-         │  - 現在レイアウト保存          │
-         │  - 設定ファイル更新            │
+         │  - Current layout saving     │
+         │  - Config file update        │
          ├─────────────────────────────┤
          │  Command Executor            │
-         │  - displayplacer 実行         │
-         │  - コマンド検証                │
+         │  - displayplacer execution   │
+         │  - Command validation        │
          ├─────────────────────────────┤
          │  Dependency Manager          │
-         │  - 依存関係チェック            │
-         │  - 自動インストール            │
+         │  - Dependency checking       │
+         │  - Auto installation         │
          ├─────────────────────────────┤
          │  Auto Launch Manager         │
-         │  - LaunchAgent 管理           │
-         │  - 自動起動設定                │
+         │  - LaunchAgent management    │
+         │  - Auto-launch configuration │
          └──────────────┬──────────────┘
                         │
          ┌──────────────┴──────────────┐
-         │      インフラストラクチャ層    │
+         │    Infrastructure Layer      │
          ├─────────────────────────────┤
          │  Logger (logger.py)          │
-         │  - 構造化ログ出力              │
-         │  - ファイルローテーション       │
+         │  - Structured logging        │
+         │  - File rotation             │
          ├─────────────────────────────┤
          │  Error Handler               │
-         │  - エラーハンドリング          │
-         │  - ユーザーフレンドリーメッセージ │
+         │  - Error handling            │
+         │  - User-friendly messages    │
          └──────────────┬──────────────┘
                         │
          ┌──────────────┴──────────────┐
-         │      外部依存                 │
+         │      External Dependencies   │
          ├─────────────────────────────┤
          │  displayplacer               │
-         │  - ディスプレイ設定ツール       │
+         │  - Display configuration     │
          ├─────────────────────────────┤
          │  GNU grep                    │
-         │  - テキスト検索                │
+         │  - Text search               │
          ├─────────────────────────────┤
          │  Homebrew                    │
-         │  - パッケージ管理              │
+         │  - Package management        │
          └─────────────────────────────┘
 ```
 
-## コンポーネント詳細
+## Component Details
 
-### 1. ユーザーインターフェース層
+### 1. User Interface Layer
 
 #### CLI (main.py)
-- **責務**: コマンドライン引数の解析、ユーザー入力の処理
-- **主要機能**:
-  - `argparse` による引数解析
-  - 各種オプション（`--show-displays`, `--save-current`, `--dry-run` など）の処理
-  - CLI Bridge への処理委譲
-- **依存関係**: `cli_bridge.CLIBridge`, `logger.Logger`
+- **Responsibility**: Command-line argument parsing, user input processing
+- **Key Features**:
+  - Argument parsing with `argparse`
+  - Processing various options (`--show-displays`, `--save-current`, `--dry-run`, etc.)
+  - Delegation to CLI Bridge
+- **Dependencies**: `cli_bridge.CLIBridge`, `logger.Logger`
 
 #### Menu Bar App (menubar_app.py)
-- **責務**: macOS メニューバーアプリケーションの提供
-- **主要機能**:
-  - `rumps` フレームワークを使用した GUI
-  - メニュー項目の動的生成
-  - ユーザーアクションのハンドリング
-  - 自動起動設定の管理
-- **依存関係**: `rumps`, `cli_bridge.CLIBridge`, `auto_launch_manager.AutoLaunchManager`
+- **Responsibility**: Providing macOS menu bar application
+- **Key Features**:
+  - GUI using `rumps` framework
+  - Dynamic menu item generation
+  - User action handling
+  - Auto-launch configuration management
+- **Dependencies**: `rumps`, `cli_bridge.CLIBridge`, `auto_launch_manager.AutoLaunchManager`
 
-### 2. ビジネスロジック層
+### 2. Business Logic Layer
 
 #### CLI Bridge (cli_bridge.py)
-- **責務**: UI層とビジネスロジック層の橋渡し
-- **主要機能**:
-  - 各種操作の統合（レイアウト適用、保存、表示など）
-  - エラーハンドリングの統一
-  - ログ出力の統一
-- **依存関係**: すべてのビジネスロジックコンポーネント
+- **Responsibility**: Bridge between UI layer and business logic layer
+- **Key Features**:
+  - Integration of various operations (layout application, saving, display, etc.)
+  - Unified error handling
+  - Unified log output
+- **Dependencies**: All business logic components
 
 #### Config Manager (config_manager.py)
-- **責務**: 設定ファイルの管理
-- **主要機能**:
-  - JSON 設定ファイルの読み込み
-  - 設定ファイルの検証
-  - デフォルト設定の生成
-  - 設定ファイルの更新
-- **データ構造**:
+- **Responsibility**: Configuration file management
+- **Key Features**:
+  - JSON configuration file loading
+  - Configuration file validation
+  - Default configuration generation
+  - Configuration file updates
+- **Data Structure**:
   ```python
   {
       "version": str,
@@ -134,226 +136,226 @@ Display Layout Manager は、macOS のディスプレイレイアウトを自動
   ```
 
 #### Display Manager (display_manager.py)
-- **責務**: ディスプレイ情報の取得
-- **主要機能**:
-  - `displayplacer list` コマンドの実行
-  - Persistent Screen ID の抽出
-  - 現在のディスプレイ構成の取得
-- **依存関係**: `subprocess`, `re`
+- **Responsibility**: Display information retrieval
+- **Key Features**:
+  - Executing `displayplacer list` command
+  - Persistent Screen ID extraction
+  - Current display configuration retrieval
+- **Dependencies**: `subprocess`, `re`
 
 #### Pattern Matcher (pattern_matcher.py)
-- **責務**: ディスプレイ構成とパターンのマッチング
-- **主要機能**:
-  - Screen ID セットの比較
-  - 最適パターンの選択
-  - マッチング結果の返却
-- **アルゴリズム**: セットの完全一致（順序不問）
+- **Responsibility**: Display configuration and pattern matching
+- **Key Features**:
+  - Screen ID set comparison
+  - Optimal pattern selection
+  - Matching result return
+- **Algorithm**: Exact set matching (order-independent)
 
 #### Layout Saver (layout_saver.py)
-- **責務**: 現在のレイアウトの保存
-- **主要機能**:
-  - 現在のディスプレイ構成の取得
-  - `displayplacer list` からコマンドの抽出
-  - パターン名の自動生成
-  - 設定ファイルへの追加・更新
-- **命名規則**: `{count}_Displays_{id1}_{id2}_{id3}`
+- **Responsibility**: Current layout saving
+- **Key Features**:
+  - Current display configuration retrieval
+  - Command extraction from `displayplacer list`
+  - Automatic pattern name generation
+  - Configuration file addition/update
+- **Naming Convention**: `{count}_Displays_{id1}_{id2}_{id3}`
 
 #### Command Executor (command_executor.py)
-- **責務**: displayplacer コマンドの実行
-- **主要機能**:
-  - コマンドの検証
-  - ドライランモードのサポート
-  - コマンド実行とエラーハンドリング
-- **依存関係**: `subprocess`
+- **Responsibility**: displayplacer command execution
+- **Key Features**:
+  - Command validation
+  - Dry-run mode support
+  - Command execution and error handling
+- **Dependencies**: `subprocess`
 
 #### Dependency Manager (dependency_manager.py)
-- **責務**: 外部依存関係の管理
-- **主要機能**:
-  - Homebrew の存在確認
-  - displayplacer の存在確認とインストール
-  - GNU grep の存在確認とインストール
-  - インストール状況のレポート
-- **依存関係**: `subprocess`, `shutil`
+- **Responsibility**: External dependency management
+- **Key Features**:
+  - Homebrew existence check
+  - displayplacer existence check and installation
+  - GNU grep existence check and installation
+  - Installation status reporting
+- **Dependencies**: `subprocess`, `shutil`
 
 #### Auto Launch Manager (auto_launch_manager.py)
-- **責務**: ログイン時の自動起動管理
-- **主要機能**:
-  - LaunchAgent plist ファイルの作成
-  - 自動起動の有効化・無効化
-  - 現在の状態確認
-- **ファイル**: `~/Library/LaunchAgents/com.displaylayoutmanager.menubar.plist`
+- **Responsibility**: Login auto-launch management
+- **Key Features**:
+  - LaunchAgent plist file creation
+  - Auto-launch enable/disable
+  - Current state checking
+- **File**: `~/Library/LaunchAgents/com.displaylayoutmanager.menubar.plist`
 
-### 3. インフラストラクチャ層
+### 3. Infrastructure Layer
 
 #### Logger (logger.py)
-- **責務**: ログ出力の管理
-- **主要機能**:
-  - 構造化ログ（JSON 形式）
-  - ファイルローテーション（日次）
-  - コンソール出力とファイル出力の両立
-  - ログレベル管理
-- **ログファイル**: `~/Library/Logs/DisplayLayoutManager/`
+- **Responsibility**: Log output management
+- **Key Features**:
+  - Structured logging (JSON format)
+  - File rotation (daily)
+  - Console and file output
+  - Log level management
+- **Log Files**: `~/Library/Logs/DisplayLayoutManager/`
 
 #### Error Handler (error_handler.py)
-- **責務**: エラーハンドリングの統一
-- **主要機能**:
-  - カスタム例外クラスの定義
-  - ユーザーフレンドリーなエラーメッセージ
-  - トラブルシューティングガイドの提供
-- **例外階層**:
+- **Responsibility**: Unified error handling
+- **Key Features**:
+  - Custom exception class definitions
+  - User-friendly error messages
+  - Troubleshooting guide provision
+- **Exception Hierarchy**:
   ```
-  DisplayLayoutError (基底クラス)
-  ├── ConfigError (設定ファイルエラー)
-  ├── DisplayDetectionError (ディスプレイ検出エラー)
-  ├── PatternMatchError (パターンマッチングエラー)
-  ├── CommandExecutionError (コマンド実行エラー)
-  └── DependencyError (依存関係エラー)
+  DisplayLayoutError (base class)
+  ├── ConfigError (configuration file errors)
+  ├── DisplayDetectionError (display detection errors)
+  ├── PatternMatchError (pattern matching errors)
+  ├── CommandExecutionError (command execution errors)
+  └── DependencyError (dependency errors)
   ```
 
-## データフロー
+## Data Flow
 
-### レイアウト適用フロー
+### Layout Application Flow
 
 ```
-1. ユーザー入力
+1. User Input
    ↓
 2. CLI / Menu Bar App
    ↓
 3. CLI Bridge.apply_layout()
    ↓
 4. Dependency Manager.check_dependencies()
-   ├→ Homebrew チェック
-   ├→ displayplacer チェック
-   └→ GNU grep チェック
+   ├→ Homebrew check
+   ├→ displayplacer check
+   └→ GNU grep check
    ↓
 5. Config Manager.load_config()
-   ├→ 設定ファイル読み込み
-   └→ JSON パース・検証
+   ├→ Config file loading
+   └→ JSON parsing/validation
    ↓
 6. Display Manager.get_current_displays()
-   ├→ displayplacer list 実行
-   └→ Screen ID 抽出
+   ├→ displayplacer list execution
+   └→ Screen ID extraction
    ↓
 7. Pattern Matcher.find_matching_pattern()
-   ├→ Screen ID セット比較
-   └→ 最適パターン選択
+   ├→ Screen ID set comparison
+   └→ Optimal pattern selection
    ↓
 8. Command Executor.execute()
-   ├→ コマンド検証
-   └→ displayplacer 実行
+   ├→ Command validation
+   └→ displayplacer execution
    ↓
-9. 結果返却
+9. Result return
 ```
 
-### レイアウト保存フロー
+### Layout Saving Flow
 
 ```
-1. ユーザー入力 (--save-current)
+1. User Input (--save-current)
    ↓
 2. CLI / Menu Bar App
    ↓
 3. CLI Bridge.save_current_layout()
    ↓
 4. Display Manager.get_current_displays()
-   ├→ displayplacer list 実行
-   └→ Screen ID 抽出
+   ├→ displayplacer list execution
+   └→ Screen ID extraction
    ↓
 5. Layout Saver.save_current_layout()
-   ├→ 現在のコマンド取得
-   ├→ パターン名生成
-   └→ 設定ファイル更新
+   ├→ Current command retrieval
+   ├→ Pattern name generation
+   └→ Config file update
    ↓
 6. Config Manager.save_config()
-   ├→ JSON シリアライズ
-   └→ ファイル書き込み
+   ├→ JSON serialization
+   └→ File writing
    ↓
-7. 結果返却
+7. Result return
 ```
 
-## 設計原則
+## Design Principles
 
-### 1. 単一責任の原則 (SRP)
-各コンポーネントは1つの責務のみを持ちます。例えば、`ConfigManager` は設定ファイルの管理のみを担当し、ディスプレイ検出は `DisplayManager` が担当します。
+### 1. Single Responsibility Principle (SRP)
+Each component has only one responsibility. For example, `ConfigManager` handles only configuration file management, while display detection is handled by `DisplayManager`.
 
-### 2. 依存性逆転の原則 (DIP)
-高レベルモジュール（CLI Bridge）は低レベルモジュール（各マネージャー）に依存しますが、インターフェースを通じて疎結合を保ちます。
+### 2. Dependency Inversion Principle (DIP)
+High-level modules (CLI Bridge) depend on low-level modules (managers), but maintain loose coupling through interfaces.
 
-### 3. 開放閉鎖の原則 (OCP)
-新しい機能（例：新しいパターンマッチングアルゴリズム）は、既存コードを変更せずに追加できるように設計されています。
+### 3. Open-Closed Principle (OCP)
+New features (e.g., new pattern matching algorithms) can be added without modifying existing code.
 
-### 4. エラーハンドリング
-すべてのエラーは適切にキャッチされ、ユーザーフレンドリーなメッセージとトラブルシューティングガイドが提供されます。
+### 4. Error Handling
+All errors are properly caught and provide user-friendly messages and troubleshooting guides.
 
-### 5. ログ出力
-すべての重要な操作はログに記録され、デバッグとトラブルシューティングを容易にします。
+### 5. Logging
+All important operations are logged for easy debugging and troubleshooting.
 
-## テスト戦略
+## Testing Strategy
 
-### 単体テスト
-各コンポーネントは独立してテスト可能です：
-- `test_config_manager.py`: 設定ファイルの読み込み・検証
-- `test_display_manager.py`: ディスプレイ検出
-- `test_pattern_matcher.py`: パターンマッチング
-- `test_command_executor.py`: コマンド実行
-- `test_layout_saver.py`: レイアウト保存
+### Unit Tests
+Each component can be tested independently:
+- `test_config_manager.py`: Configuration file loading/validation
+- `test_display_manager.py`: Display detection
+- `test_pattern_matcher.py`: Pattern matching
+- `test_command_executor.py`: Command execution
+- `test_layout_saver.py`: Layout saving
 
-### 統合テスト
-- `test_cli_components.py`: CLI コンポーネントの統合テスト
-- `test_menubar_integration.py`: メニューバーアプリの統合テスト
-- `integration_test.py`: エンドツーエンドテスト
+### Integration Tests
+- `test_cli_components.py`: CLI component integration tests
+- `test_menubar_integration.py`: Menu bar app integration tests
+- `integration_test.py`: End-to-end tests
 
-### テストカバレッジ
-- 目標: 70%以上
-- 現在: CI/CD で自動測定
-- レポート: Codecov で可視化
+### Test Coverage
+- Target: 70%+
+- Current: Automatically measured in CI/CD
+- Reports: Visualized with Codecov
 
-## パフォーマンス考慮事項
+## Performance Considerations
 
-### 起動時間
-- 依存関係チェック: ~100ms
-- 設定ファイル読み込み: ~10ms
-- ディスプレイ検出: ~200ms
-- 合計: ~300ms
+### Startup Time
+- Dependency check: ~100ms
+- Config file loading: ~10ms
+- Display detection: ~200ms
+- Total: ~300ms
 
-### メモリ使用量
+### Memory Usage
 - CLI: ~20MB
 - Menu Bar App: ~30MB
 
-### ディスク使用量
-- アプリケーション: ~3.5MB
-- ログファイル: ~1MB/日（自動ローテーション）
+### Disk Usage
+- Application: ~3.5MB
+- Log files: ~1MB/day (automatic rotation)
 
-## セキュリティ考慮事項
+## Security Considerations
 
-### ファイルパーミッション
-- 設定ファイル: `0600` (ユーザーのみ読み書き可能)
-- ログファイル: `0600` (ユーザーのみ読み書き可能)
-- LaunchAgent plist: `0644` (標準パーミッション)
+### File Permissions
+- Config files: `0600` (user read/write only)
+- Log files: `0600` (user read/write only)
+- LaunchAgent plist: `0644` (standard permissions)
 
-### コマンド実行
-- `subprocess` を使用した安全なコマンド実行
-- シェルインジェクション対策
-- コマンド検証
+### Command Execution
+- Safe command execution using `subprocess`
+- Shell injection prevention
+- Command validation
 
-### 依存関係
-- 信頼できるソース（Homebrew）からのみインストール
-- バージョン固定による再現性確保
+### Dependencies
+- Install only from trusted sources (Homebrew)
+- Version pinning for reproducibility
 
-## 拡張性
+## Extensibility
 
-### 新しいパターンマッチングアルゴリズム
-`PatternMatcher` クラスを拡張することで、より高度なマッチングロジックを追加できます。
+### New Pattern Matching Algorithms
+Extend the `PatternMatcher` class to add more advanced matching logic.
 
-### 新しいインターフェース
-CLI Bridge を使用することで、新しい UI（例：Web インターフェース）を簡単に追加できます。
+### New Interfaces
+Use CLI Bridge to easily add new UIs (e.g., web interface).
 
-### プラグインシステム
-将来的には、カスタムプラグインをサポートする拡張ポイントを提供する予定です。
+### Plugin System
+Future plans to provide extension points for custom plugins.
 
-## 今後の改善計画
+## Future Improvements
 
-1. **プロファイル機能**: 複数の設定プロファイルをサポート
-2. **クラウド同期**: iCloud を使用した設定の同期
-3. **ホットキーサポート**: キーボードショートカットでレイアウト切り替え
-4. **通知機能**: レイアウト適用時の通知表示
-5. **プラグインシステム**: カスタム機能の追加をサポート
+1. **Profile Feature**: Support multiple configuration profiles
+2. **Cloud Sync**: Configuration sync using iCloud
+3. **Hotkey Support**: Layout switching with keyboard shortcuts
+4. **Notifications**: Notification display when applying layouts
+5. **Plugin System**: Support for adding custom features
