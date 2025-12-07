@@ -7,6 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2025-12-07
+
+### Added
+- **国際化（i18n）対応**: CLI とメニューバーアプリの完全な多言語対応
+  - 日本語と英語のメッセージサポート
+  - システムロケールの自動検出
+  - 環境変数 `DISPLAY_LAYOUT_LANG` による言語オーバーライド
+  - ログファイルは常に英語で記録（技術的一貫性のため）
+- **Pre-commit フック**: コミット前の自動品質チェック
+  - Black による自動コードフォーマット
+  - isort による import 文の自動整理
+  - flake8 による Lint チェック
+  - 末尾空白削除、EOF 修正、YAML 検証
+- **開発依存関係**: pytest, coverage, black, isort, flake8, pre-commit を追加
+- **ドキュメント国際化**: 英語版と日本語版の完全なドキュメントセット
+  - README.md / README_JP.md
+  - ARCHITECTURE.md / ARCHITECTURE_JP.md
+  - docs/configuration.md / docs/configuration_jp.md
+  - docs/troubleshooting.md / docs/troubleshooting_jp.md
+- **開発ガイドライン**: Pre-commit と CI/CD の連携ガイドラインを追加
+
+### Changed
+- **メニューバーアイコン**: 🖥️ から ⧈ (U+29C8) に変更
+- **メッセージ管理**: 全ての CLI とメニューバーアプリのメッセージを国際化
+- **Logger**: ログファイル出力を常に英語に統一
+
+### Fixed
+- **コードフォーマット**: Black と isort による自動フォーマット適用
+- **コード品質**: Pre-commit フックによる品質チェックの自動化
+
 ### Added
 - **メニューバーアプリケーション**: macOS メニューバーから操作できる GUI アプリケーション
 - **display-layout-menubar**: メニューバーアプリの起動コマンド
