@@ -328,6 +328,35 @@ pip install -e .
 python -m src.display_layout_manager.main --run-tests
 ```
 
+### Development Setup
+
+1. **Install development dependencies**
+   ```bash
+   pip install -e ".[dev]"
+   ```
+
+2. **Set up pre-commit hooks**
+   ```bash
+   pre-commit install
+   ```
+
+   This will automatically run the following checks before each commit:
+   - **Black**: Code formatting
+   - **isort**: Import statement organization
+   - **flake8**: Linting
+   - **Trailing whitespace removal**
+   - **End-of-file fixer**
+   - **YAML validation**
+
+3. **Manual pre-commit run** (optional)
+   ```bash
+   # Run on all files
+   pre-commit run --all-files
+
+   # Run specific hook
+   pre-commit run black --all-files
+   ```
+
 ### Testing
 
 ```bash

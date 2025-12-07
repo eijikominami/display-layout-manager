@@ -32,7 +32,9 @@ class ExecutionResult:
         elif self.success:
             return f"✓ パターン '{self.pattern_name}' の適用が完了しました"
         else:
-            return f"✗ パターン '{self.pattern_name}' の適用に失敗しました (終了コード: {self.return_code})"
+            return (
+                f"✗ パターン '{self.pattern_name}' の適用に失敗しました (終了コード: {self.return_code})"
+            )
 
 
 class CommandExecutor:
@@ -100,9 +102,7 @@ class CommandExecutor:
             if success:
                 self._log(f"コマンド実行成功 (終了コード: {result.returncode})")
             else:
-                self._log(
-                    f"コマンド実行失敗 (終了コード: {result.returncode}): {stderr[:100]}..."
-                )
+                self._log(f"コマンド実行失敗 (終了コード: {result.returncode}): {stderr[:100]}...")
 
             return success, stdout, stderr, result.returncode
 
@@ -218,9 +218,7 @@ class CommandExecutor:
         """
         log_lines = []
 
-        log_lines.append(
-            f"実行時刻: {result.execution_time.strftime('%Y-%m-%d %H:%M:%S')}"
-        )
+        log_lines.append(f"実行時刻: {result.execution_time.strftime('%Y-%m-%d %H:%M:%S')}")
         log_lines.append(f"パターン名: {result.pattern_name}")
         log_lines.append(f"ドライラン: {'はい' if result.dry_run else 'いいえ'}")
         log_lines.append(f"実行結果: {'成功' if result.success else '失敗'}")

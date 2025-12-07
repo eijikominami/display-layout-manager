@@ -63,9 +63,7 @@ def parse_arguments() -> argparse.Namespace:
         help="現在のディスプレイ構成を表示して終了",
     )
 
-    parser.add_argument(
-        "--validate-config", action="store_true", help="設定ファイルの検証のみ実行"
-    )
+    parser.add_argument("--validate-config", action="store_true", help="設定ファイルの検証のみ実行")
 
     parser.add_argument("--run-tests", action="store_true", help="統合テストを実行")
 
@@ -352,9 +350,10 @@ def main() -> int:
             )
 
             # displayplacerの利用可能性確認
-            is_available, error_msg = (
-                command_executor.validate_displayplacer_available()
-            )
+            (
+                is_available,
+                error_msg,
+            ) = command_executor.validate_displayplacer_available()
             if not is_available:
                 logger.error("command", f"displayplacer not available: {error_msg}")
                 error_handler.handle_error(

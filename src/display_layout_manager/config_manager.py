@@ -118,12 +118,8 @@ class ConfigManager:
         os.chmod(config_path, 0o600)
 
         print(f"デフォルト設定ファイルを作成しました: {config_path}")
-        print(
-            "現在のディスプレイレイアウトを保存するには: display-layout-manager --save-current"
-        )
-        print(
-            "接続されたディスプレイを確認するには: display-layout-manager --show-displays"
-        )
+        print("現在のディスプレイレイアウトを保存するには: display-layout-manager --save-current")
+        print("接続されたディスプレイを確認するには: display-layout-manager --show-displays")
 
     def validate_config_structure(self, config_data: Dict[str, Any]) -> List[str]:
         """設定ファイル構造の検証"""
@@ -144,46 +140,32 @@ class ConfigManager:
             return errors
 
         if len(config_data["patterns"]) == 0:
-            errors.append(
-                "'patterns' は空にできません。少なくとも1つのパターンが必要です"
-            )
+            errors.append("'patterns' は空にできません。少なくとも1つのパターンが必要です")
             return errors
 
         # 各パターンの検証
         for i, pattern in enumerate(config_data["patterns"]):
             if not isinstance(pattern, dict):
-                errors.append(
-                    f"パターン {i+1}: パターンはオブジェクトである必要があります"
-                )
+                errors.append(f"パターン {i+1}: パターンはオブジェクトである必要があります")
                 continue
 
             # パターンの必須フィールド確認
             required_fields = ["name", "screen_ids", "command"]
             for field in required_fields:
                 if field not in pattern:
-                    errors.append(
-                        f"パターン {i+1}: 必須フィールド '{field}' が見つかりません"
-                    )
+                    errors.append(f"パターン {i+1}: 必須フィールド '{field}' が見つかりません")
                 elif field == "name" and not isinstance(pattern[field], str):
-                    errors.append(
-                        f"パターン {i+1}: '{field}' は文字列である必要があります"
-                    )
+                    errors.append(f"パターン {i+1}: '{field}' は文字列である必要があります")
                 elif field == "screen_ids":
                     if not isinstance(pattern[field], list):
-                        errors.append(
-                            f"パターン {i+1}: '{field}' は配列である必要があります"
-                        )
+                        errors.append(f"パターン {i+1}: '{field}' は配列である必要があります")
                     elif len(pattern[field]) == 0:
                         errors.append(f"パターン {i+1}: '{field}' は空にできません")
                     elif not all(isinstance(sid, str) for sid in pattern[field]):
-                        errors.append(
-                            f"パターン {i+1}: '{field}' の全要素は文字列である必要があります"
-                        )
+                        errors.append(f"パターン {i+1}: '{field}' の全要素は文字列である必要があります")
                 elif field == "command":
                     if not isinstance(pattern[field], str):
-                        errors.append(
-                            f"パターン {i+1}: '{field}' は文字列である必要があります"
-                        )
+                        errors.append(f"パターン {i+1}: '{field}' は文字列である必要があります")
                     elif not pattern[field].strip().startswith("displayplacer"):
                         errors.append(
                             f"パターン {i+1}: '{field}' は 'displayplacer' で開始する必要があります"
@@ -191,9 +173,7 @@ class ConfigManager:
 
             # オプションフィールドの検証
             if "description" in pattern and not isinstance(pattern["description"], str):
-                errors.append(
-                    f"パターン {i+1}: 'description' は文字列である必要があります"
-                )
+                errors.append(f"パターン {i+1}: 'description' は文字列である必要があります")
 
         return errors
 

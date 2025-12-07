@@ -211,9 +211,7 @@ class Logger:
                     "pattern_description": match_result.pattern.description,
                 }
             )
-            self.success(
-                "pattern", f"パターンマッチ成功: {match_result.pattern.name}", details
-            )
+            self.success("pattern", f"パターンマッチ成功: {match_result.pattern.name}", details)
         else:
             self.warning("pattern", "マッチするパターンなし", details)
 
@@ -229,9 +227,7 @@ class Logger:
 
         if execution_result.success:
             if execution_result.dry_run:
-                self.info(
-                    "command", f"ドライラン: {execution_result.pattern_name}", details
-                )
+                self.info("command", f"ドライラン: {execution_result.pattern_name}", details)
             else:
                 self.success(
                     "command",
@@ -242,9 +238,7 @@ class Logger:
             details.update(
                 {"stdout": execution_result.stdout, "stderr": execution_result.stderr}
             )
-            self.error(
-                "command", f"コマンド実行失敗: {execution_result.pattern_name}", details
-            )
+            self.error("command", f"コマンド実行失敗: {execution_result.pattern_name}", details)
 
     def get_session_summary(self) -> Dict[str, Any]:
         """セッションサマリーを取得"""

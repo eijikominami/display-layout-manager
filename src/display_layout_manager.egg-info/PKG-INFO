@@ -27,6 +27,7 @@ Classifier: Topic :: System :: Hardware
 Classifier: Topic :: Utilities
 Requires-Python: >=3.8
 Description-Content-Type: text/markdown
+Provides-Extra: dev
 License-File: LICENSE
 
 English / [**日本語**](README_JP.md)
@@ -63,6 +64,40 @@ Display Layout Manager is a command-line tool for automatically managing multipl
 - **OS**: macOS 10.14 (Mojave) or later
 - **Python**: 3.8 or later
 - **Dependencies**: Homebrew, displayplacer, GNU grep (automatic installation supported)
+
+## Language Support
+
+Display Layout Manager supports **English** and **Japanese** interfaces.
+
+### Automatic Language Detection
+
+The application automatically detects your system locale and displays messages in the appropriate language:
+- **Japanese locale** (ja, ja_JP, etc.): All CLI and menu bar messages in Japanese
+- **Other locales**: All CLI and menu bar messages in English
+
+### Manual Language Override
+
+You can override the automatic language detection using the `DISPLAY_LAYOUT_LANG` environment variable:
+
+```bash
+# Force English interface
+export DISPLAY_LAYOUT_LANG=en
+display-layout-manager
+
+# Force Japanese interface
+export DISPLAY_LAYOUT_LANG=ja
+display-layout-manager
+
+# One-time override
+DISPLAY_LAYOUT_LANG=en display-layout-manager --show-displays
+```
+
+### Log Files
+
+**Note**: Log files are always written in English (technical records), regardless of the interface language. This ensures consistency for debugging and troubleshooting.
+
+- **CLI/Menu Bar Output**: Internationalized (English/Japanese)
+- **Log Files**: Always English (`~/Library/Logs/DisplayLayoutManager/`)
 
 ## Installation
 
@@ -119,7 +154,7 @@ display-layout-menubar --disable-auto-launch
 
 #### Menu Bar App Features
 
-A 🖥️ icon appears in the menu bar, providing the following features:
+A ⧈ icon appears in the menu bar, providing the following features:
 
 - **Apply Layout**: Apply layout matching current display configuration with one click
 - **Save Current Settings**: Save current display configuration to config file
@@ -325,6 +360,35 @@ pip install -e .
 python -m src.display_layout_manager.main --run-tests
 ```
 
+### Development Setup
+
+1. **Install development dependencies**
+   ```bash
+   pip install -e ".[dev]"
+   ```
+
+2. **Set up pre-commit hooks**
+   ```bash
+   pre-commit install
+   ```
+
+   This will automatically run the following checks before each commit:
+   - **Black**: Code formatting
+   - **isort**: Import statement organization
+   - **flake8**: Linting
+   - **Trailing whitespace removal**
+   - **End-of-file fixer**
+   - **YAML validation**
+
+3. **Manual pre-commit run** (optional)
+   ```bash
+   # Run on all files
+   pre-commit run --all-files
+
+   # Run specific hook
+   pre-commit run black --all-files
+   ```
+
 ### Testing
 
 ```bash
@@ -371,5 +435,3 @@ MIT License - See [LICENSE](LICENSE) file for details.
 
 - [displayplacer](https://github.com/jakehilborn/displayplacer) - macOS display configuration tool
 - [Homebrew](https://brew.sh/) - macOS package manager
-
-

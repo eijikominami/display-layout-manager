@@ -150,9 +150,11 @@ class IntegrationTester:
             }
 
             invalid_config_path = self.create_test_config(invalid_config)
-            invalid_success, invalid_config_obj, invalid_errors = (
-                config_manager.load_config(invalid_config_path)
-            )
+            (
+                invalid_success,
+                invalid_config_obj,
+                invalid_errors,
+            ) = config_manager.load_config(invalid_config_path)
 
             details = {
                 "valid_config_success": success,
@@ -163,11 +165,7 @@ class IntegrationTester:
             }
 
             test_success = success and not invalid_success and len(invalid_errors) > 0
-            message = (
-                "設定ファイル管理テスト成功"
-                if test_success
-                else "設定ファイル管理テスト失敗"
-            )
+            message = "設定ファイル管理テスト成功" if test_success else "設定ファイル管理テスト失敗"
 
             execution_time = time.time() - start_time
             return TestResult(
@@ -220,11 +218,7 @@ class IntegrationTester:
             else:
                 test_success = False
 
-            message = (
-                "ディスプレイ検出テスト成功"
-                if test_success
-                else f"ディスプレイ検出テスト失敗: {error}"
-            )
+            message = "ディスプレイ検出テスト成功" if test_success else f"ディスプレイ検出テスト失敗: {error}"
 
             execution_time = time.time() - start_time
             return TestResult(
@@ -319,11 +313,7 @@ class IntegrationTester:
                 and not no_match_result.matched
             )
 
-            message = (
-                "パターンマッチングテスト成功"
-                if test_success
-                else "パターンマッチングテスト失敗"
-            )
+            message = "パターンマッチングテスト成功" if test_success else "パターンマッチングテスト失敗"
 
             execution_time = time.time() - start_time
             return TestResult(
@@ -392,9 +382,7 @@ class IntegrationTester:
                 and not invalid_result.success
             )
 
-            message = (
-                "コマンド実行テスト成功" if test_success else "コマンド実行テスト失敗"
-            )
+            message = "コマンド実行テスト成功" if test_success else "コマンド実行テスト失敗"
 
             execution_time = time.time() - start_time
             return TestResult(
@@ -449,9 +437,7 @@ class IntegrationTester:
                 and logger.has_errors()
             )
 
-            message = (
-                "ログシステムテスト成功" if test_success else "ログシステムテスト失敗"
-            )
+            message = "ログシステムテスト成功" if test_success else "ログシステムテスト失敗"
 
             execution_time = time.time() - start_time
             return TestResult(
@@ -511,11 +497,7 @@ displayplacer "id:TEST-ID-1 res:1920x1080 hz:60 color_depth:8 enabled:true scali
                 and "TEST-ID-1" in extracted_command
             )
 
-            message = (
-                "レイアウト保存機能テスト成功"
-                if test_success
-                else "レイアウト保存機能テスト失敗"
-            )
+            message = "レイアウト保存機能テスト成功" if test_success else "レイアウト保存機能テスト失敗"
 
             execution_time = time.time() - start_time
             return TestResult(

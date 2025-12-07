@@ -26,9 +26,7 @@ def test_generate_pattern_name():
     pattern_name = saver.generate_pattern_name(screen_ids_single)
     print(f"単一ディスプレイのパターン名: {pattern_name}")
 
-    assert (
-        "Single_Display" in pattern_name
-    ), "単一ディスプレイのパターン名が正しくありません"
+    assert "Single_Display" in pattern_name, "単一ディスプレイのパターン名が正しくありません"
     assert "37D8832A" in pattern_name, "Screen IDの一部が含まれていません"
 
     # 複数ディスプレイ
@@ -39,9 +37,7 @@ def test_generate_pattern_name():
     pattern_name = saver.generate_pattern_name(screen_ids_multiple)
     print(f"複数ディスプレイのパターン名: {pattern_name}")
 
-    assert (
-        "2_Displays" in pattern_name
-    ), "複数ディスプレイのパターン名が正しくありません"
+    assert "2_Displays" in pattern_name, "複数ディスプレイのパターン名が正しくありません"
     assert "37D8832A" in pattern_name, "最初のScreen IDの一部が含まれていません"
     assert "69733B7E" in pattern_name, "2番目のScreen IDの一部が含まれていません"
 
@@ -69,12 +65,8 @@ displayplacer "id:37D8832A-2D66-02CA-B9F7-8F30A301B230 res:1920x1080 origin:(0,0
     command = saver.extract_current_command(test_output)
     print(f"抽出されたコマンド: {command[:50]}...")
 
-    assert command.startswith(
-        "displayplacer"
-    ), "コマンドがdisplayplacerで始まっていません"
-    assert (
-        "37D8832A-2D66-02CA-B9F7-8F30A301B230" in command
-    ), "Screen IDが含まれていません"
+    assert command.startswith("displayplacer"), "コマンドがdisplayplacerで始まっていません"
+    assert "37D8832A-2D66-02CA-B9F7-8F30A301B230" in command, "Screen IDが含まれていません"
     assert "res:1920x1080" in command, "解像度が含まれていません"
 
     print("✓ test_extract_current_command 成功")
@@ -195,15 +187,11 @@ def test_save_config_to_file():
         with open(temp_path, "r", encoding="utf-8") as f:
             saved_data = json.load(f)
 
-        print(
-            f"保存されたデータ: {json.dumps(saved_data, indent=2, ensure_ascii=False)}"
-        )
+        print(f"保存されたデータ: {json.dumps(saved_data, indent=2, ensure_ascii=False)}")
 
         assert saved_data["version"] == "1.0", "バージョンが正しく保存されていません"
         assert len(saved_data["patterns"]) == 1, "パターン数が正しくありません"
-        assert (
-            saved_data["patterns"][0]["name"] == "Test Pattern"
-        ), "パターン名が正しく保存されていません"
+        assert saved_data["patterns"][0]["name"] == "Test Pattern", "パターン名が正しく保存されていません"
 
         print("✓ test_save_config_to_file 成功")
 

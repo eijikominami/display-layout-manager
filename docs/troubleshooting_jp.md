@@ -38,13 +38,13 @@
    ```
 
 2. **PATH を設定**
-   
+
    Apple Silicon Mac の場合:
    ```bash
    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc
    source ~/.zshrc
    ```
-   
+
    Intel Mac の場合:
    ```bash
    echo 'eval "$(/usr/local/bin/brew shellenv)"' >> ~/.zshrc
@@ -103,13 +103,13 @@
    ```
 
 2. **PATH を設定（オプション）**
-   
+
    Apple Silicon Mac の場合:
    ```bash
    echo 'export PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH"' >> ~/.zshrc
    source ~/.zshrc
    ```
-   
+
    Intel Mac の場合:
    ```bash
    echo 'export PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"' >> ~/.zshrc
@@ -143,7 +143,7 @@
    - 設定ファイルの内容を貼り付けて検証
 
 2. **一般的な構文エラー**
-   
+
    **末尾のコンマ**
    ```json
    // ❌ 悪い例
@@ -154,7 +154,7 @@
        }
      ]
    }
-   
+
    // ✅ 良い例
    {
      "patterns": [
@@ -164,14 +164,14 @@
      ]
    }
    ```
-   
+
    **引用符の不一致**
    ```json
    // ❌ 悪い例
    {
      "name": "Pattern 1'
    }
-   
+
    // ✅ 良い例
    {
      "name": "Pattern 1"
@@ -269,7 +269,7 @@
    ```bash
    displayplacer list
    ```
-   
+
    エラーが表示される場合は、displayplacer の問題です。
 
 2. **ディスプレイ接続を確認**
@@ -329,14 +329,14 @@
    ```bash
    open ~/Library/Application\ Support/DisplayLayoutManager/config.json
    ```
-   
+
    現在の Screen IDs と完全に一致するように修正
 
 3. **自動保存を使用**
    ```bash
    display-layout-manager --save-current
    ```
-   
+
    これにより、現在の構成が自動的に保存されます。
 
 4. **ドライランで確認**
@@ -387,7 +387,7 @@
    ```bash
    display-layout-manager --dry-run --verbose
    ```
-   
+
    実行予定のコマンドを確認
 
 2. **displayplacer を直接実行**
@@ -395,14 +395,14 @@
    # ドライランで表示されたコマンドをコピーして実行
    displayplacer "id:SCREEN_ID res:1920x1080 ..."
    ```
-   
+
    エラーメッセージを確認
 
 3. **対応している解像度を確認**
    ```bash
    displayplacer list
    ```
-   
+
    "Resolutions for rotation 0:" セクションで対応解像度を確認
 
 4. **設定ファイルを更新**
@@ -430,7 +430,7 @@
    ```bash
    sudo display-layout-manager
    ```
-   
+
    ただし、通常は不要です。
 
 ## メニューバーアプリの問題
@@ -450,7 +450,7 @@
    ```bash
    display-layout-menubar
    ```
-   
+
    エラーメッセージを確認
 
 2. **依存関係を確認**
@@ -479,14 +479,14 @@
    ```bash
    tail -f ~/Library/Logs/DisplayLayoutManager/display_layout_manager_*.log
    ```
-   
+
    メニュー項目をクリックしてログを確認
 
 2. **CLI で動作確認**
    ```bash
    display-layout-manager --verbose
    ```
-   
+
    CLI で正常に動作するか確認
 
 3. **設定ファイルを確認**
@@ -605,13 +605,13 @@ zsh: command not found: display-layout-manager
    ```
 
 3. **PATH を設定**
-   
+
    Apple Silicon Mac の場合:
    ```bash
    echo 'export PATH="/opt/homebrew/bin:$PATH"' >> ~/.zshrc
    source ~/.zshrc
    ```
-   
+
    Intel Mac の場合:
    ```bash
    echo 'export PATH="/usr/local/bin:$PATH"' >> ~/.zshrc

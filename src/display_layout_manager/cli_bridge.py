@@ -145,9 +145,7 @@ class CLIBridge:
                     error_message=f"ディスプレイ情報の取得に失敗しました: {error}",
                 )
 
-            display_info = (
-                f"接続されたディスプレイ: {len(current_config.screen_ids)}個\n"
-            )
+            display_info = f"接続されたディスプレイ: {len(current_config.screen_ids)}個\n"
             for i, screen_id in enumerate(current_config.screen_ids, 1):
                 display_info += f"{i}. {screen_id[:16]}...\n"
 
