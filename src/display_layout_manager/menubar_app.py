@@ -8,6 +8,7 @@ import rumps
 
 from .auto_launch_manager import AutoLaunchManager
 from .cli_bridge import CLIBridge
+from .i18n import LocaleDetector, MessageManager
 
 
 class DisplayLayoutMenuBar(rumps.App):
@@ -18,6 +19,10 @@ class DisplayLayoutMenuBar(rumps.App):
             "🖥️",  # ディスプレイの絵文字アイコン
             quit_button=None,  # カスタム終了ボタンを使用
         )
+
+        # Initialize i18n
+        self.locale_detector = LocaleDetector()
+        self.msg = MessageManager(self.locale_detector)
 
         # コンポーネントの初期化
         self.cli_bridge = CLIBridge(verbose=False)
@@ -31,22 +36,21 @@ class DisplayLayoutMenuBar(rumps.App):
     def _build_menu(self):
         """メニュー構造を構築"""
         return [
-            rumps.MenuItem("レイアウトを適用", callback=self.apply_layout),
-            rumps.MenuItem("現在の設定を保存", callback=self.save_current),
+            rumps.MenuItem(self.msg.get("menu_apply_layout"), callback=self.apply_layout),
+            rumps.MenuItem(self.msg.get("menu_save_current"), callback=self.save_current),
             rumps.separator,
-            rumps.MenuItem("ログイン時に起動", callback=self.toggle_auto_launch),
+            rumps.MenuItem(self.msg.get("menu_auto_launch"), callback=self.toggle_auto_launch),
             rumps.separator,
-            rumps.MenuItem("終了", callback=self.quit_application),
+            rumps.MenuItem(self.msg.get("menu_quit"), callback=self.quit_application),
         ]
 
     def _update_auto_launch_state(self):
         """自動起動メニュー項目の状態を更新"""
         is_enabled = self.auto_launch_manager.is_enabled()
-        menu_item = self.menu["ログイン時に起動"]
+        menu_item = self.menu[self.msg.get("menu_auto_launch")]
         if menu_item:
             menu_item.state = 1 if is_enabled else 0
 
-    @rumps.clicked("レイアウトを適用")
     def apply_layout(self, _):
         """レイアウト適用アクション（サイレント実行）"""
         try:
@@ -56,7 +60,6 @@ class DisplayLayoutMenuBar(rumps.App):
             # エラー時もサイレント（ログファイルに記録される）
             pass
 
-    @rumps.clicked("現在の設定を保存")
     def save_current(self, _):
         """現在の設定保存アクション（サイレント実行）"""
         try:
@@ -66,7 +69,6 @@ class DisplayLayoutMenuBar(rumps.App):
             # エラー時もサイレント（ログファイルに記録される）
             pass
 
-    @rumps.clicked("ログイン時に起動")
     def toggle_auto_launch(self, sender):
         """自動起動の切り替えアクション"""
         try:
@@ -83,7 +85,6 @@ class DisplayLayoutMenuBar(rumps.App):
             # エラー時もサイレント（ログファイルに記録される）
             pass
 
-    @rumps.clicked("終了")
     def quit_application(self, _):
         """アプリケーション終了アクション"""
         rumps.quit_application()

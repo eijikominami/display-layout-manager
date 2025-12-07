@@ -9,21 +9,26 @@ import argparse
 import sys
 
 from display_layout_manager.auto_launch_manager import AutoLaunchManager
+from display_layout_manager.i18n import LocaleDetector, MessageManager
 from display_layout_manager.menubar_app import DisplayLayoutMenuBar
 
 
 def main():
     """メニューバーアプリケーションのメインエントリーポイント"""
+    # Initialize i18n
+    locale_detector = LocaleDetector()
+    msg = MessageManager(locale_detector)
+    
     parser = argparse.ArgumentParser(
         description="Display Layout Manager - Menu Bar Application"
     )
     parser.add_argument(
-        "--enable-auto-launch", action="store_true", help="ログイン時の自動起動を有効化"
+        "--enable-auto-launch", action="store_true", help="Enable auto-launch at login"
     )
     parser.add_argument(
         "--disable-auto-launch",
         action="store_true",
-        help="ログイン時の自動起動を無効化",
+        help="Disable auto-launch at login",
     )
 
     args = parser.parse_args()
@@ -32,13 +37,13 @@ def main():
     if args.enable_auto_launch:
         auto_launch = AutoLaunchManager()
         auto_launch.enable()
-        print("✓ ログイン時の自動起動を有効化しました")
+        print(f"✓ {msg.get('auto_launch_enabled')}")
         return 0
 
     if args.disable_auto_launch:
         auto_launch = AutoLaunchManager()
         auto_launch.disable()
-        print("✓ ログイン時の自動起動を無効化しました")
+        print(f"✓ {msg.get('auto_launch_disabled')}")
         return 0
 
     # メニューバーアプリケーションを起動
@@ -47,10 +52,10 @@ def main():
         app.run()
         return 0
     except KeyboardInterrupt:
-        print("\nメニューバーアプリケーションを終了します")
+        print(f"\n{msg.get('menubar_app_quit')}")
         return 0
     except Exception as e:
-        print(f"エラーが発生しました: {e}", file=sys.stderr)
+        print(f"{msg.get('app_error', error=e)}", file=sys.stderr)
         return 1
 
 
