@@ -28,7 +28,6 @@ def test_menubar_initialization():
             lambda self: self._menu_dict, lambda self, v: setattr(self, "_menu_dict", v)
         ),
     ):
-
         mock_init.return_value = None
 
         try:

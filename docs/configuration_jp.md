@@ -85,7 +85,7 @@ display-layout-manager
 
 - **型**: 文字列
 - **説明**: パターンの一意な名前
-- **制約**: 
+- **制約**:
   - 空文字列不可
   - 同じ名前のパターンは推奨されない（最後のものが優先）
 - **推奨**: 分かりやすい名前を使用
@@ -267,7 +267,7 @@ display-layout-manager --save-current
    ```bash
    displayplacer list
    ```
-   
+
    出力の "Execute the command below" の次の行をコピー
 
 3. **設定ファイルを編集**

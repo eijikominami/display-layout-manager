@@ -19,43 +19,43 @@ jobs:
     strategy:
       matrix:
         python-version: ['3.9', '3.10', '3.11']
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-      
+
       - name: Install system dependencies
         run: |
           # Install Homebrew dependencies
           brew install jakehilborn/jakehilborn/displayplacer
           brew install grep
-      
+
       - name: Install Python package
         run: |
           pip install -e .
-      
+
       - name: Install test dependencies
         run: |
           pip install coverage
-      
+
       - name: Run unit tests
         run: |
           python tests/run_all_tests.py
-      
+
       - name: Run integration tests
         run: |
           python -m src.display_layout_manager.main --run-tests --verbose
-      
+
       - name: Generate coverage report
         run: |
           python tests/run_coverage.py
           coverage xml
-      
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
@@ -63,71 +63,71 @@ jobs:
           flags: unittests
           name: codecov-${{ matrix.python-version }}
           fail_ci_if_error: false
-      
+
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report-${{ matrix.python-version }}
           path: htmlcov/
           retention-days: 7
-  
+
   lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      
+
       - name: Install linting tools
         run: |
           pip install flake8 black isort
-      
+
       - name: Run flake8
         run: |
           flake8 src/ tests/ --count --select=E9,F63,F7,F82 --show-source --statistics
           flake8 src/ tests/ --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-      
+
       - name: Check code formatting with black
         run: |
           black --check src/ tests/
-      
+
       - name: Check import sorting with isort
         run: |
           isort --check-only --profile black src/ tests/
-  
+
   homebrew-test:
     runs-on: macos-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Get version from __init__.py
         id: version
         run: |
           VERSION=$(python3 -c "exec(open('src/display_layout_manager/__init__.py').read()); print(__version__)")
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
           echo "Detected version: $VERSION"
-      
+
       - name: Install system dependencies
         run: |
           brew install jakehilborn/jakehilborn/displayplacer
           brew install grep
-      
+
       - name: Create temporary Homebrew Formula
         run: |
           mkdir -p /tmp/homebrew-test/Formula
-          
+
           # Get SHA256 of current source
           tar czf /tmp/test-source.tar.gz --exclude='.git' .
           SHA256=$(shasum -a 256 /tmp/test-source.tar.gz | cut -d' ' -f1)
-          
+
           # Create test formula
           VERSION=$(python3 -c "exec(open('src/display_layout_manager/__init__.py').read()); print(__version__)")
-          
+
           cat > /tmp/homebrew-test/Formula/display-layout-manager.rb << EOF
           class DisplayLayoutManager < Formula
             include Language::Python::Virtualenv
@@ -160,13 +160,13 @@ jobs:
 
             def install
               virtualenv_install_with_resources
-              
+
               # メニューバーアプリのエントリーポイントを手動作成
               (bin/"display-layout-menubar").write <<~EOS
                 #!/bin/bash
                 exec "#{libexec}/bin/python" -m display_layout_manager.menubar "$@"
               EOS
-              
+
               # 実行権限を付与
               chmod 0755, bin/"display-layout-menubar"
             end
@@ -176,45 +176,45 @@ jobs:
             end
           end
           EOF
-      
+
       - name: Create local tap and install
         run: |
           # Create local tap
           mkdir -p $(brew --repository)/Library/Taps/test/homebrew-test/Formula
           cp /tmp/homebrew-test/Formula/display-layout-manager.rb $(brew --repository)/Library/Taps/test/homebrew-test/Formula/
-          
+
           # Install from local tap
           brew install --build-from-source test/test/display-layout-manager
-      
+
       - name: Verify installation
         run: |
           # Check that main command exists
           which display-layout-manager
           display-layout-manager --version
-          
+
           # Check that menubar command exists
           which display-layout-menubar
-          
+
           # List all installed binaries
           echo "Installed binaries:"
           ls -la $(brew --prefix)/bin/ | grep display-layout
-          
+
           # Check Cellar structure
           echo "Cellar structure:"
           CELLAR_PATH=$(brew --cellar display-layout-manager)/${{ steps.version.outputs.VERSION }}
           ls -la $CELLAR_PATH/bin/
-      
+
       - name: Run basic functionality tests
         run: |
           # Test CLI help
           display-layout-manager --help
-          
+
           # Test version command
           display-layout-manager --version
-          
+
           # Test show-displays (may fail if no displays, but should not crash)
           display-layout-manager --show-displays || true
-      
+
       - name: Cleanup
         if: always()
         run: |

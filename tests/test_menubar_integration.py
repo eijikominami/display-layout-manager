@@ -55,7 +55,6 @@ def test_checkbox_toggle():
     # メニューバーアプリを作成（実際には起動しない）
     print("\n[テスト 1] メニューバーアプリの初期化")
     try:
-
         # モックせずに実際のインスタンスを作成
         app = DisplayLayoutMenuBar()
         print("  ✓ アプリインスタンス作成成功")

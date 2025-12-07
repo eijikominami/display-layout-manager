@@ -150,9 +150,11 @@ class IntegrationTester:
             }
 
             invalid_config_path = self.create_test_config(invalid_config)
-            invalid_success, invalid_config_obj, invalid_errors = (
-                config_manager.load_config(invalid_config_path)
-            )
+            (
+                invalid_success,
+                invalid_config_obj,
+                invalid_errors,
+            ) = config_manager.load_config(invalid_config_path)
 
             details = {
                 "valid_config_success": success,

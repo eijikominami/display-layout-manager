@@ -352,9 +352,10 @@ def main() -> int:
             )
 
             # displayplacerの利用可能性確認
-            is_available, error_msg = (
-                command_executor.validate_displayplacer_available()
-            )
+            (
+                is_available,
+                error_msg,
+            ) = command_executor.validate_displayplacer_available()
             if not is_available:
                 logger.error("command", f"displayplacer not available: {error_msg}")
                 error_handler.handle_error(

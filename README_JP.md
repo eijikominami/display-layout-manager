@@ -328,6 +328,35 @@ pip install -e .
 python -m src.display_layout_manager.main --run-tests
 ```
 
+### 開発環境のセットアップ
+
+1. **開発依存関係のインストール**
+   ```bash
+   pip install -e ".[dev]"
+   ```
+
+2. **pre-commit フックのセットアップ**
+   ```bash
+   pre-commit install
+   ```
+
+   これにより、コミット前に以下のチェックが自動実行されます：
+   - **Black**: コードフォーマット
+   - **isort**: import 文の整理
+   - **flake8**: Lint チェック
+   - **末尾の空白削除**
+   - **ファイル末尾の改行修正**
+   - **YAML 検証**
+
+3. **手動での pre-commit 実行**（オプション）
+   ```bash
+   # 全ファイルに対して実行
+   pre-commit run --all-files
+
+   # 特定のフックのみ実行
+   pre-commit run black --all-files
+   ```
+
 ### テスト
 
 ```bash

@@ -38,13 +38,13 @@ Error: Homebrew not found
    ```
 
 2. **Configure PATH**
-   
+
    For Apple Silicon Mac:
    ```bash
    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc
    source ~/.zshrc
    ```
-   
+
    For Intel Mac:
    ```bash
    echo 'eval "$(/usr/local/bin/brew shellenv)"' >> ~/.zshrc
@@ -103,13 +103,13 @@ Error: GNU grep not found
    ```
 
 2. **Configure PATH (optional)**
-   
+
    For Apple Silicon Mac:
    ```bash
    echo 'export PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH"' >> ~/.zshrc
    source ~/.zshrc
    ```
-   
+
    For Intel Mac:
    ```bash
    echo 'export PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"' >> ~/.zshrc
@@ -143,7 +143,7 @@ Details: Expecting ',' delimiter: line 5 column 3 (char 123)
    - Paste configuration file content for validation
 
 2. **Common syntax errors**
-   
+
    **Trailing comma**
    ```json
    // ❌ Bad
@@ -154,7 +154,7 @@ Details: Expecting ',' delimiter: line 5 column 3 (char 123)
        }
      ]
    }
-   
+
    // ✅ Good
    {
      "patterns": [
@@ -230,7 +230,7 @@ Error: Display detection failed
    ```bash
    displayplacer list
    ```
-   
+
    If error appears, it's a displayplacer issue.
 
 2. **Check display connection**
@@ -268,14 +268,14 @@ Current Screen IDs: [ID1, ID2]
    ```bash
    open ~/Library/Application\ Support/DisplayLayoutManager/config.json
    ```
-   
+
    Modify to exactly match current Screen IDs
 
 3. **Use auto-save**
    ```bash
    display-layout-manager --save-current
    ```
-   
+
    This automatically saves current configuration.
 
 4. **Verify with dry run**
@@ -304,7 +304,7 @@ Exit code: 1
    ```bash
    display-layout-manager --dry-run --verbose
    ```
-   
+
    Check command to be executed
 
 2. **Run displayplacer directly**
@@ -312,14 +312,14 @@ Exit code: 1
    # Copy and run command shown in dry run
    displayplacer "id:SCREEN_ID res:1920x1080 ..."
    ```
-   
+
    Check error message
 
 3. **Check supported resolutions**
    ```bash
    displayplacer list
    ```
-   
+
    Check supported resolutions in "Resolutions for rotation 0:" section
 
 4. **Update configuration file**
@@ -343,7 +343,7 @@ Exit code: 1
    ```bash
    display-layout-menubar
    ```
-   
+
    Check error messages
 
 2. **Check dependencies**
@@ -372,14 +372,14 @@ Exit code: 1
    ```bash
    tail -f ~/Library/Logs/DisplayLayoutManager/display_layout_manager_*.log
    ```
-   
+
    Click menu item and check logs
 
 2. **Verify with CLI**
    ```bash
    display-layout-manager --verbose
    ```
-   
+
    Check if CLI works normally
 
 3. **Check configuration file**

@@ -85,7 +85,7 @@ display-layout-manager
 
 - **Type**: String
 - **Description**: Unique pattern name
-- **Constraints**: 
+- **Constraints**:
   - Cannot be empty string
   - Duplicate names not recommended (last one takes precedence)
 - **Recommendation**: Use descriptive names
@@ -230,7 +230,7 @@ Advantages of this method:
    ```bash
    displayplacer list
    ```
-   
+
    Copy the line after "Execute the command below"
 
 3. **Edit configuration file**
