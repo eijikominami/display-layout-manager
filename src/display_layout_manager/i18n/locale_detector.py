@@ -21,12 +21,19 @@ class LocaleDetector:
         Returns:
             str: 'ja' for Japanese, 'en' for English
         """
-        # Environment variable override
+        # Environment variable override (highest priority for testing)
         override = os.environ.get("DISPLAY_LAYOUT_LANG")
         if override:
             return "ja" if override.startswith("ja") else "en"
 
-        # macOS: Use NSLocale to get preferred languages
+        # Check LANG environment variable (for testing and CLI usage)
+        lang = os.environ.get("LANG", "")
+        if lang.startswith("ja"):
+            return "ja"
+        elif lang.startswith("en"):
+            return "en"
+
+        # macOS: Use NSLocale to get preferred languages (for GUI apps)
         try:
             from Foundation import NSLocale
 
@@ -40,12 +47,7 @@ class LocaleDetector:
         except Exception:
             pass
 
-        # Check LANG environment variable
-        lang = os.environ.get("LANG", "")
-        if lang.startswith("ja"):
-            return "ja"
-
-        # Use locale module
+        # Use locale module as fallback
         try:
             current_locale, _ = locale.getdefaultlocale()
             if current_locale and current_locale.startswith("ja"):

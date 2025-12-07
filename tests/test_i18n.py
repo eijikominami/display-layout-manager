@@ -11,7 +11,7 @@ from unittest.mock import patch
 # Add src directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from display_layout_manager.i18n import LocaleDetector, MessageManager
+from display_layout_manager.i18n import LocaleDetector, MessageManager  # noqa: E402
 
 
 class TestLocaleDetector(unittest.TestCase):
@@ -55,8 +55,10 @@ class TestLocaleDetector(unittest.TestCase):
         """Test default to English when locale cannot be determined"""
         with patch.dict(os.environ, {}, clear=True):
             with patch("locale.getdefaultlocale", return_value=(None, None)):
-                detector = LocaleDetector()
-                self.assertEqual(detector.get_locale(), "en")
+                # Mock Foundation module import to simulate NSLocale not available
+                with patch.dict(sys.modules, {"Foundation": None}):
+                    detector = LocaleDetector()
+                    self.assertEqual(detector.get_locale(), "en")
 
     def test_locale_caching(self):
         """Test that locale is cached after first detection"""
