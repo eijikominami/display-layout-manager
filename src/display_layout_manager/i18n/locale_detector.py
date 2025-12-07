@@ -26,6 +26,20 @@ class LocaleDetector:
         if override:
             return "ja" if override.startswith("ja") else "en"
 
+        # macOS: Use NSLocale to get preferred languages
+        try:
+            from Foundation import NSLocale
+
+            # Get the list of preferred languages
+            preferred_languages = NSLocale.preferredLanguages()
+            if preferred_languages and len(preferred_languages) > 0:
+                # Check the first preferred language
+                first_lang = preferred_languages[0]
+                if first_lang.startswith("ja"):
+                    return "ja"
+        except Exception:
+            pass
+
         # Check LANG environment variable
         lang = os.environ.get("LANG", "")
         if lang.startswith("ja"):
