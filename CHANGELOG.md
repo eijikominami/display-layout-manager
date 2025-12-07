@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2025-12-07
+
+### Added
+- **重複起動防止**: メニューバーアプリの重複起動を防止
+  - PIDファイルによる排他制御
+  - 既存インスタンスを前面に表示
+  - `~/Library/Application Support/DisplayLayoutManager/menubar.pid` でプロセス管理
+- **全ディスプレイ表示**: すべてのディスプレイのメニューバーにアイコンを表示（試験的）
+  - NSWindow.Level と NSWindowCollectionBehavior の設定
+  - macOS の制限により動作しない場合があります
+
+### Changed
+- メニューバーアプリの起動処理を改善
+
 ## [1.4.2] - 2025-12-07
 
 ### Fixed
