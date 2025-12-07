@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **メニューバーアプリケーション**: macOS メニューバーから操作できる GUI アプリケーション
-- **display-layout-manager-menubar**: メニューバーアプリの起動コマンド
+- **display-layout-menubar**: メニューバーアプリの起動コマンド
 - **レイアウト適用ボタン**: メニューバーから1クリックでレイアウト適用
 - **設定保存ボタン**: メニューバーから現在の設定を保存
 - **ディスプレイ情報表示**: 接続されたディスプレイ情報をメニューから確認
@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **依存関係**: rumps と pyobjc-framework-Cocoa を追加
-- **setup.py**: display-layout-manager-menubar エントリーポイントを追加
+- **setup.py**: display-layout-menubar エントリーポイントを追加
 - **Homebrew Formula**: メニューバーアプリのリソースと使用方法を追加
 
 ## [1.2.0] - 2025-12-06

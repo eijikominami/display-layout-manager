@@ -43,7 +43,7 @@ class AutoLaunchManager:
             # 実行ファイルのパスを取得
             executable_path = self._find_executable()
             if not executable_path:
-                raise Exception("display-layout-manager-menubar が見つかりません")
+                raise Exception("display-layout-menubar が見つかりません")
 
             # plist ファイルを作成
             # executable_path がスペースを含む場合（python コマンド）は分割
@@ -129,7 +129,7 @@ class AutoLaunchManager:
 
     def _find_executable(self) -> str:
         """
-        display-layout-manager-menubar の実行ファイルパスを検索
+        display-layout-menubar の実行ファイルパスを検索
 
         Returns:
             str: 実行ファイルのパス
@@ -137,7 +137,7 @@ class AutoLaunchManager:
         # which コマンドで検索
         try:
             result = subprocess.run(
-                ["which", "display-layout-manager-menubar"],
+                ["which", "display-layout-menubar"],
                 capture_output=True,
                 text=True,
                 check=True,
@@ -148,10 +148,10 @@ class AutoLaunchManager:
 
         # 検索パス
         search_paths = [
-            "/opt/homebrew/bin/display-layout-manager-menubar",  # Apple Silicon
-            "/usr/local/bin/display-layout-manager-menubar",  # Intel Mac
+            "/opt/homebrew/bin/display-layout-menubar",  # Apple Silicon
+            "/usr/local/bin/display-layout-menubar",  # Intel Mac
             str(
-                Path.home() / ".local" / "bin" / "display-layout-manager-menubar"
+                Path.home() / ".local" / "bin" / "display-layout-menubar"
             ),  # pip --user
         ]
 
