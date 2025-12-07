@@ -54,6 +54,15 @@ jobs:
       - name: Generate coverage report
         run: |
           python tests/run_coverage.py
+          coverage xml
+      
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage.xml
+          flags: unittests
+          name: codecov-${{ matrix.python-version }}
+          fail_ci_if_error: false
       
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
@@ -151,6 +160,15 @@ jobs:
 
             def install
               virtualenv_install_with_resources
+              
+              # メニューバーアプリのエントリーポイントを手動作成
+              (bin/"display-layout-menubar").write <<~EOS
+                #!/bin/bash
+                exec "#{libexec}/bin/python" -m display_layout_manager.menubar "$@"
+              EOS
+              
+              # 実行権限を付与
+              chmod 0755, bin/"display-layout-menubar"
             end
 
             test do
@@ -175,11 +193,11 @@ jobs:
           display-layout-manager --version
           
           # Check that menubar command exists
-          which display-layout-manager-menubar
+          which display-layout-menubar
           
           # List all installed binaries
           echo "Installed binaries:"
-          ls -la $(brew --prefix)/bin/ | grep display-layout-manager
+          ls -la $(brew --prefix)/bin/ | grep display-layout
           
           # Check Cellar structure
           echo "Cellar structure:"

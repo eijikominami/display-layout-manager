@@ -1,129 +1,138 @@
+English / [**日本語**](README_JP.md)
+
 # Display Layout Manager
 
-macOS用のディスプレイレイアウト自動設定ツール
+[![Build](https://github.com/eijikominami/display-layout-manager/actions/workflows/test.yml/badge.svg)](https://github.com/eijikominami/display-layout-manager/actions/workflows/test.yml)
+[![Release](https://github.com/eijikominami/display-layout-manager/actions/workflows/release.yml/badge.svg)](https://github.com/eijikominami/display-layout-manager/actions/workflows/release.yml)
+[![Release Version](https://img.shields.io/github/v/release/eijikominami/display-layout-manager)](https://github.com/eijikominami/display-layout-manager/releases)
+[![codecov](https://codecov.io/gh/eijikominami/display-layout-manager/branch/main/graph/badge.svg)](https://codecov.io/gh/eijikominami/display-layout-manager)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/downloads/)
 
-## 概要
+Automatic display layout configuration tool for macOS
 
-Display Layout Manager は、macOS で複数のディスプレイ構成を自動的に管理するためのコマンドラインツールです。異なるディスプレイの組み合わせに応じて、事前に定義されたレイアウト設定を自動的に適用します。
+## Overview
 
-## 主な機能
+Display Layout Manager is a command-line tool for automatically managing multiple display configurations on macOS. It automatically applies predefined layout settings based on different display combinations.
 
-- **自動ディスプレイ検出**: 現在接続されているディスプレイの Persistent Screen ID を自動検出
-- **パターンマッチング**: ディスプレイ構成に基づいて最適なレイアウトパターンを自動選択
-- **設定ファイル管理**: JSON 形式の設定ファイルで複数のレイアウトパターンを管理
-- **現在レイアウト保存**: `--save-current` で現在のディスプレイ構成を簡単保存
-- **依存関係管理**: 必要なツールの自動インストールと確認
-- **包括的なログ**: 構造化ログ出力とセッションサマリー
-- **メニューバーアプリ**: macOS メニューバーから簡単に操作できる GUI
-- **エラーハンドリング**: ユーザーフレンドリーなエラーメッセージとトラブルシューティングガイド
-- **統合テスト**: 包括的なテストスイートによる品質保証
+## Key Features
 
-## システム要件
+- **Automatic Display Detection**: Automatically detects Persistent Screen IDs of currently connected displays
+- **Pattern Matching**: Automatically selects optimal layout patterns based on display configuration
+- **Configuration File Management**: Manages multiple layout patterns with JSON format configuration files
+- **Current Layout Saving**: Easily save current display configuration with `--save-current`
+- **Dependency Management**: Automatic installation and verification of required tools
+- **Comprehensive Logging**: Structured log output and session summaries
+- **Menu Bar App**: Easy-to-use GUI accessible from macOS menu bar
+- **Error Handling**: User-friendly error messages and troubleshooting guides
+- **Integration Testing**: Quality assurance through comprehensive test suites
 
-- **OS**: macOS 10.14 (Mojave) 以降
-- **Python**: 3.8 以降
-- **依存ツール**: Homebrew、displayplacer、GNU grep（自動インストール対応）
+## System Requirements
 
-## インストール
+- **OS**: macOS 10.14 (Mojave) or later
+- **Python**: 3.8 or later
+- **Dependencies**: Homebrew, displayplacer, GNU grep (automatic installation supported)
 
-### Homebrew を使用（推奨）
+## Installation
+
+### Using Homebrew (Recommended)
 
 ```bash
-# Homebrew tap を追加
+# Add Homebrew tap
 brew tap eijikominami/display-layout-manager
 
-# Display Layout Manager をインストール
+# Install Display Layout Manager
 brew install display-layout-manager
 ```
 
-### pip を使用
+### Using pip
 
 ```bash
-# PyPI からインストール
+# Install from PyPI
 pip install display-layout-manager
 
-# または GitHub から直接インストール
+# Or install directly from GitHub
 pip install git+https://github.com/eijikominami/display-layout-manager.git
 ```
 
-### ソースからインストール
+### Install from Source
 
 ```bash
-# リポジトリをクローン
+# Clone repository
 git clone https://github.com/eijikominami/display-layout-manager.git
 cd display-layout-manager
 
-# 開発モードでインストール
+# Install in development mode
 pip install -e .
 ```
 
-## 使用方法
+## Usage
 
-### メニューバーアプリケーション（推奨）
+### Menu Bar Application (Recommended)
 
-macOS のメニューバーから簡単に操作できる GUI アプリケーションです。
+A GUI application that can be easily operated from the macOS menu bar.
 
 ```bash
-# メニューバーアプリを起動
+# Launch menu bar app
 display-layout-menubar
 
-# バックグラウンドで起動
+# Launch in background
 display-layout-menubar &
 
-# ログイン時の自動起動を有効化
+# Enable auto-launch at login
 display-layout-menubar --enable-auto-launch
 
-# ログイン時の自動起動を無効化
+# Disable auto-launch at login
 display-layout-menubar --disable-auto-launch
 ```
 
-#### メニューバーアプリの機能
+#### Menu Bar App Features
 
-メニューバーに 🖥️ アイコンが表示され、以下の機能を提供します：
+A 🖥️ icon appears in the menu bar, providing the following features:
 
-- **レイアウトを適用**: クリック一つで現在のディスプレイ構成に合ったレイアウトを適用
-- **現在の設定を保存**: 現在のディスプレイ構成を設定ファイルに保存
-- **✓ ログイン時に起動**: 自動起動の有効化・無効化を切り替え（チェックマークで状態表示）
-- **終了**: メニューバーアプリを終了
+- **Apply Layout**: Apply layout matching current display configuration with one click
+- **Save Current Settings**: Save current display configuration to config file
+- **✓ Launch at Login**: Toggle auto-launch on/off (checkmark shows current state)
+- **Quit**: Exit menu bar app
 
-操作結果はログファイル（`~/Library/Logs/DisplayLayoutManager/`）に記録されます。
+Operation results are recorded in log files (`~/Library/Logs/DisplayLayoutManager/`).
 
-### CLI コマンド
+### CLI Commands
 
 ```bash
-# 基本実行（自動でディスプレイレイアウトを適用）
+# Basic execution (automatically apply display layout)
 display-layout-manager
 
-# 現在のディスプレイ構成を表示
+# Show current display configuration
 display-layout-manager --show-displays
 
-# 設定ファイルの検証
+# Validate configuration file
 display-layout-manager --validate-config
 
-# ドライラン（実際にコマンドを実行しない）
+# Dry run (don't actually execute commands)
 display-layout-manager --dry-run
 
-# 詳細ログ付き実行
+# Execute with verbose logging
 display-layout-manager --verbose
 
-# 統合テストの実行
+# Run integration tests
 display-layout-manager --run-tests
 
-# 現在のレイアウトを保存
+# Save current layout
 display-layout-manager --save-current
 
-# ヘルプ表示
+# Show help
 display-layout-manager --help
 ```
 
-### 設定ファイル
+### Configuration File
 
-設定ファイルは以下の場所に自動作成されます：
-- **デフォルト**: `~/Library/Application Support/DisplayLayoutManager/config.json`
-- **環境変数**: `DISPLAY_LAYOUT_CONFIG` で指定可能
-- **コマンドライン**: `--config` オプションで指定可能
+Configuration files are automatically created in the following locations:
+- **Default**: `~/Library/Application Support/DisplayLayoutManager/config.json`
+- **Environment Variable**: Can be specified with `DISPLAY_LAYOUT_CONFIG`
+- **Command Line**: Can be specified with `--config` option
 
-#### 設定ファイル例
+#### Configuration File Example
 
 ```json
 {
@@ -131,7 +140,7 @@ display-layout-manager --help
   "patterns": [
     {
       "name": "Laptop Only",
-      "description": "ラップトップ単体使用",
+      "description": "Laptop only usage",
       "screen_ids": [
         "37D8832A-2D66-02CA-B9F7-8F30A301B230"
       ],
@@ -139,7 +148,7 @@ display-layout-manager --help
     },
     {
       "name": "Home Office Setup",
-      "description": "メインディスプレイ + 外部モニター2台",
+      "description": "Main display + 2 external monitors",
       "screen_ids": [
         "37D8832A-2D66-02CA-B9F7-8F30A301B230",
         "3F816611-C361-483F-8FB3-CE03208D949C",
@@ -151,183 +160,183 @@ display-layout-manager --help
 }
 ```
 
-### 設定手順
+### Setup Steps
 
-1. **現在のディスプレイ構成を確認**
+1. **Check current display configuration**
    ```bash
    display-layout-manager --show-displays
    ```
 
-2. **設定ファイルを編集**
-   - 出力された Screen ID を使用してパターンを作成
-   - `displayplacer list` コマンドで現在のコマンドを取得
+2. **Edit configuration file**
+   - Create patterns using the output Screen IDs
+   - Get current command with `displayplacer list` command
 
-3. **設定ファイルを検証**
+3. **Validate configuration file**
    ```bash
    display-layout-manager --validate-config
    ```
 
-4. **ドライランでテスト**
+4. **Test with dry run**
    ```bash
    display-layout-manager --dry-run --verbose
    ```
 
-### 現在のレイアウトを自動保存
+### Auto-Save Current Layout
 
-手動での設定ファイル編集を避けたい場合は、現在のディスプレイレイアウトを自動的に保存できます：
+If you want to avoid manual configuration file editing, you can automatically save the current display layout:
 
 ```bash
-# 現在のディスプレイレイアウトを保存
+# Save current display layout
 display-layout-manager --save-current
 
-# 出力例:
-# 現在のディスプレイ構成を保存中...
-# 検出されたディスプレイ: 3個
-# ✓ パターン '3_Displays_37D8832A_3F816611_AE0F5F39' を作成しました
+# Example output:
+# Saving current display configuration...
+# Detected displays: 3
+# ✓ Created pattern '3_Displays_37D8832A_3F816611_AE0F5F39'
 ```
 
-この機能の特徴：
-- **自動パターン名生成**: Screen IDsから一意の名前を自動生成
-- **自動上書き**: 同じディスプレイ構成が既に存在する場合は自動更新
-- **現在設定の抽出**: displayplacerから現在の設定コマンドを自動抽出
+Features:
+- **Automatic Pattern Name Generation**: Generates unique names from Screen IDs
+- **Automatic Overwrite**: Automatically updates if same display configuration already exists
+- **Current Settings Extraction**: Automatically extracts current settings command from displayplacer
 
-## ログとデバッグ
+## Logging and Debugging
 
-### ログファイル
+### Log Files
 
-- **場所**: `~/Library/Logs/DisplayLayoutManager/`
-- **形式**: JSON 構造化ログ
-- **ファイル種類**:
-  - `display_layout_manager_YYYYMMDD.log` - 通常実行ログ（日次ローテーション）
+- **Location**: `~/Library/Logs/DisplayLayoutManager/`
+- **Format**: JSON structured logs
+- **File Types**:
+  - `display_layout_manager_YYYYMMDD.log` - Normal execution logs (daily rotation)
 
-### デバッグオプション
+### Debug Options
 
 ```bash
-# 詳細ログ表示
+# Show verbose logs
 display-layout-manager --verbose
 
-# 統合テスト実行
+# Run integration tests
 display-layout-manager --run-tests --verbose
 
-# 設定ファイル検証
+# Validate configuration file
 display-layout-manager --validate-config --verbose
 ```
 
-## トラブルシューティング
+## Troubleshooting
 
-### 依存関係の問題
+### Dependency Issues
 
-**Homebrew が見つからない**
+**Homebrew not found**
 ```bash
-# Homebrew をインストール
+# Install Homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-# シェルを再起動またはパスを設定
+# Restart shell or set PATH
 eval "$(/opt/homebrew/bin/brew shellenv)"  # Apple Silicon Mac
 eval "$(/usr/local/bin/brew shellenv)"     # Intel Mac
 ```
 
-**displayplacer が見つからない**
+**displayplacer not found**
 ```bash
-# displayplacer をインストール
+# Install displayplacer
 brew install jakehilborn/jakehilborn/displayplacer
 
-# または手動でダウンロード
+# Or download manually
 # https://github.com/jakehilborn/displayplacer/releases
 ```
 
-**GNU grep が見つからない**
+**GNU grep not found**
 ```bash
-# GNU grep をインストール
+# Install GNU grep
 brew install grep
 
-# PATH を設定（必要に応じて）
+# Set PATH (if needed)
 export PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH"  # Apple Silicon Mac
 export PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"     # Intel Mac
 ```
 
-### 設定ファイルの問題
+### Configuration File Issues
 
-**JSON 構文エラー**
-- オンライン JSON バリデーターを使用
-- コンマ、括弧、引用符の対応を確認
-- `--validate-config` オプションで詳細確認
+**JSON syntax error**
+- Use online JSON validator
+- Check commas, brackets, and quotes
+- Use `--validate-config` option for detailed check
 
-**パターンが一致しない**
+**Pattern doesn't match**
 ```bash
-# 現在の Screen ID を確認
+# Check current Screen IDs
 display-layout-manager --show-displays
 
-# 設定ファイルの screen_ids を更新
-# 完全一致が必要（順序は問わない）
+# Update screen_ids in configuration file
+# Exact match required (order doesn't matter)
 ```
 
-### コマンド実行の問題
+### Command Execution Issues
 
-**displayplacer コマンドが失敗する**
-- Screen ID が正しいか確認
-- 解像度やリフレッシュレートが対応しているか確認
-- `--dry-run` オプションでコマンドを事前確認
+**displayplacer command fails**
+- Check if Screen ID is correct
+- Check if resolution and refresh rate are supported
+- Pre-check command with `--dry-run` option
 
-## 開発・貢献
+## Development & Contributing
 
-### 開発環境セットアップ
+### Development Environment Setup
 
 ```bash
-# リポジトリをクローン
+# Clone repository
 git clone https://github.com/eijikominami/display-layout-manager.git
 cd display-layout-manager
 
-# 開発モードでインストール
+# Install in development mode
 pip install -e .
 
-# 統合テスト実行
+# Run integration tests
 python -m src.display_layout_manager.main --run-tests
 ```
 
-### テスト
+### Testing
 
 ```bash
-# 全テストスイートを実行（推奨）
+# Run all test suites (recommended)
 python3 tests/run_all_tests.py
 
-# テストカバレッジを測定
+# Measure test coverage
 python3 tests/run_coverage.py
-# HTML レポート: htmlcov/index.html
+# HTML report: htmlcov/index.html
 
-# CLI コンポーネント単体テスト
+# CLI component unit tests
 python3 tests/test_cli_components.py      # ConfigManager, PatternMatcher, CLIBridge
 python3 tests/test_dependency_manager.py  # DependencyManager
 python3 tests/test_display_manager.py     # DisplayManager
 python3 tests/test_command_executor.py    # CommandExecutor
 python3 tests/test_layout_saver.py        # LayoutSaver
 
-# メニューバーアプリテスト
+# Menu bar app tests
 python3 tests/test_menubar_checkbox.py    # AutoLaunchManager
-python3 tests/test_menubar_logic.py       # メニューバーロジック
-python3 tests/test_menubar_integration.py # メニューバー統合テスト
+python3 tests/test_menubar_logic.py       # Menu bar logic
+python3 tests/test_menubar_integration.py # Menu bar integration tests
 
-# CLI 統合テスト
+# CLI integration tests
 display-layout-manager --run-tests --verbose
 
-# 手動テスト
+# Manual tests
 display-layout-manager --dry-run --verbose
 display-layout-manager --show-displays
 display-layout-manager --validate-config
 ```
 
-## ライセンス
+## License
 
-MIT License - 詳細は [LICENSE](LICENSE) ファイルを参照してください。
+MIT License - See [LICENSE](LICENSE) file for details.
 
-## 貢献・サポート
+## Contributing & Support
 
-- **バグ報告**: [GitHub Issues](https://github.com/eijikominami/display-layout-manager/issues)
-- **機能要望**: [GitHub Issues](https://github.com/eijikominami/display-layout-manager/issues)
-- **ドキュメント**: [GitHub Wiki](https://github.com/eijikominami/display-layout-manager/wiki)
-- **変更履歴**: [CHANGELOG.md](CHANGELOG.md)
+- **Bug Reports**: [GitHub Issues](https://github.com/eijikominami/display-layout-manager/issues)
+- **Feature Requests**: [GitHub Issues](https://github.com/eijikominami/display-layout-manager/issues)
+- **Documentation**: [GitHub Wiki](https://github.com/eijikominami/display-layout-manager/wiki)
+- **Changelog**: [CHANGELOG.md](CHANGELOG.md)
 
-## 関連プロジェクト
+## Related Projects
 
-- [displayplacer](https://github.com/jakehilborn/displayplacer) - macOS ディスプレイ設定ツール
-- [Homebrew](https://brew.sh/) - macOS パッケージマネージャー
+- [displayplacer](https://github.com/jakehilborn/displayplacer) - macOS display configuration tool
+- [Homebrew](https://brew.sh/) - macOS package manager
