@@ -11,6 +11,7 @@ import sys
 from display_layout_manager.auto_launch_manager import AutoLaunchManager
 from display_layout_manager.i18n import LocaleDetector, MessageManager
 from display_layout_manager.menubar_app import DisplayLayoutMenuBar
+from display_layout_manager.single_instance_manager import SingleInstanceManager
 
 
 def main():
@@ -46,6 +47,21 @@ def main():
         print(f"✓ {msg.get('auto_launch_disabled')}")
         return 0
 
+    # 単一インスタンス管理
+    instance_manager = SingleInstanceManager()
+
+    # 既に起動しているかチェック
+    if instance_manager.is_already_running():
+        print("Display Layout Manager is already running.")
+        # 既存のインスタンスを前面に表示
+        instance_manager.bring_existing_to_front()
+        return 0
+
+    # ロックを取得
+    if not instance_manager.acquire_lock():
+        print("Failed to acquire lock.", file=sys.stderr)
+        return 1
+
     # メニューバーアプリケーションを起動
     try:
         app = DisplayLayoutMenuBar()
@@ -57,6 +73,9 @@ def main():
     except Exception as e:
         print(f"{msg.get('app_error', error=e)}", file=sys.stderr)
         return 1
+    finally:
+        # 終了時にロックを解放
+        instance_manager.release_lock()
 
 
 if __name__ == "__main__":

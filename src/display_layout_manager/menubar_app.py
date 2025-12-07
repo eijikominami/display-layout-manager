@@ -34,6 +34,9 @@ class DisplayLayoutMenuBar(rumps.App):
         # 初期状態を反映
         self._update_auto_launch_state()
 
+        # 全ディスプレイに表示されるように設定
+        self._configure_multi_display()
+
     def _build_menu(self):
         """メニュー構造を構築"""
         return [
@@ -95,3 +98,29 @@ class DisplayLayoutMenuBar(rumps.App):
     def quit_application(self, _):
         """アプリケーション終了アクション"""
         rumps.quit_application()
+
+    def _configure_multi_display(self):
+        """すべてのディスプレイにアイコンを表示する設定
+
+        NSWindow の level と collection behavior を設定することで、
+        すべてのディスプレイのメニューバーにアイコンを表示します。
+        """
+        try:
+            from AppKit import (
+                NSApp,
+                NSWindow,
+                NSWindowCollectionBehaviorCanJoinAllSpaces,
+            )
+
+            # NSApp のウィンドウを取得して設定
+            for window in NSApp.windows():
+                # ステータスバーウィンドウの level を設定
+                window.setLevel_(NSWindow.NSStatusWindowLevel)
+                # すべてのスペース（ディスプレイ）に表示されるように設定
+                window.setCollectionBehavior_(
+                    NSWindowCollectionBehaviorCanJoinAllSpaces
+                )
+        except Exception:
+            # エラーは無視（デフォルト動作を維持）
+            # macOS の制限により、この設定が機能しない場合があります
+            pass
