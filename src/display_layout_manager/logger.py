@@ -1,6 +1,9 @@
 """
 ログ・フィードバック管理モジュール
 構造化ログ出力とユーザーフィードバックを管理
+
+Note: Log files are always written in English (technical records).
+      CLI output is internationalized based on system locale.
 """
 
 import json
@@ -12,6 +15,7 @@ from typing import Any, Dict, Optional
 
 from .command_executor import ExecutionResult
 from .display_manager import DisplayConfiguration
+from .i18n import LocaleDetector, MessageManager
 from .pattern_matcher import MatchResult
 
 
@@ -41,6 +45,10 @@ class Logger:
         self.daemon_mode = daemon_mode
         self.log_entries = []
         self._log_file_path: Optional[Path] = None
+
+        # Initialize i18n for CLI output
+        self.locale_detector = LocaleDetector()
+        self.msg = MessageManager(self.locale_detector)
 
         if self.log_to_file:
             self._setup_log_file()
@@ -81,14 +89,19 @@ class Logger:
         message: str,
         details: Optional[Dict[str, Any]] = None,
     ) -> None:
-        """内部ログ記録メソッド"""
+        """
+        Internal logging method
+        
+        Note: Log file messages are always in English (technical records).
+              CLI output is not printed here - use print() with MessageManager in calling code.
+        """
         timestamp = datetime.now().isoformat()
 
         log_entry = LogEntry(
             timestamp=timestamp,
             level=level,
             component=component,
-            message=message,
+            message=message,  # Always English for log files
             details=details,
         )
 
@@ -97,10 +110,8 @@ class Logger:
         if self.log_to_file:
             self._write_to_file(log_entry)
 
-        # 詳細モードまたは重要なメッセージの場合は標準出力
-        if self.verbose or level in ["ERROR", "WARNING"]:
-            prefix = f"[{component.upper()}]" if self.verbose else ""
-            print(f"{prefix} {message}")
+        # Note: CLI output is handled by calling code using MessageManager
+        # This ensures log files are in English while CLI output is internationalized
 
     def info(
         self, component: str, message: str, details: Optional[Dict[str, Any]] = None
@@ -259,31 +270,30 @@ class Logger:
         return summary
 
     def print_session_summary(self) -> None:
-        """セッションサマリーを表示"""
+        """セッションサマリーを表示 (internationalized)"""
         if not self.log_entries:
-            print("ログエントリがありません")
             return
 
         summary = self.get_session_summary()
 
         print("\n" + "=" * 50)
-        print("セッションサマリー")
+        print(self.msg.get("session_summary"))
         print("=" * 50)
 
-        print(f"総ログエントリ数: {summary['total_entries']}")
+        print(self.msg.get("total_log_entries", count=summary['total_entries']))
 
         if summary["by_level"]:
-            print("\nレベル別:")
+            print(f"\n{self.msg.get('by_level')}")
             for level, count in summary["by_level"].items():
                 print(f"  {level}: {count}")
 
         if summary["by_component"]:
-            print("\nコンポーネント別:")
+            print(f"\n{self.msg.get('by_component')}")
             for component, count in summary["by_component"].items():
                 print(f"  {component}: {count}")
 
         if self._log_file_path and self.log_to_file:
-            print(f"\nログファイル: {self._log_file_path}")
+            print(f"\n{self.msg.get('log_file', path=self._log_file_path)}")
 
     def export_logs(self, output_path: Path) -> bool:
         """ログをファイルにエクスポート"""
