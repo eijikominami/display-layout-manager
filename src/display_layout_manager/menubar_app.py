@@ -21,7 +21,7 @@ class DisplayLayoutMenuBar(rumps.App):
 
         super(DisplayLayoutMenuBar, self).__init__(
             "Display Layout Manager",  # Application name
-            title="⧈",  # Menu bar icon (U+29C8 SQUARED SQUARE)
+            title="🖥️",  # Menu bar icon (Desktop Computer emoji)
             quit_button=None,  # カスタム終了ボタンを使用
         )
 
