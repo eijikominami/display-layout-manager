@@ -15,14 +15,15 @@ class DisplayLayoutMenuBar(rumps.App):
     """Display Layout Manager メニューバーアプリケーション"""
 
     def __init__(self):
-        super(DisplayLayoutMenuBar, self).__init__(
-            "⧈",  # U+29C8 (SQUARED SQUARE)
-            quit_button=None,  # カスタム終了ボタンを使用
-        )
-
-        # Initialize i18n
+        # Initialize i18n first
         self.locale_detector = LocaleDetector()
         self.msg = MessageManager(self.locale_detector)
+
+        super(DisplayLayoutMenuBar, self).__init__(
+            "Display Layout Manager",  # Application name
+            title="⧈",  # Menu bar icon (U+29C8 SQUARED SQUARE)
+            quit_button=None,  # カスタム終了ボタンを使用
+        )
 
         # コンポーネントの初期化
         self.cli_bridge = CLIBridge(verbose=False)

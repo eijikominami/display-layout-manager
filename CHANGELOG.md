@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.1] - 2025-12-07
+
+### Fixed
+- **メニューバーアイコン表示**: rumps の `title` パラメータを正しく設定してメニューバーアイコンが表示されるように修正
+
 ## [1.4.0] - 2025-12-07
 
 ### Added
