@@ -33,6 +33,40 @@ Display Layout Manager は、macOS で複数のディスプレイ構成を自動
 - **Python**: 3.8 以降
 - **依存ツール**: Homebrew、displayplacer、GNU grep（自動インストール対応）
 
+## 言語サポート
+
+Display Layout Manager は **英語** と **日本語** のインターフェースをサポートしています。
+
+### 自動言語検出
+
+アプリケーションはシステムのロケール設定を自動的に検出し、適切な言語でメッセージを表示します：
+- **日本語ロケール**（ja、ja_JP 等）: CLI とメニューバーアプリの全メッセージが日本語で表示
+- **その他のロケール**: CLI とメニューバーアプリの全メッセージが英語で表示
+
+### 手動言語切り替え
+
+環境変数 `DISPLAY_LAYOUT_LANG` を使用して、自動言語検出を上書きできます：
+
+```bash
+# 英語インターフェースを強制
+export DISPLAY_LAYOUT_LANG=en
+display-layout-manager
+
+# 日本語インターフェースを強制
+export DISPLAY_LAYOUT_LANG=ja
+display-layout-manager
+
+# 一時的な上書き
+DISPLAY_LAYOUT_LANG=en display-layout-manager --show-displays
+```
+
+### ログファイル
+
+**注意**: ログファイルは、インターフェース言語に関係なく、常に英語で記録されます（技術的な記録のため）。これにより、デバッグやトラブルシューティングの一貫性が確保されます。
+
+- **CLI/メニューバー出力**: 国際化対応（英語/日本語）
+- **ログファイル**: 常に英語（`~/Library/Logs/DisplayLayoutManager/`）
+
 ## インストール
 
 ### Homebrew を使用（推奨）
@@ -88,7 +122,7 @@ display-layout-menubar --disable-auto-launch
 
 #### メニューバーアプリの機能
 
-メニューバーに 🖥️ アイコンが表示され、以下の機能を提供します：
+メニューバーに ⧈ アイコンが表示され、以下の機能を提供します：
 
 - **レイアウトを適用**: クリック一つで現在のディスプレイ構成に合ったレイアウトを適用
 - **現在の設定を保存**: 現在のディスプレイ構成を設定ファイルに保存
