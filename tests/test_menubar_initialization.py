@@ -32,7 +32,7 @@ def test_menubar_title_initialization():
         print(f"  ✓ app.title が設定されている: '{app.title}'")
 
         # title が期待値と一致するか確認
-        expected_title = "🖥️"
+        expected_title = "⧈"
         assert (
             app.title == expected_title
         ), f"app.title は '{expected_title}' であるべき（実際: '{app.title}'）"
