@@ -84,6 +84,8 @@ MESSAGES = {
         "auto_launch_enabled": "Auto-launch enabled",
         "auto_launch_disabled": "Auto-launch disabled",
         "menubar_app_quit": "Quitting menu bar application",
+        "layout_applied": "Layout applied successfully",
+        "layout_saved": "Layout saved as: {pattern}",
         
         # Error messages
         "error_occurred": "Error occurred: {error}",
@@ -173,6 +175,8 @@ MESSAGES = {
         "auto_launch_enabled": "ログイン時の自動起動を有効化しました",
         "auto_launch_disabled": "ログイン時の自動起動を無効化しました",
         "menubar_app_quit": "メニューバーアプリケーションを終了します",
+        "layout_applied": "レイアウトを適用しました",
+        "layout_saved": "レイアウトを保存しました: {pattern}",
         
         # エラーメッセージ
         "error_occurred": "エラーが発生しました: {error}",

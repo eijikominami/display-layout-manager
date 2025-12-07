@@ -33,6 +33,40 @@ Display Layout Manager is a command-line tool for automatically managing multipl
 - **Python**: 3.8 or later
 - **Dependencies**: Homebrew, displayplacer, GNU grep (automatic installation supported)
 
+## Language Support
+
+Display Layout Manager supports **English** and **Japanese** interfaces.
+
+### Automatic Language Detection
+
+The application automatically detects your system locale and displays messages in the appropriate language:
+- **Japanese locale** (ja, ja_JP, etc.): All CLI and menu bar messages in Japanese
+- **Other locales**: All CLI and menu bar messages in English
+
+### Manual Language Override
+
+You can override the automatic language detection using the `DISPLAY_LAYOUT_LANG` environment variable:
+
+```bash
+# Force English interface
+export DISPLAY_LAYOUT_LANG=en
+display-layout-manager
+
+# Force Japanese interface
+export DISPLAY_LAYOUT_LANG=ja
+display-layout-manager
+
+# One-time override
+DISPLAY_LAYOUT_LANG=en display-layout-manager --show-displays
+```
+
+### Log Files
+
+**Note**: Log files are always written in English (technical records), regardless of the interface language. This ensures consistency for debugging and troubleshooting.
+
+- **CLI/Menu Bar Output**: Internationalized (English/Japanese)
+- **Log Files**: Always English (`~/Library/Logs/DisplayLayoutManager/`)
+
 ## Installation
 
 ### Using Homebrew (Recommended)
@@ -88,7 +122,7 @@ display-layout-menubar --disable-auto-launch
 
 #### Menu Bar App Features
 
-A 🖥️ icon appears in the menu bar, providing the following features:
+A ⧈ icon appears in the menu bar, providing the following features:
 
 - **Apply Layout**: Apply layout matching current display configuration with one click
 - **Save Current Settings**: Save current display configuration to config file

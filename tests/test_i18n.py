@@ -3,8 +3,13 @@ Tests for internationalization (i18n) functionality
 """
 
 import os
+import sys
 import unittest
+from pathlib import Path
 from unittest.mock import patch
+
+# Add src directory to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from display_layout_manager.i18n import LocaleDetector, MessageManager
 

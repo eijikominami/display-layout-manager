@@ -66,6 +66,11 @@ Display Layout Manager is a tool for automatically managing display layouts on m
          │  Error Handler               │
          │  - Error handling            │
          │  - User-friendly messages    │
+         ├─────────────────────────────┤
+         │  Internationalization (i18n/)│
+         │  - Locale detection          │
+         │  - Message catalog (EN/JA)   │
+         │  - Message formatting        │
          └──────────────┬──────────────┘
                         │
          ┌──────────────┴──────────────┐
@@ -211,6 +216,33 @@ Display Layout Manager is a tool for automatically managing display layouts on m
   ├── CommandExecutionError (command execution errors)
   └── DependencyError (dependency errors)
   ```
+
+#### Internationalization (i18n/)
+- **Responsibility**: Multi-language support for user-facing messages
+- **Key Features**:
+  - Automatic locale detection
+  - Message catalog management (English/Japanese)
+  - Environment variable override support
+  - Separation of log files (always English) and UI messages (internationalized)
+- **Components**:
+  - **LocaleDetector**: System locale detection
+    - Checks `DISPLAY_LAYOUT_LANG` environment variable
+    - Falls back to `LANG` environment variable
+    - Defaults to English if detection fails
+  - **MessageCatalog**: Message dictionary management
+    - Stores all user-facing messages in English and Japanese
+    - Organized by functional categories (system, dependency, config, display, pattern, command, menu bar, error)
+  - **MessageManager**: Message retrieval and formatting
+    - Retrieves messages based on detected locale
+    - Supports parameter substitution (e.g., `{count}`, `{name}`)
+    - Falls back to English for missing keys
+- **Language Support**:
+  - **English**: Default language, used for all locales except Japanese
+  - **Japanese**: Used when system locale is `ja`, `ja_JP`, etc.
+- **Log File Policy**:
+  - Log files are always written in English (technical records)
+  - CLI and menu bar output is internationalized based on locale
+  - This ensures consistency for debugging and troubleshooting
 
 ## Data Flow
 
