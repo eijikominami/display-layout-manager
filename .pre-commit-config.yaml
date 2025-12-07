@@ -1,7 +1,7 @@
 repos:
   # Black フォーマッター
   - repo: https://github.com/psf/black
-    rev: 23.12.1
+    rev: 25.11.0
     hooks:
       - id: black
         language_version: python3
@@ -16,14 +16,14 @@ repos:
 
   # flake8（Lintチェック）
   - repo: https://github.com/PyCQA/flake8
-    rev: 7.0.0
+    rev: 7.3.0
     hooks:
       - id: flake8
         args: [--max-line-length=88, --extend-ignore=E203]
 
   # 末尾の空白削除
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer

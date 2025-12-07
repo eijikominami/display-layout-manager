@@ -39,7 +39,9 @@ def test_menubar_initialization():
             assert hasattr(app, "cli_bridge"), "cli_bridge が存在すべき"
             print("  ✓ cli_bridge 初期化確認")
 
-            assert hasattr(app, "auto_launch_manager"), "auto_launch_manager が存在すべき"
+            assert hasattr(
+                app, "auto_launch_manager"
+            ), "auto_launch_manager が存在すべき"
             print("  ✓ auto_launch_manager 初期化確認")
 
             return True

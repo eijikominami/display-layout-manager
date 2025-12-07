@@ -25,7 +25,9 @@ def test_checkbox_toggle():
     )
 
     if is_ci:
-        print("\n⚠ CI 環境では GUI テストが実行できないため、このテストをスキップします")
+        print(
+            "\n⚠ CI 環境では GUI テストが実行できないため、このテストをスキップします"
+        )
         print("=" * 70)
         return True
 

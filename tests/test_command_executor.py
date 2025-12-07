@@ -65,7 +65,9 @@ def test_execute_command():
 
     # 失敗するコマンド
     success, stdout, stderr, return_code = executor._execute_command("false")
-    print(f"失敗するコマンドの実行: {'✓ 失敗と判定' if not success else '✗ 成功と判定'}")
+    print(
+        f"失敗するコマンドの実行: {'✓ 失敗と判定' if not success else '✗ 成功と判定'}"
+    )
 
     assert not success, "false コマンドが成功してしまいました"
     assert return_code != 0, "終了コードが0です"

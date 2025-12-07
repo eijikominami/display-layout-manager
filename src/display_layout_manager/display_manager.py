@@ -58,7 +58,9 @@ class DisplayManager:
             if success:
                 self._log(f"コマンド成功: {len(stdout)}文字の出力")
             else:
-                self._log(f"コマンド失敗 (終了コード: {result.returncode}): {stderr[:100]}...")
+                self._log(
+                    f"コマンド失敗 (終了コード: {result.returncode}): {stderr[:100]}..."
+                )
 
             return success, stdout, stderr
 

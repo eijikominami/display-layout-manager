@@ -37,9 +37,15 @@ Rotation: 0
     for screen_id in screen_ids:
         print(f"  - {screen_id}")
 
-    assert len(screen_ids) == 2, f"2個のScreen IDを期待しましたが、{len(screen_ids)}個でした"
-    assert "37D8832A-2D66-02CA-B9F7-8F30A301B230" in screen_ids, "最初のScreen IDが見つかりません"
-    assert "69733B7E-4C7B-8BDB-11A0-C8F9D6A3E2F1" in screen_ids, "2番目のScreen IDが見つかりません"
+    assert (
+        len(screen_ids) == 2
+    ), f"2個のScreen IDを期待しましたが、{len(screen_ids)}個でした"
+    assert (
+        "37D8832A-2D66-02CA-B9F7-8F30A301B230" in screen_ids
+    ), "最初のScreen IDが見つかりません"
+    assert (
+        "69733B7E-4C7B-8BDB-11A0-C8F9D6A3E2F1" in screen_ids
+    ), "2番目のScreen IDが見つかりません"
 
     print("✓ test_extract_screen_ids 成功")
 
@@ -62,8 +68,12 @@ Rotation: 0
 
     print(f"抽出されたScreen IDs: {len(screen_ids)}個")
 
-    assert len(screen_ids) == 1, f"1個のScreen IDを期待しましたが、{len(screen_ids)}個でした"
-    assert "37D8832A-2D66-02CA-B9F7-8F30A301B230" in screen_ids, "Screen IDが見つかりません"
+    assert (
+        len(screen_ids) == 1
+    ), f"1個のScreen IDを期待しましたが、{len(screen_ids)}個でした"
+    assert (
+        "37D8832A-2D66-02CA-B9F7-8F30A301B230" in screen_ids
+    ), "Screen IDが見つかりません"
 
     print("✓ test_extract_screen_ids_single 成功")
 
@@ -81,7 +91,9 @@ def test_extract_screen_ids_empty():
 
     print(f"抽出されたScreen IDs: {len(screen_ids)}個")
 
-    assert len(screen_ids) == 0, f"0個のScreen IDを期待しましたが、{len(screen_ids)}個でした"
+    assert (
+        len(screen_ids) == 0
+    ), f"0個のScreen IDを期待しましたが、{len(screen_ids)}個でした"
 
     print("✓ test_extract_screen_ids_empty 成功")
 

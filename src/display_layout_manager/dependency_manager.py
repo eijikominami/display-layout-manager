@@ -40,7 +40,9 @@ class DependencyManager:
             if success:
                 self._log(f"コマンド成功: {stdout[:100]}...")
             else:
-                self._log(f"コマンド失敗 (終了コード: {result.returncode}): {stderr[:100]}...")
+                self._log(
+                    f"コマンド失敗 (終了コード: {result.returncode}): {stderr[:100]}..."
+                )
 
             return success, stdout, stderr
 
@@ -188,7 +190,9 @@ class DependencyManager:
 
         if success:
             print("GNU grep のインストールが完了しました")
-            print("注意: Homebrew の GNU grep は 'ggrep' コマンドとしてインストールされます")
+            print(
+                "注意: Homebrew の GNU grep は 'ggrep' コマンドとしてインストールされます"
+            )
             print("  - 通常の grep の代わりに ggrep を使用してください")
             print("  - または、以下を ~/.zshrc に追加して PATH を設定してください:")
             print(

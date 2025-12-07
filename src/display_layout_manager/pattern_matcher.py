@@ -126,7 +126,9 @@ class PatternMatcher:
                 details="現在のディスプレイが検出されませんでした",
             )
 
-        self._log(f"パターンマッチング開始: 現在のディスプレイ {len(current_screen_ids)}個")
+        self._log(
+            f"パターンマッチング開始: 現在のディスプレイ {len(current_screen_ids)}個"
+        )
         self._log(f"検索対象パターン: {len(patterns)}個")
 
         # 完全一致を優先して検索
@@ -189,7 +191,9 @@ class PatternMatcher:
         Returns:
             MatchResult: マッチ結果
         """
-        self._log(f"ディスプレイ構成マッチング開始: {len(display_config.screen_ids)}個のディスプレイ")
+        self._log(
+            f"ディスプレイ構成マッチング開始: {len(display_config.screen_ids)}個のディスプレイ"
+        )
 
         return self.find_best_match(display_config.screen_ids, patterns)
 
@@ -227,7 +231,9 @@ class PatternMatcher:
 
             # コマンドの基本チェック
             if not pattern.command.strip().startswith("displayplacer"):
-                issues.append(f"パターン '{pattern.name}': コマンドが 'displayplacer' で開始していません")
+                issues.append(
+                    f"パターン '{pattern.name}': コマンドが 'displayplacer' で開始していません"
+                )
 
         return len(issues) == 0, issues
 

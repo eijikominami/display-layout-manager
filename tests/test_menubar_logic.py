@@ -106,7 +106,9 @@ def test_cli_bridge_calls():
     except Exception:
         pass
 
-    assert mock_cli_bridge.execute_apply_layout.called, "execute_apply_layout() が呼ばれるべき"
+    assert (
+        mock_cli_bridge.execute_apply_layout.called
+    ), "execute_apply_layout() が呼ばれるべき"
     print("    ✓ execute_apply_layout() 呼び出し確認")
 
     # テスト 2: 設定保存
@@ -117,7 +119,9 @@ def test_cli_bridge_calls():
     except Exception:
         pass
 
-    assert mock_cli_bridge.execute_save_current.called, "execute_save_current() が呼ばれるべき"
+    assert (
+        mock_cli_bridge.execute_save_current.called
+    ), "execute_save_current() が呼ばれるべき"
     print("    ✓ execute_save_current() 呼び出し確認")
 
     return True

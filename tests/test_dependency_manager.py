@@ -19,10 +19,14 @@ def test_check_homebrew():
     manager = DependencyManager(verbose=True)
     result = manager.check_homebrew()
 
-    print(f"結果: {'✓ Homebrew が利用可能' if result else '✗ Homebrew が見つかりません'}")
+    print(
+        f"結果: {'✓ Homebrew が利用可能' if result else '✗ Homebrew が見つかりません'}"
+    )
 
     # Homebrew は通常インストールされているはず
-    assert result, "Homebrew が見つかりません。このテストを実行するには Homebrew が必要です"
+    assert (
+        result
+    ), "Homebrew が見つかりません。このテストを実行するには Homebrew が必要です"
 
     print("✓ test_check_homebrew 成功")
 
@@ -34,10 +38,14 @@ def test_check_displayplacer():
     manager = DependencyManager(verbose=True)
     result = manager.check_displayplacer()
 
-    print(f"結果: {'✓ displayplacer が利用可能' if result else '✗ displayplacer が見つかりません'}")
+    print(
+        f"結果: {'✓ displayplacer が利用可能' if result else '✗ displayplacer が見つかりません'}"
+    )
 
     # displayplacer は通常インストールされているはず
-    assert result, "displayplacer が見つかりません。このテストを実行するには displayplacer が必要です"
+    assert (
+        result
+    ), "displayplacer が見つかりません。このテストを実行するには displayplacer が必要です"
 
     print("✓ test_check_displayplacer 成功")
 
@@ -49,10 +57,14 @@ def test_check_gnu_grep():
     manager = DependencyManager(verbose=True)
     result = manager.check_gnu_grep()
 
-    print(f"結果: {'✓ GNU grep が利用可能' if result else '✗ GNU grep が見つかりません'}")
+    print(
+        f"結果: {'✓ GNU grep が利用可能' if result else '✗ GNU grep が見つかりません'}"
+    )
 
     # GNU grep は通常インストールされているはず
-    assert result, "GNU grep が見つかりません。このテストを実行するには GNU grep が必要です"
+    assert (
+        result
+    ), "GNU grep が見つかりません。このテストを実行するには GNU grep が必要です"
 
     print("✓ test_check_gnu_grep 成功")
 

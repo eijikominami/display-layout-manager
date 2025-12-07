@@ -63,7 +63,9 @@ def parse_arguments() -> argparse.Namespace:
         help="現在のディスプレイ構成を表示して終了",
     )
 
-    parser.add_argument("--validate-config", action="store_true", help="設定ファイルの検証のみ実行")
+    parser.add_argument(
+        "--validate-config", action="store_true", help="設定ファイルの検証のみ実行"
+    )
 
     parser.add_argument("--run-tests", action="store_true", help="統合テストを実行")
 
