@@ -303,8 +303,12 @@ class TestCompleteWorkflow(unittest.TestCase):
                 self.assertIsInstance(message, str)
                 self.assertTrue(len(message) > 0)
                 # Should not contain Japanese characters
-                self.assertFalse(any("\u3040" <= c <= "\u309F" for c in message))  # Hiragana
-                self.assertFalse(any("\u30A0" <= c <= "\u30FF" for c in message))  # Katakana
+                self.assertFalse(
+                    any("\u3040" <= c <= "\u309f" for c in message)
+                )  # Hiragana
+                self.assertFalse(
+                    any("\u30a0" <= c <= "\u30ff" for c in message)
+                )  # Katakana
 
 
 if __name__ == "__main__":

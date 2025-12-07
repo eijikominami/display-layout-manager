@@ -91,7 +91,7 @@ class Logger:
     ) -> None:
         """
         Internal logging method
-        
+
         Note: Log file messages are always in English (technical records).
               CLI output is not printed here - use print() with MessageManager in calling code.
         """
@@ -280,7 +280,7 @@ class Logger:
         print(self.msg.get("session_summary"))
         print("=" * 50)
 
-        print(self.msg.get("total_log_entries", count=summary['total_entries']))
+        print(self.msg.get("total_log_entries", count=summary["total_entries"]))
 
         if summary["by_level"]:
             print(f"\n{self.msg.get('by_level')}")

@@ -36,10 +36,16 @@ class DisplayLayoutMenuBar(rumps.App):
     def _build_menu(self):
         """メニュー構造を構築"""
         return [
-            rumps.MenuItem(self.msg.get("menu_apply_layout"), callback=self.apply_layout),
-            rumps.MenuItem(self.msg.get("menu_save_current"), callback=self.save_current),
+            rumps.MenuItem(
+                self.msg.get("menu_apply_layout"), callback=self.apply_layout
+            ),
+            rumps.MenuItem(
+                self.msg.get("menu_save_current"), callback=self.save_current
+            ),
             rumps.separator,
-            rumps.MenuItem(self.msg.get("menu_auto_launch"), callback=self.toggle_auto_launch),
+            rumps.MenuItem(
+                self.msg.get("menu_auto_launch"), callback=self.toggle_auto_launch
+            ),
             rumps.separator,
             rumps.MenuItem(self.msg.get("menu_quit"), callback=self.quit_application),
         ]

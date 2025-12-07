@@ -18,7 +18,7 @@ def main():
     # Initialize i18n
     locale_detector = LocaleDetector()
     msg = MessageManager(locale_detector)
-    
+
     parser = argparse.ArgumentParser(
         description="Display Layout Manager - Menu Bar Application"
     )

@@ -251,8 +251,12 @@ def main() -> int:
             for i, pattern in enumerate(patterns, 1):
                 print(f"  {msg.get('pattern_info', index=i, name=pattern.name)}")
                 if pattern.description:
-                    print(f"     {msg.get('pattern_description', description=pattern.description)}")
-                print(f"     {msg.get('pattern_screen_count', count=len(pattern.screen_ids))}")
+                    print(
+                        f"     {msg.get('pattern_description', description=pattern.description)}"
+                    )
+                print(
+                    f"     {msg.get('pattern_screen_count', count=len(pattern.screen_ids))}"
+                )
 
         # ディスプレイ管理の初期化とテスト
         print("\n" + "=" * 50)
@@ -314,7 +318,12 @@ def main() -> int:
             print(msg.get("pattern_match_type", type=match_result.match_type))
             print(msg.get("pattern_confidence", confidence=match_result.confidence))
             if match_result.pattern.description:
-                print(msg.get("pattern_description", description=match_result.pattern.description))
+                print(
+                    msg.get(
+                        "pattern_description",
+                        description=match_result.pattern.description,
+                    )
+                )
         else:
             print(msg.get("pattern_no_match"))
 
@@ -333,7 +342,9 @@ def main() -> int:
 
         if match_result.matched:
             print(msg.get("executing_command"))
-            logger.info("command", f"Command execution started: {match_result.pattern.name}")
+            logger.info(
+                "command", f"Command execution started: {match_result.pattern.name}"
+            )
 
             # コマンド実行器の初期化
             command_executor = CommandExecutor(
@@ -429,7 +440,11 @@ def main() -> int:
                 logger.error("system", f"Unexpected error: {e}")
             return error_handler.get_exit_code(error_code)
         else:
-            error_msg = msg.get("app_error", error=e) if "msg" in locals() else f"An error occurred: {e}"
+            error_msg = (
+                msg.get("app_error", error=e)
+                if "msg" in locals()
+                else f"An error occurred: {e}"
+            )
             print(error_msg, file=sys.stderr)
             return 1
 
