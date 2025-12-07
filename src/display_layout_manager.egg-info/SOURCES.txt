@@ -1,4 +1,5 @@
 .coverage
+.pre-commit-config.yaml
 ARCHITECTURE.md
 ARCHITECTURE_JP.md
 CHANGELOG.md
@@ -33,6 +34,7 @@ src/display_layout_manager/main.py
 src/display_layout_manager/menubar.py
 src/display_layout_manager/menubar_app.py
 src/display_layout_manager/pattern_matcher.py
+src/display_layout_manager/single_instance_manager.py
 src/display_layout_manager.egg-info/PKG-INFO
 src/display_layout_manager.egg-info/SOURCES.txt
 src/display_layout_manager.egg-info/dependency_links.txt
