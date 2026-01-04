@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **メニューバーアプリのバグ修正**:
+  - 「ログイン時に起動」メニュー項目のチェックマーク状態がアプリ起動時に正しく反映されるように修正
+  - 「レイアウトを適用」ボタンのエラーハンドリングを改善し、エラー時にログファイルに詳細を記録するように修正
+
 ## [1.5.0] - 2025-12-07
 
 ### Added

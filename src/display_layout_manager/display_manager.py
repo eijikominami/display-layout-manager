@@ -161,7 +161,7 @@ class DisplayManager:
             print(f"  {i}. {screen_id}")
 
         if self.verbose:
-            print(f"\n--- displayplacer list の生出力 ---")
+            print("\n--- displayplacer list の生出力 ---")
             print(config.raw_output)
             print("--- 生出力終了 ---")
 

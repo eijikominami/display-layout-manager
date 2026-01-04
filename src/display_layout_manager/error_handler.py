@@ -246,7 +246,6 @@ class ErrorHandler:
         self, exception: Exception, context: Optional[Dict[str, Any]] = None
     ) -> str:
         """例外を処理してエラーコードを返す"""
-        exception_type = type(exception).__name__
         exception_message = str(exception).lower()
 
         # 例外の種類とメッセージから適切なエラーコードを推定

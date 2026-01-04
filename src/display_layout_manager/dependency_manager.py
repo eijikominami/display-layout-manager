@@ -6,7 +6,7 @@
 import shutil
 import subprocess
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Tuple
 
 
 class DependencyManager:
@@ -85,7 +85,7 @@ class DependencyManager:
         # displayplacerコマンドの動作確認
         success, stdout, stderr = self._run_command(["displayplacer", "--version"])
         if success:
-            self._log(f"displayplacer 確認完了")
+            self._log("displayplacer 確認完了")
             return True
         else:
             # --versionオプションがない場合があるので、helpで確認

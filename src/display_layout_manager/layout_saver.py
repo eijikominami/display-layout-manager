@@ -4,10 +4,9 @@
 """
 
 import json
-import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import List, Optional
 
 from .config_manager import ConfigManager, ConfigPattern, Configuration
 from .display_manager import DisplayManager

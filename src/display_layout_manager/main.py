@@ -5,10 +5,8 @@ macOS用のディスプレイレイアウト自動設定アプリケーション
 """
 
 import argparse
-import os
 import sys
 from pathlib import Path
-from typing import Optional
 
 from . import __version__
 from .command_executor import CommandExecutor

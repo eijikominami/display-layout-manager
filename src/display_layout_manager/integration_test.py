@@ -8,7 +8,7 @@ import shutil
 import tempfile
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List
 
 from .command_executor import CommandExecutor
 from .config_manager import ConfigManager, ConfigPattern
