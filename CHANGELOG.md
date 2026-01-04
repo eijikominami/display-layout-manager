@@ -7,10 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.1] - 2026-01-04
+
+### Added
+- **API ドキュメント**: CLI コマンドの完全な API 仕様書を追加
+  - docs/api-specification.md / api-specification_jp.md
+  - 全コマンドオプション、終了コード、出力形式を文書化
+- **データモデルドキュメント**: データ構造と変換ロジックの詳細を追加
+  - docs/data-models.md / data-models_jp.md
+  - ConfigPattern、Configuration、DisplayConfiguration の仕様を文書化
+
+### Changed
+- **README 構成**: Pre-commit フックの説明を Installation セクションに移動し、開発者向けであることを明確化
+
 ### Fixed
 - **メニューバーアプリのバグ修正**:
   - 「ログイン時に起動」メニュー項目のチェックマーク状態がアプリ起動時に正しく反映されるように修正
   - 「レイアウトを適用」ボタンのエラーハンドリングを改善し、エラー時にログファイルに詳細を記録するように修正
+
+### Removed
+- **IMPLEMENTATION_SUMMARY.md**: チャットコンテキスト依存の実装記録ファイルを削除（情報は CHANGELOG.md と ARCHITECTURE.md に含まれる）
 
 ## [1.5.0] - 2025-12-07
 
