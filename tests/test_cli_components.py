@@ -3,6 +3,7 @@
 CLI コンポーネントの包括的単体テスト
 """
 import json
+import os
 import sys
 import tempfile
 from pathlib import Path

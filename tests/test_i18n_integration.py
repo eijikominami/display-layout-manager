@@ -9,14 +9,12 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 # Add src directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from display_layout_manager.i18n import (  # noqa: E402
-    LocaleDetector,
-    MessageManager,
-)
+from display_layout_manager.i18n import LocaleDetector, MessageManager  # noqa: E402
 from display_layout_manager.logger import Logger  # noqa: E402
 
 

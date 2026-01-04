@@ -8,9 +8,7 @@ from pathlib import Path
 # src ディレクトリをパスに追加
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from display_layout_manager.auto_launch_manager import (  # noqa: E402
-    AutoLaunchManager,
-)
+from display_layout_manager.auto_launch_manager import AutoLaunchManager  # noqa: E402
 
 
 def test_auto_launch_manager():

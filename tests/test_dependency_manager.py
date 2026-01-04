@@ -9,9 +9,7 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
-from display_layout_manager.dependency_manager import (  # noqa: E402
-    DependencyManager,
-)
+from display_layout_manager.dependency_manager import DependencyManager  # noqa: E402
 
 
 def test_check_homebrew():

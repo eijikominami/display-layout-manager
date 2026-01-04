@@ -61,8 +61,11 @@ class PatternMatcher:
         if is_match:
             self._log(f"完全一致: パターン '{pattern.name}'")
         else:
+            current_count = len(current_sorted)
+            pattern_count = len(pattern_sorted)
             self._log(
-                f"不一致: パターン '{pattern.name}' (現在: {len(current_sorted)}個, パターン: {len(pattern_sorted)}個)"
+                f"不一致: パターン '{pattern.name}' "
+                f"(現在: {current_count}個, パターン: {pattern_count}個)"
             )
 
         return is_match
@@ -156,17 +159,25 @@ class PatternMatcher:
         similarity_threshold = 0.5
 
         if best_similarity >= similarity_threshold and best_pattern:
+            details = (
+                f"部分一致: パターン '{best_pattern.name}' "
+                f"(類似度: {best_similarity:.2f})"
+            )
             return MatchResult(
                 matched=True,
                 pattern=best_pattern,
                 confidence=best_similarity,
                 match_type="partial",
-                details=f"部分一致: パターン '{best_pattern.name}' (類似度: {best_similarity:.2f})",
+                details=details,
             )
         else:
             # 最も類似度の高いパターンの情報を含める
             if best_pattern:
-                details = f"一致するパターンなし (最も近いパターン: '{best_pattern.name}', 類似度: {best_similarity:.2f})"
+                details = (
+                    f"一致するパターンなし "
+                    f"(最も近いパターン: '{best_pattern.name}', "
+                    f"類似度: {best_similarity:.2f})"
+                )
             else:
                 details = "一致するパターンなし"
 

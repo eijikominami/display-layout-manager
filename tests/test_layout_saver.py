@@ -66,7 +66,8 @@ Rotation: 0
 
 Execute the command below to set your screens to the current arrangement:
 
-displayplacer "id:37D8832A-2D66-02CA-B9F7-8F30A301B230 res:1920x1080 origin:(0,0) degree:0"
+displayplacer "id:37D8832A-2D66-02CA-B9F7-8F30A301B230 \
+res:1920x1080 origin:(0,0) degree:0"
 """
 
     command = saver.extract_current_command(test_output)

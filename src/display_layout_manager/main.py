@@ -44,7 +44,11 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument(
         "--config",
         type=Path,
-        help="設定ファイルのパス (デフォルト: ~/Library/Application Support/DisplayLayoutManager/config.json)",
+        help=(
+            "設定ファイルのパス "
+            "(デフォルト: ~/Library/Application Support/"
+            "DisplayLayoutManager/config.json)"
+        ),
     )
 
     parser.add_argument("--verbose", "-v", action="store_true", help="詳細ログを表示")
@@ -247,14 +251,17 @@ def main() -> int:
         if args.verbose:
             print(msg.get("registered_patterns"))
             for i, pattern in enumerate(patterns, 1):
-                print(f"  {msg.get('pattern_info', index=i, name=pattern.name)}")
+                pattern_info = msg.get("pattern_info", index=i, name=pattern.name)
+                print(f"  {pattern_info}")
                 if pattern.description:
-                    print(
-                        f"     {msg.get('pattern_description', description=pattern.description)}"
+                    desc = msg.get(
+                        "pattern_description", description=pattern.description
                     )
-                print(
-                    f"     {msg.get('pattern_screen_count', count=len(pattern.screen_ids))}"
+                    print(f"     {desc}")
+                screen_count = msg.get(
+                    "pattern_screen_count", count=len(pattern.screen_ids)
                 )
+                print(f"     {screen_count}")
 
         # ディスプレイ管理の初期化とテスト
         print("\n" + "=" * 50)

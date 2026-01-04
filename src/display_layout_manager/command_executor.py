@@ -28,11 +28,16 @@ class ExecutionResult:
     def get_summary(self) -> str:
         """実行結果のサマリーを取得"""
         if self.dry_run:
-            return f"[ドライラン] パターン '{self.pattern_name}' のコマンドを実行予定"
+            return (
+                f"[ドライラン] パターン '{self.pattern_name}' " f"のコマンドを実行予定"
+            )
         elif self.success:
             return f"✓ パターン '{self.pattern_name}' の適用が完了しました"
         else:
-            return f"✗ パターン '{self.pattern_name}' の適用に失敗しました (終了コード: {self.return_code})"
+            return (
+                f"✗ パターン '{self.pattern_name}' の適用に失敗しました "
+                f"(終了コード: {self.return_code})"
+            )
 
 
 class CommandExecutor:

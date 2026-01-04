@@ -84,8 +84,9 @@ def test_checkbox_toggle():
         if app.auto_launch_manager.is_enabled() and menu_item.state == 1:
             print("  ✓ 有効化成功 (state=1)")
         else:
+            is_enabled = app.auto_launch_manager.is_enabled()
             print(
-                f"  ✗ 有効化失敗 (is_enabled={app.auto_launch_manager.is_enabled()}, state={menu_item.state})"
+                f"  ✗ 有効化失敗 " f"(is_enabled={is_enabled}, state={menu_item.state})"
             )
             return False
 
@@ -102,8 +103,9 @@ def test_checkbox_toggle():
         if not app.auto_launch_manager.is_enabled() and menu_item.state == 0:
             print("  ✓ 無効化成功 (state=0)")
         else:
+            is_enabled = app.auto_launch_manager.is_enabled()
             print(
-                f"  ✗ 無効化失敗 (is_enabled={app.auto_launch_manager.is_enabled()}, state={menu_item.state})"
+                f"  ✗ 無効化失敗 " f"(is_enabled={is_enabled}, state={menu_item.state})"
             )
             return False
 
