@@ -9,8 +9,11 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
-from display_layout_manager.command_executor import CommandExecutor, ExecutionResult
-from display_layout_manager.config_manager import ConfigPattern
+from display_layout_manager.command_executor import (  # noqa: E402
+    CommandExecutor,
+    ExecutionResult,
+)
+from display_layout_manager.config_manager import ConfigPattern  # noqa: E402
 
 
 def test_validate_command():
@@ -107,11 +110,11 @@ def test_execute_pattern_invalid_command():
     """無効なコマンドのパターン実行テスト"""
     print("\n=== test_execute_pattern_invalid_command ===")
 
-    executor = CommandExecutor(verbose=True, dry_run=False)
+    CommandExecutor(verbose=True, dry_run=False)
 
     # 無効なコマンドのパターン（ConfigPatternの__post_init__でエラーになる）
     try:
-        pattern = ConfigPattern(
+        ConfigPattern(
             name="Invalid Pattern",
             description="無効なコマンドのパターン",
             screen_ids=["37D8832A-2D66-02CA-B9F7-8F30A301B230"],
@@ -174,7 +177,7 @@ def test_get_execution_log():
 
     log = executor.get_execution_log(result)
 
-    print(f"生成されたログ:")
+    print("生成されたログ:")
     print(log)
 
     assert "Test Pattern" in log, "パターン名がログに含まれていません"

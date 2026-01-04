@@ -9,7 +9,9 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
-from display_layout_manager.dependency_manager import DependencyManager
+from display_layout_manager.dependency_manager import (  # noqa: E402
+    DependencyManager,
+)
 
 
 def test_check_homebrew():
@@ -76,7 +78,7 @@ def test_check_all_dependencies():
     manager = DependencyManager(verbose=False)
     all_available, status = manager.check_all_dependencies()
 
-    print(f"\n結果:")
+    print("\n結果:")
     print(f"  すべて利用可能: {all_available}")
     print(f"  Homebrew: {status['homebrew']}")
     print(f"  displayplacer: {status['displayplacer']}")

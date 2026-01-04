@@ -4,7 +4,6 @@
 """
 import os
 import sys
-import time
 from pathlib import Path
 
 # src ディレクトリをパスに追加
@@ -33,8 +32,6 @@ def test_checkbox_toggle():
 
     # rumps と menubar_app のインポートチェック（GUI環境が必要）
     try:
-        import rumps
-
         from display_layout_manager.auto_launch_manager import AutoLaunchManager
         from display_layout_manager.menubar_app import DisplayLayoutMenuBar
     except Exception as e:
@@ -49,7 +46,7 @@ def test_checkbox_toggle():
     try:
         manager.disable()
         print("  ✓ 無効化完了")
-    except:
+    except Exception:
         print("  ✓ 既に無効化済み")
 
     # メニューバーアプリを作成（実際には起動しない）

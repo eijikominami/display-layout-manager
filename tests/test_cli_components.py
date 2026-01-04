@@ -3,17 +3,15 @@
 CLI コンポーネントの包括的単体テスト
 """
 import json
-import os
 import sys
 import tempfile
 from pathlib import Path
-from unittest.mock import MagicMock, Mock, patch
 
 # src ディレクトリをパスに追加
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from display_layout_manager.config_manager import ConfigManager
-from display_layout_manager.pattern_matcher import PatternMatcher
+from display_layout_manager.config_manager import ConfigManager  # noqa: E402
+from display_layout_manager.pattern_matcher import PatternMatcher  # noqa: E402
 
 
 def test_config_manager():
@@ -124,7 +122,7 @@ def test_pattern_matcher():
         result = matcher.find_best_match(current_screens, patterns)
         assert result.matched, "順序に関係なく一致すべき"
         assert result.pattern.name == "Pattern 1", "Pattern 1 が一致すべき"
-        print(f"  ✓ 順序無関係マッチング成功")
+        print("  ✓ 順序無関係マッチング成功")
 
         return True
 
