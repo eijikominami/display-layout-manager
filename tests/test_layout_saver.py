@@ -11,8 +11,11 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
-from display_layout_manager.config_manager import ConfigPattern, Configuration
-from display_layout_manager.layout_saver import LayoutSaver, SaveResult
+from display_layout_manager.config_manager import (  # noqa: E402
+    ConfigPattern,
+    Configuration,
+)
+from display_layout_manager.layout_saver import LayoutSaver, SaveResult  # noqa: E402
 
 
 def test_generate_pattern_name():
@@ -63,7 +66,8 @@ Rotation: 0
 
 Execute the command below to set your screens to the current arrangement:
 
-displayplacer "id:37D8832A-2D66-02CA-B9F7-8F30A301B230 res:1920x1080 origin:(0,0) degree:0"
+displayplacer "id:37D8832A-2D66-02CA-B9F7-8F30A301B230 \
+res:1920x1080 origin:(0,0) degree:0"
 """
 
     command = saver.extract_current_command(test_output)
@@ -227,7 +231,7 @@ def test_save_result_dataclass():
         message="パターンを作成しました",
     )
 
-    print(f"成功ケース:")
+    print("成功ケース:")
     print(f"  success: {result_success.success}")
     print(f"  pattern_name: {result_success.pattern_name}")
     print(f"  action: {result_success.action}")
@@ -249,7 +253,7 @@ def test_save_result_dataclass():
         error_details="詳細なエラー情報",
     )
 
-    print(f"失敗ケース:")
+    print("失敗ケース:")
     print(f"  success: {result_failure.success}")
     print(f"  message: {result_failure.message}")
     print(f"  error_details: {result_failure.error_details}")

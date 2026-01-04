@@ -6,7 +6,7 @@
 import shutil
 import subprocess
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Tuple
 
 
 class DependencyManager:
@@ -85,7 +85,7 @@ class DependencyManager:
         # displayplacerコマンドの動作確認
         success, stdout, stderr = self._run_command(["displayplacer", "--version"])
         if success:
-            self._log(f"displayplacer 確認完了")
+            self._log("displayplacer 確認完了")
             return True
         else:
             # --versionオプションがない場合があるので、helpで確認
@@ -196,10 +196,12 @@ class DependencyManager:
             print("  - 通常の grep の代わりに ggrep を使用してください")
             print("  - または、以下を ~/.zshrc に追加して PATH を設定してください:")
             print(
-                '    export PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH"  # Apple Silicon Mac'
+                '    export PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH"'
+                "  # Apple Silicon Mac"
             )
             print(
-                '    export PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"     # Intel Mac'
+                '    export PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"'
+                "     # Intel Mac"
             )
             return True
         else:
@@ -250,7 +252,9 @@ class DependencyManager:
             print("\nHomebrew が見つかりません。")
             print("以下のコマンドでインストールしてください：")
             print(
-                '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+                '/bin/bash -c "$(curl -fsSL '
+                "https://raw.githubusercontent.com/Homebrew/"
+                'install/HEAD/install.sh)"'
             )
             print("\nインストール後、以下を実行してください：")
             print("1. シェルを再起動するか、以下のコマンドを実行:")

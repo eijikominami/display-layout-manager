@@ -8,7 +8,7 @@ import shutil
 import tempfile
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List
 
 from .command_executor import CommandExecutor
 from .config_manager import ConfigManager, ConfigPattern
@@ -493,7 +493,8 @@ Persistent screen id: TEST-ID-1
 Resolution: 1920x1080
 
 Execute the command below to set your screens to the current arrangement.
-displayplacer "id:TEST-ID-1 res:1920x1080 hz:60 color_depth:8 enabled:true scaling:off origin:(0,0) degree:0"
+displayplacer "id:TEST-ID-1 res:1920x1080 hz:60 color_depth:8 \
+enabled:true scaling:off origin:(0,0) degree:0"
 """
             extracted_command = layout_saver.extract_current_command(mock_output)
 

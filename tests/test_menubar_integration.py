@@ -4,7 +4,6 @@
 """
 import os
 import sys
-import time
 from pathlib import Path
 
 # src ディレクトリをパスに追加
@@ -33,8 +32,6 @@ def test_checkbox_toggle():
 
     # rumps と menubar_app のインポートチェック（GUI環境が必要）
     try:
-        import rumps
-
         from display_layout_manager.auto_launch_manager import AutoLaunchManager
         from display_layout_manager.menubar_app import DisplayLayoutMenuBar
     except Exception as e:
@@ -49,7 +46,7 @@ def test_checkbox_toggle():
     try:
         manager.disable()
         print("  ✓ 無効化完了")
-    except:
+    except Exception:
         print("  ✓ 既に無効化済み")
 
     # メニューバーアプリを作成（実際には起動しない）
@@ -87,8 +84,9 @@ def test_checkbox_toggle():
         if app.auto_launch_manager.is_enabled() and menu_item.state == 1:
             print("  ✓ 有効化成功 (state=1)")
         else:
+            is_enabled = app.auto_launch_manager.is_enabled()
             print(
-                f"  ✗ 有効化失敗 (is_enabled={app.auto_launch_manager.is_enabled()}, state={menu_item.state})"
+                f"  ✗ 有効化失敗 " f"(is_enabled={is_enabled}, state={menu_item.state})"
             )
             return False
 
@@ -105,8 +103,9 @@ def test_checkbox_toggle():
         if not app.auto_launch_manager.is_enabled() and menu_item.state == 0:
             print("  ✓ 無効化成功 (state=0)")
         else:
+            is_enabled = app.auto_launch_manager.is_enabled()
             print(
-                f"  ✗ 無効化失敗 (is_enabled={app.auto_launch_manager.is_enabled()}, state={menu_item.state})"
+                f"  ✗ 無効化失敗 " f"(is_enabled={is_enabled}, state={menu_item.state})"
             )
             return False
 

@@ -50,10 +50,17 @@ class ErrorHandler:
                 category=ErrorCategory.DEPENDENCY,
                 code="HOMEBREW_NOT_FOUND",
                 message="Homebrew が見つかりません",
-                details="Display Layout Manager は Homebrew を使用して依存関係を管理します",
+                details=(
+                    "Display Layout Manager は Homebrew を使用して"
+                    "依存関係を管理します"
+                ),
                 suggestions=[
                     "以下のコマンドで Homebrew をインストールしてください:",
-                    '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"',
+                    (
+                        '/bin/bash -c "$(curl -fsSL '
+                        "https://raw.githubusercontent.com/Homebrew/"
+                        'install/HEAD/install.sh)"'
+                    ),
                     "インストール後、シェルを再起動してください",
                 ],
             ),
@@ -65,7 +72,10 @@ class ErrorHandler:
                 suggestions=[
                     "以下のコマンドでインストールしてください:",
                     "brew install jakehilborn/jakehilborn/displayplacer",
-                    "または手動でダウンロード: https://github.com/jakehilborn/displayplacer/releases",
+                    (
+                        "または手動でダウンロード: "
+                        "https://github.com/jakehilborn/displayplacer/releases"
+                    ),
                 ],
             ),
             "GNU_GREP_NOT_FOUND": ErrorInfo(
@@ -76,7 +86,10 @@ class ErrorHandler:
                 suggestions=[
                     "以下のコマンドでインストールしてください:",
                     "brew install grep",
-                    'PATH を設定: export PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH"',
+                    (
+                        "PATH を設定: export PATH="
+                        '"/opt/homebrew/opt/grep/libexec/gnubin:$PATH"'
+                    ),
                 ],
             ),
             # 設定ファイルエラー
@@ -246,7 +259,6 @@ class ErrorHandler:
         self, exception: Exception, context: Optional[Dict[str, Any]] = None
     ) -> str:
         """例外を処理してエラーコードを返す"""
-        exception_type = type(exception).__name__
         exception_message = str(exception).lower()
 
         # 例外の種類とメッセージから適切なエラーコードを推定

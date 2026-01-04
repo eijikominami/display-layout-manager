@@ -97,12 +97,15 @@ class DisplayManager:
 
         return sorted(screen_ids)  # 一貫性のためソート
 
-    def get_current_displays(self) -> Tuple[bool, Optional[DisplayConfiguration], str]:
+    def get_current_displays(
+        self,
+    ) -> Tuple[bool, Optional[DisplayConfiguration], str]:
         """
         現在のディスプレイ構成を取得
 
         Returns:
-            Tuple[bool, Optional[DisplayConfiguration], str]: (成功フラグ, 構成オブジェクト, エラーメッセージ)
+            Tuple[bool, Optional[DisplayConfiguration], str]:
+                (成功フラグ, 構成オブジェクト, エラーメッセージ)
         """
         self._log("現在のディスプレイ構成を取得中...")
 
@@ -161,7 +164,7 @@ class DisplayManager:
             print(f"  {i}. {screen_id}")
 
         if self.verbose:
-            print(f"\n--- displayplacer list の生出力 ---")
+            print("\n--- displayplacer list の生出力 ---")
             print(config.raw_output)
             print("--- 生出力終了 ---")
 

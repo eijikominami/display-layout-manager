@@ -3,10 +3,9 @@
 メニューバーアプリのロジック部分の単体テスト
 （rumps UI を除く）
 """
-import os
 import sys
 from pathlib import Path
-from unittest.mock import MagicMock, Mock
+from unittest.mock import Mock
 
 # src ディレクトリをパスに追加
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
@@ -166,7 +165,7 @@ def test_menu_structure_logic():
         "終了",
     ]
 
-    print(f"\n  期待されるメニュー構造:")
+    print("\n  期待されるメニュー構造:")
     for i, item in enumerate(expected_items):
         if item is None:
             print(f"    {i+1}. [セパレーター]")

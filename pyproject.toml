@@ -57,3 +57,20 @@ version = {attr = "display_layout_manager.__version__"}
 
 [tool.setuptools_scm]
 write_to = "src/display_layout_manager/_version.py"
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
+# 既存コードの段階的な型チェック強化のため、一時的に緩和
+disable_error_code = ["union-attr", "arg-type", "var-annotated", "assignment", "no-any-return", "index"]
+
+[[tool.mypy.overrides]]
+module = [
+    "rumps",
+    "AppKit",
+    "Foundation",
+]
+ignore_missing_imports = true

@@ -11,6 +11,7 @@ from .command_executor import CommandExecutor
 from .config_manager import ConfigManager
 from .display_manager import DisplayManager
 from .layout_saver import LayoutSaver
+from .logger import Logger
 from .pattern_matcher import PatternMatcher
 
 
@@ -35,6 +36,7 @@ class CLIBridge:
             verbose: 詳細ログ出力フラグ
         """
         self.verbose = verbose
+        self.logger = Logger(verbose=verbose, daemon_mode=True)
         self.display_manager = DisplayManager(verbose=verbose)
         self.pattern_matcher = PatternMatcher(verbose=verbose)
         self.layout_saver = LayoutSaver(verbose=verbose)
@@ -113,10 +115,14 @@ class CLIBridge:
 
             if save_result.success:
                 action_text = "作成" if save_result.action == "created" else "更新"
+                details = (
+                    f"パターンを{action_text}しました"
+                    f"（ディスプレイ: {save_result.screen_count}個）"
+                )
                 return ActionResult(
                     success=True,
                     pattern_name=save_result.pattern_name,
-                    details=f"パターンを{action_text}しました（ディスプレイ: {save_result.screen_count}個）",
+                    details=details,
                 )
             else:
                 return ActionResult(

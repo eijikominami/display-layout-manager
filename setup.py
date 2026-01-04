@@ -79,9 +79,14 @@ setup(
     keywords="macos display monitor layout displayplacer automation",
     # プロジェクトURL
     project_urls={
-        "Bug Reports": "https://github.com/eijikominami/display-layout-manager/issues",
+        "Bug Reports": (
+            "https://github.com/eijikominami/display-layout-manager/issues"
+        ),
         "Source": "https://github.com/eijikominami/display-layout-manager",
-        "Documentation": "https://github.com/eijikominami/display-layout-manager/blob/main/README.md",
+        "Documentation": (
+            "https://github.com/eijikominami/display-layout-manager"
+            "/blob/main/README.md"
+        ),
     },
     # 追加ファイル
     include_package_data=True,

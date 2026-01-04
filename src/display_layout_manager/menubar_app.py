@@ -29,16 +29,25 @@ class DisplayLayoutMenuBar(rumps.App):
         self.cli_bridge = CLIBridge(verbose=False)
         self.auto_launch_manager = AutoLaunchManager()
 
-        self.menu = self._build_menu()
+        # メニュー項目への参照を保持
+        self.auto_launch_menu_item = None
 
-        # 初期状態を反映
-        self._update_auto_launch_state()
+        self.menu = self._build_menu()
 
         # 全ディスプレイに表示されるように設定
         self._configure_multi_display()
 
     def _build_menu(self):
         """メニュー構造を構築"""
+        # 自動起動メニュー項目を作成して参照を保持
+        self.auto_launch_menu_item = rumps.MenuItem(
+            self.msg.get("menu_auto_launch"), callback=self.toggle_auto_launch
+        )
+
+        # 初期状態を設定
+        is_enabled = self.auto_launch_manager.is_enabled()
+        self.auto_launch_menu_item.state = 1 if is_enabled else 0
+
         return [
             rumps.MenuItem(
                 self.msg.get("menu_apply_layout"), callback=self.apply_layout
@@ -47,9 +56,7 @@ class DisplayLayoutMenuBar(rumps.App):
                 self.msg.get("menu_save_current"), callback=self.save_current
             ),
             rumps.separator,
-            rumps.MenuItem(
-                self.msg.get("menu_auto_launch"), callback=self.toggle_auto_launch
-            ),
+            self.auto_launch_menu_item,
             rumps.separator,
             rumps.MenuItem(self.msg.get("menu_quit"), callback=self.quit_application),
         ]
@@ -57,27 +64,44 @@ class DisplayLayoutMenuBar(rumps.App):
     def _update_auto_launch_state(self):
         """自動起動メニュー項目の状態を更新"""
         is_enabled = self.auto_launch_manager.is_enabled()
-        menu_item = self.menu[self.msg.get("menu_auto_launch")]
-        if menu_item:
-            menu_item.state = 1 if is_enabled else 0
+        if self.auto_launch_menu_item:
+            self.auto_launch_menu_item.state = 1 if is_enabled else 0
 
     def apply_layout(self, _):
         """レイアウト適用アクション（サイレント実行）"""
         try:
-            self.cli_bridge.execute_apply_layout()
+            result = self.cli_bridge.execute_apply_layout()
             # 通知は表示しない（ログファイルに記録される）
-        except Exception:
-            # エラー時もサイレント（ログファイルに記録される）
-            pass
+            if not result.success:
+                # エラー時はログに記録
+                self.cli_bridge.logger.error(
+                    "menubar",
+                    f"Layout application failed: {result.error_message}",
+                    {"pattern_name": result.pattern_name},
+                )
+        except Exception as e:
+            # 予期しないエラーもログに記録
+            self.cli_bridge.logger.error(
+                "menubar", f"Unexpected error in apply_layout: {str(e)}"
+            )
 
     def save_current(self, _):
         """現在の設定保存アクション（サイレント実行）"""
         try:
-            self.cli_bridge.execute_save_current()
+            result = self.cli_bridge.execute_save_current()
             # 通知は表示しない（ログファイルに記録される）
-        except Exception:
-            # エラー時もサイレント（ログファイルに記録される）
-            pass
+            if not result.success:
+                # エラー時はログに記録
+                self.cli_bridge.logger.error(
+                    "menubar",
+                    f"Save current layout failed: {result.error_message}",
+                    {"pattern_name": result.pattern_name},
+                )
+        except Exception as e:
+            # 予期しないエラーもログに記録
+            self.cli_bridge.logger.error(
+                "menubar", f"Unexpected error in save_current: {str(e)}"
+            )
 
     def toggle_auto_launch(self, sender):
         """自動起動の切り替えアクション"""

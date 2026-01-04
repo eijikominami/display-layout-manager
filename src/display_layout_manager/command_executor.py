@@ -7,7 +7,7 @@ import shlex
 import subprocess
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Optional, Tuple
+from typing import Tuple
 
 from .config_manager import ConfigPattern
 
@@ -28,11 +28,16 @@ class ExecutionResult:
     def get_summary(self) -> str:
         """実行結果のサマリーを取得"""
         if self.dry_run:
-            return f"[ドライラン] パターン '{self.pattern_name}' のコマンドを実行予定"
+            return (
+                f"[ドライラン] パターン '{self.pattern_name}' " f"のコマンドを実行予定"
+            )
         elif self.success:
             return f"✓ パターン '{self.pattern_name}' の適用が完了しました"
         else:
-            return f"✗ パターン '{self.pattern_name}' の適用に失敗しました (終了コード: {self.return_code})"
+            return (
+                f"✗ パターン '{self.pattern_name}' の適用に失敗しました "
+                f"(終了コード: {self.return_code})"
+            )
 
 
 class CommandExecutor:
@@ -146,8 +151,8 @@ class CommandExecutor:
 
         # ドライランモードの場合
         if self.dry_run:
-            self._log(f"ドライランモード: コマンドを実際には実行しません")
-            print(f"[ドライラン] 実行予定コマンド:")
+            self._log("ドライランモード: コマンドを実際には実行しません")
+            print("[ドライラン] 実行予定コマンド:")
             print(f"  {pattern.command}")
 
             return ExecutionResult(
@@ -228,16 +233,16 @@ class CommandExecutor:
         if not result.dry_run:
             log_lines.append(f"終了コード: {result.return_code}")
 
-        log_lines.append(f"実行コマンド:")
+        log_lines.append("実行コマンド:")
         log_lines.append(f"  {result.command}")
 
         if result.stdout:
-            log_lines.append(f"標準出力:")
+            log_lines.append("標準出力:")
             for line in result.stdout.split("\n"):
                 log_lines.append(f"  {line}")
 
         if result.stderr:
-            log_lines.append(f"標準エラー:")
+            log_lines.append("標準エラー:")
             for line in result.stderr.split("\n"):
                 log_lines.append(f"  {line}")
 

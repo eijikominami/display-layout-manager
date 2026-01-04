@@ -1,16 +1,18 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: display-layout-manager
 Version: 1.5.0
 Summary: macOS用ディスプレイレイアウト自動設定ツール
 Home-page: https://github.com/eijikominami/display-layout-manager
 Author: Display Layout Manager Team
-Author-email: eijikominami@gmail.com
+Author-email: Display Layout Manager Team <contact@example.com>
+Maintainer-email: Display Layout Manager Team <contact@example.com>
 License: MIT
-Project-URL: Bug Reports, https://github.com/eijikominami/display-layout-manager/issues
-Project-URL: Source, https://github.com/eijikominami/display-layout-manager
-Project-URL: Documentation, https://github.com/eijikominami/display-layout-manager/blob/main/README.md
-Keywords: macos display monitor layout displayplacer automation
-Platform: UNKNOWN
+Project-URL: Homepage, https://github.com/example/display-layout-manager
+Project-URL: Repository, https://github.com/example/display-layout-manager
+Project-URL: Documentation, https://github.com/example/display-layout-manager/blob/main/README.md
+Project-URL: Bug Reports, https://github.com/example/display-layout-manager/issues
+Project-URL: Changelog, https://github.com/example/display-layout-manager/blob/main/CHANGELOG.md
+Keywords: macos,display,monitor,layout,displayplacer,automation
 Classifier: Development Status :: 4 - Beta
 Classifier: Environment :: Console
 Classifier: Intended Audience :: End Users/Desktop
@@ -27,8 +29,12 @@ Classifier: Topic :: System :: Hardware
 Classifier: Topic :: Utilities
 Requires-Python: >=3.8
 Description-Content-Type: text/markdown
-Provides-Extra: dev
 License-File: LICENSE
+Requires-Dist: pyobjc-framework-Cocoa>=10.0
+Dynamic: author
+Dynamic: home-page
+Dynamic: license-file
+Dynamic: requires-python
 
 English / [**日本語**](README_JP.md)
 

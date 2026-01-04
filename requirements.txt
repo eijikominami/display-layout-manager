@@ -3,3 +3,7 @@
 # メニューバーアプリケーション用
 rumps>=0.4.0
 pyobjc-framework-Cocoa>=9.0
+
+# 開発・テスト用
+coverage>=7.0.0
+mypy>=1.0.0

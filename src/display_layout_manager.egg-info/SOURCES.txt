@@ -1,4 +1,5 @@
 .coverage
+.gitmodules
 .pre-commit-config.yaml
 ARCHITECTURE.md
 ARCHITECTURE_JP.md

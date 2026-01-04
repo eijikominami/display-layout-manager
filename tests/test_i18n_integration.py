@@ -5,18 +5,17 @@ Tests actual CLI and menubar app behavior with different locales
 
 import json
 import os
-import subprocess
 import sys
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 # Add src directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from display_layout_manager.i18n import LocaleDetector, MessageManager
-from display_layout_manager.logger import Logger
+from display_layout_manager.i18n import LocaleDetector, MessageManager  # noqa: E402
+from display_layout_manager.logger import Logger  # noqa: E402
 
 
 class TestCLIInternationalization(unittest.TestCase):

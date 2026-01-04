@@ -2,16 +2,14 @@
 """
 メニューバーアプリの包括的な単体テスト
 """
-import os
 import sys
 from pathlib import Path
-from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import Mock, patch
 
 # src ディレクトリをパスに追加
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from display_layout_manager.auto_launch_manager import AutoLaunchManager
-from display_layout_manager.menubar_app import DisplayLayoutMenuBar
+from display_layout_manager.menubar_app import DisplayLayoutMenuBar  # noqa: E402
 
 
 def test_menubar_initialization():
@@ -117,9 +115,7 @@ def test_auto_launch_state_update():
             # モックメニュー項目を作成
             mock_menu_item = Mock()
             mock_menu_item.state = 0
-
-            # メニューをモック
-            app.menu = {"ログイン時に起動": mock_menu_item}
+            app.auto_launch_menu_item = mock_menu_item
 
             # 自動起動マネージャーをモック
             app.auto_launch_manager = Mock()
@@ -137,6 +133,19 @@ def test_auto_launch_state_update():
             app._update_auto_launch_state()
             assert mock_menu_item.state == 0, "無効時は state = 0 であるべき"
             print("    ✓ 無効時の state = 0 確認")
+
+            # テスト 3: 初期化時の状態設定（_build_menu内で設定される）
+            print("\n  [3-3] 初期化時の状態設定テスト")
+            app.auto_launch_manager.is_enabled.return_value = True
+            app._build_menu()
+            # auto_launch_menu_itemが_build_menu内で作成され、状態が設定されているはず
+            assert (
+                app.auto_launch_menu_item is not None
+            ), "auto_launch_menu_item が作成されるべき"
+            assert (
+                app.auto_launch_menu_item.state == 1
+            ), "初期化時に有効状態が反映されるべき"
+            print("    ✓ 初期化時の状態設定確認")
 
             return True
         except Exception as e:

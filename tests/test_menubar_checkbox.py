@@ -2,14 +2,13 @@
 """
 メニューバーアプリのチェックマーク機能の単体テスト
 """
-import os
 import sys
 from pathlib import Path
 
 # src ディレクトリをパスに追加
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from display_layout_manager.auto_launch_manager import AutoLaunchManager
+from display_layout_manager.auto_launch_manager import AutoLaunchManager  # noqa: E402
 
 
 def test_auto_launch_manager():
@@ -34,7 +33,7 @@ def test_auto_launch_manager():
         print("  ✓ disable() 成功")
         after_disable = manager.is_enabled()
         print(f"  is_enabled(): {after_disable}")
-        assert after_disable == False, "無効化後は False であるべき"
+        assert after_disable is False, "無効化後は False であるべき"
         print("  ✓ 無効化後の状態確認: OK")
     except Exception as e:
         print(f"  ✗ disable() 失敗: {e}")
@@ -46,7 +45,7 @@ def test_auto_launch_manager():
         print("  ✓ enable() 成功")
         after_enable = manager.is_enabled()
         print(f"  is_enabled(): {after_enable}")
-        assert after_enable == True, "有効化後は True であるべき"
+        assert after_enable is True, "有効化後は True であるべき"
         print("  ✓ 有効化後の状態確認: OK")
     except Exception as e:
         print(f"  ✗ enable() 失敗: {e}")
@@ -63,7 +62,7 @@ def test_auto_launch_manager():
             print("  現在: 有効")
             manager.disable()
             print("  disable() 実行")
-            assert manager.is_enabled() == False, "無効化されるべき"
+            assert manager.is_enabled() is False, "無効化されるべき"
             print("  ✓ 有効 → 無効: OK")
 
         # 無効 → 有効
@@ -71,7 +70,7 @@ def test_auto_launch_manager():
             print("  現在: 無効")
             manager.enable()
             print("  enable() 実行")
-            assert manager.is_enabled() == True, "有効化されるべき"
+            assert manager.is_enabled() is True, "有効化されるべき"
             print("  ✓ 無効 → 有効: OK")
 
         # 有効 → 無効（再度）
@@ -79,7 +78,7 @@ def test_auto_launch_manager():
             print("  現在: 有効")
             manager.disable()
             print("  disable() 実行")
-            assert manager.is_enabled() == False, "無効化されるべき"
+            assert manager.is_enabled() is False, "無効化されるべき"
             print("  ✓ 有効 → 無効（再度）: OK")
 
         print("  ✓ トグル動作: OK")

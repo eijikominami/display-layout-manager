@@ -93,7 +93,8 @@ class Logger:
         Internal logging method
 
         Note: Log file messages are always in English (technical records).
-              CLI output is not printed here - use print() with MessageManager in calling code.
+              CLI output is not printed here - use print() with
+              MessageManager in calling code.
         """
         timestamp = datetime.now().isoformat()
 
