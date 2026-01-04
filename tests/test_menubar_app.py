@@ -141,8 +141,12 @@ def test_auto_launch_state_update():
             app.auto_launch_manager.is_enabled.return_value = True
             menu_items = app._build_menu()
             # auto_launch_menu_itemが_build_menu内で作成され、状態が設定されているはず
-            assert app.auto_launch_menu_item is not None, "auto_launch_menu_item が作成されるべき"
-            assert app.auto_launch_menu_item.state == 1, "初期化時に有効状態が反映されるべき"
+            assert (
+                app.auto_launch_menu_item is not None
+            ), "auto_launch_menu_item が作成されるべき"
+            assert (
+                app.auto_launch_menu_item.state == 1
+            ), "初期化時に有効状態が反映されるべき"
             print("    ✓ 初期化時の状態設定確認")
 
             return True
