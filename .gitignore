@@ -1,9 +1,8 @@
-# Byte-compiled / optimized / DLL files
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
-
-# Distribution / packaging
+*.so
 .Python
 build/
 develop-eggs/
@@ -26,7 +25,15 @@ venv/
 env/
 ENV/
 
-# IDE
+# Testing
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.tox/
+.hypothesis/
+
+# IDEs
 .vscode/
 .idea/
 *.swp
@@ -36,11 +43,6 @@ ENV/
 # OS
 .DS_Store
 Thumbs.db
-
-# Testing
-.coverage
-htmlcov/
-.pytest_cache/
 
 # Logs
 *.log
