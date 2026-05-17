@@ -85,7 +85,7 @@ jobs:
 
       - name: Install linting tools
         run: |
-          pip install flake8 black isort mypy
+          pip install 'flake8>=7.0' 'black>=24.0,<26.0' 'isort>=5.0' 'mypy>=1.0'
 
       - name: Run flake8
         run: |
